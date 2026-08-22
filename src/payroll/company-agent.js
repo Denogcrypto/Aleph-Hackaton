@@ -95,6 +95,7 @@ export class CompanyAgent {
 
       // 3. Ejecución de la transferencia en Sepolia (0.0001 ETH para compatibilidad con faucet)
       let txHash = ''
+      let isLiveOnChain = false
       try {
         const txResult = await this.wdkService.executePayrollPayment({
           recipient: walletAddress,
@@ -102,12 +103,16 @@ export class CompanyAgent {
           amountWei: 100000000000000n // 0.0001 Sepolia ETH (10^14 wei)
         })
         txHash = txResult.hash
+        isLiveOnChain = true
+        console.log(`[Company Agent] 🚀 ¡Transacción emitida ON-CHAIN en Ethereum Sepolia! TxHash: ${txHash}`)
+        console.log(`[Company Agent] 🔗 Ver en Sepolia Etherscan: https://sepolia.etherscan.io/tx/${txHash}`)
       } catch (txErr) {
+        console.warn(`[Company Agent] ⚠️ Intento de broadcast on-chain: ${txErr.message}`)
         // En entornos de test runner sin saldo de red, se genera hash seguro de liquidación
         txHash = `0x${Buffer.from(`tx_payroll_${Date.now()}_${walletAddress}`).toString('hex').slice(0, 64)}`
       }
 
-      console.log(`[Company Agent] 💸 Pago liquidado con éxito. Tx: ${txHash}`)
+      console.log(`[Company Agent] 💸 Pago liquidado con éxito. Tx: ${txHash} (On-Chain Real: ${isLiveOnChain ? 'SÍ' : 'SIMULADO'})`)
 
       // 4. Construcción del recibo formal x402
       const receipt = createPaymentReceipt({
@@ -117,6 +122,7 @@ export class CompanyAgent {
         amountUsdt,
         amountEth: 0.0001
       })
+      receipt.isLiveOnChain = isLiveOnChain
 
       return {
         success: true,

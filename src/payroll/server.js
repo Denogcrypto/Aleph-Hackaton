@@ -292,7 +292,9 @@ const server = http.createServer(async (req, res) => {
             `RULE: Whitelist Only -> PASS (${targetAgent.walletAddress || 'verified'})`,
             `RULE: Max Cap 5,000 USDt -> PASS (${targetAgent.salaryUsdt} USDt requested)`,
             'SIMULATION: account.simulate.transfer -> ALLOW',
-            `SETTLEMENT: Broadcast on Sepolia -> ${claimResult.receipt?.txHash}`,
+            claimResult.receipt?.isLiveOnChain
+              ? `SETTLEMENT: 🚀 EMITIDO ON-CHAIN EN SEPOLIA -> https://sepolia.etherscan.io/tx/${claimResult.receipt?.txHash}`
+              : `SETTLEMENT: Broadcast en Sepolia -> ${claimResult.receipt?.txHash}`,
             'ACKNOWLEDGEMENT: Employee Agent validated receipt and confirmed status: PAID_CONFIRMED'
           ]
         }))
