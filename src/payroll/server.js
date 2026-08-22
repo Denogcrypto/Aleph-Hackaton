@@ -69,6 +69,10 @@ Promise.all([
     paymentDay: 1,
     status: 'ACTIVE'
   })
+
+  const emps = listActiveEmployees()
+  metrics.pendingClaimsCount = emps.length
+  metrics.pendingClaimsUsdt = emps.reduce((sum, e) => sum + e.salaryUsdt, 0)
 })
 
 const scheduler = new PayrollScheduler({
@@ -76,31 +80,12 @@ const scheduler = new PayrollScheduler({
   defaultPaymentDay: 1
 })
 
-const transactionHistory = [
-  {
-    timestamp: '2026-08-01 09:00',
-    agentId: 'emp-001 (Alice)',
-    amountUsdt: 2500,
-    status: 'SETTLED',
-    txHash: '0x74785f706179726f6c6c5f313738373432363430333138395f30783938353845',
-    explorerUrl: 'https://sepolia.etherscan.io/tx/0x74785f706179726f6c6c5f313738373432363430333138395f30783938353845'
-  },
-  {
-    timestamp: '2026-08-01 09:01',
-    agentId: 'emp-002 (Bob)',
-    amountUsdt: 1800,
-    status: 'SETTLED',
-    txHash: '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc9f7823ab',
-    explorerUrl: 'https://sepolia.etherscan.io/tx/0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc9f7823ab'
-  }
-]
+const transactionHistory = []
 
 const metrics = {
-  treasuryLiquidity: 45700,
-  settledVolume: 4300,
-  pendingClaimsCount: 2,
-  pendingClaimsUsdt: 4300,
-  activeAgentsCount: 12
+  settledVolume: 0,
+  pendingClaimsCount: 0,
+  pendingClaimsUsdt: 0
 }
 
 const MIME_TYPES = {
@@ -133,6 +118,7 @@ const server = http.createServer(async (req, res) => {
     const bobAddress = await bobAgent.getWalletAddress()
     const treasuryBalances = await companyAgent.getBalances()
     const employees = listActiveEmployees()
+    const treasuryLiquidity = Number(treasuryBalances?.usdt) || 0
 
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({
@@ -147,7 +133,13 @@ const server = http.createServer(async (req, res) => {
       simulatedDate: scheduler.getFormattedDate(),
       currentPeriod: scheduler.getCurrentPeriod(),
       isPaydayToday: scheduler.isPaydayForEmployee(1),
-      metrics,
+      metrics: {
+        treasuryLiquidity,
+        settledVolume: metrics.settledVolume,
+        pendingClaimsCount: metrics.pendingClaimsCount,
+        pendingClaimsUsdt: metrics.pendingClaimsUsdt,
+        activeAgentsCount: employees.length
+      },
       employees,
       transactionHistory
     }))
@@ -206,6 +198,7 @@ const server = http.createServer(async (req, res) => {
               transactionHistory.unshift({
                 timestamp: `${scheduler.getFormattedDate()} 09:00`,
                 agentId: `${item.employeeId} (${item.name.split(' ')[0]})`,
+                concept: item.employeeId === 'emp-001' ? 'Monthly Core Engineering Salary' : (item.employeeId === 'emp-002' ? 'Monthly UI/UX Design Salary' : 'Monthly Employee Salary'),
                 amountUsdt: item.amountUsdt,
                 status: 'SETTLED',
                 txHash: item.txHash,
@@ -273,6 +266,7 @@ const server = http.createServer(async (req, res) => {
           const newTx = {
             timestamp: `${scheduler.getFormattedDate()} ${new Date().toTimeString().slice(0, 5)}`,
             agentId: `${targetAgent.employeeId} (${targetAgent.name.split(' ')[0]})`,
+            concept: targetAgent.employeeId === 'emp-001' ? 'Monthly Core Engineering Salary' : (targetAgent.employeeId === 'emp-002' ? 'Monthly UI/UX Design Salary' : 'Monthly Employee Salary'),
             amountUsdt: amount,
             status: 'SETTLED',
             txHash: claimResult.receipt.txHash,
@@ -426,6 +420,7 @@ const server = http.createServer(async (req, res) => {
     const blockedTx = {
       timestamp: `${scheduler.getFormattedDate()} ${new Date().toTimeString().slice(0, 5)}`,
       agentId: 'hacker-999 (Rogue)',
+      concept: 'Unauthorized Protocol Exploit',
       amountUsdt: 10000,
       status: 'BLOCKED_POLICY',
       txHash: 'N/A (BLOCKED_BY_WDK)',

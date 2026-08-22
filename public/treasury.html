@@ -152,20 +152,20 @@
       <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
           <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Liquidez en Tesorería</span>
-          <div id="treasuryUsdtText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$45,700.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
+          <div id="treasuryUsdtText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">-- <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
           <p class="text-xs text-teal-600 dark:text-[#2DD4BF] mt-2 font-mono-tech">Ethereum Sepolia Non-Custodial</p>
         </div>
 
         <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
           <span data-i18n="vault_gas_reserve" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Reserva de Gas (Sepolia ETH)</span>
-          <div id="treasuryEthText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">0.0500 <span class="text-sm font-normal text-amber-600 dark:text-[#F59E0B]">ETH</span></div>
+          <div id="treasuryEthText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">-- <span class="text-sm font-normal text-amber-600 dark:text-[#F59E0B]">ETH</span></div>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono-tech">Balance On-Chain detectado</p>
         </div>
 
         <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
           <span data-i18n="panel_budget_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Presupuesto Mensual de Nómina</span>
-          <div id="treasuryBudgetText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$4,300 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span></div>
-          <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-2 font-mono-tech">8.6% asignado</p>
+          <div id="treasuryBudgetText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$0 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span></div>
+          <p id="treasuryBudgetPct" class="text-xs text-emerald-600 dark:text-emerald-400 mt-2 font-mono-tech">0% asignado</p>
         </div>
       </section>
 
@@ -195,20 +195,20 @@
             <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono-tech">
               <div class="flex justify-between">
                 <span class="text-slate-500 dark:text-slate-400">Dirección:</span>
-                <span id="vaultAddressText" class="text-slate-900 dark:text-white">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</span>
+                <span id="vaultAddressText" class="text-slate-900 dark:text-white">Cargando...</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-500 dark:text-slate-400">Balance USD₮:</span>
-                <span id="vaultUsdtText" class="text-teal-600 dark:text-[#2DD4BF] font-bold">5,576.04 USD₮</span>
+                <span id="vaultUsdtText" class="text-teal-600 dark:text-[#2DD4BF] font-bold">-- USD₮</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-500 dark:text-slate-400">Gas ETH:</span>
-                <span id="vaultEthText" class="text-slate-900 dark:text-white">0.05 ETH</span>
+                <span id="vaultEthText" class="text-slate-900 dark:text-white">-- ETH</span>
               </div>
             </div>
 
             <div class="flex gap-2">
-              <a id="etherscanLink" href="https://sepolia.etherscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" target="_blank" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
+              <a id="etherscanLink" href="#" target="_blank" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
                 <span class="material-symbols-outlined text-[16px]">open_in_new</span>
                 Ver en Sepolia Etherscan
               </a>
@@ -273,7 +273,7 @@
       </p>
 
       <div id="modalAddressBox" class="bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-slate-300 dark:border-slate-800 font-mono-tech text-xs text-slate-900 dark:text-white break-all select-all">
-        0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+        Cargando...
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
@@ -288,7 +288,7 @@
   </div>
 
   <script>
-    let currentTreasuryAddr = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+    let currentTreasuryAddr = '';
 
     function openDepositModal() {
       document.getElementById('depositModal').classList.remove('hidden');
@@ -297,6 +297,7 @@
       document.getElementById('depositModal').classList.add('hidden');
     }
     function copyAddress() {
+      if (!currentTreasuryAddr) return;
       navigator.clipboard.writeText(currentTreasuryAddr);
       alert('Dirección de tesorería copiada al portapapeles: ' + currentTreasuryAddr);
     }
@@ -325,8 +326,11 @@
         }
 
         if (data.metrics) {
-          const settled = Number(data.metrics.settledVolume).toLocaleString();
-          document.getElementById('treasuryBudgetText').innerHTML = `$${settled} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span>`;
+          const settled = Number(data.metrics.settledVolume || 0);
+          const pct = Math.min(100, Math.round((settled / 50000) * 100));
+          document.getElementById('treasuryBudgetText').innerHTML = `$${settled.toLocaleString()} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span>`;
+          const pctEl = document.getElementById('treasuryBudgetPct');
+          if (pctEl) pctEl.innerText = `${pct}% asignado`;
         }
       } catch (err) {
         console.warn('Error loading treasury on-chain data:', err);
