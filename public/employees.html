@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Employee Agents - Paygent WDK</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      font-size: 24px;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: "#0F172A",
+              surface: "#1E293B",
+              surfaceLow: "#0D1C2D",
+              surfaceHigh: "#273647",
+              primary: "#2DD4BF",
+              secondary: "#F59E0B"
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-[#0F172A] text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
+    <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
+      <a href="/index.html" class="flex items-center gap-2 w-full">
+        <img src="/paygent-logo.svg" alt="Paygent Logo" class="h-10 w-auto object-contain" />
+      </a>
+    </div>
+
+    <nav class="flex-1 py-6 px-4 space-y-1.5">
+      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        <span>Overview / Cockpit</span>
+      </a>
+
+      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        <span>Company Treasury</span>
+      </a>
+
+      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
+        <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+        <span>Employee Agents</span>
+      </a>
+
+      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">policy</span>
+        <span>WDK Policy Engine</span>
+      </a>
+
+      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        <span>x402 Audit Logs</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800/80">
+      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
+        </span>
+        <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
+          <p class="font-bold text-white">Sepolia Testnet</p>
+          <p class="text-slate-400">Non-Custodial WDK</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 ml-64 flex flex-col min-w-0">
+    <header class="h-20 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-sm font-semibold text-white">Autonomous Employee Agents Registry</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="openRegisterModal()" class="bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 px-4 rounded-xl text-xs font-mono-tech flex items-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.25)] transition-all">
+          <span class="material-symbols-outlined text-[18px]">person_add</span>
+          Register Employee Agent
+        </button>
+      </div>
+    </header>
+
+    <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
+      
+      <!-- Stats Row -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Active Agents</span>
+          <div class="text-2xl font-bold text-white mt-2">12 <span class="text-sm font-normal text-[#2DD4BF]">Autonomous Nodes</span></div>
+          <p class="text-xs text-emerald-400 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">sensors</span> 100% Online & Ready</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Total Monthly Payroll</span>
+          <div class="text-2xl font-bold text-white mt-2">$30,000.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
+          <p class="text-xs text-slate-400 mt-1">Spread across 12 contracts</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Next Scheduled Cycle</span>
+          <div class="text-2xl font-bold text-[#F59E0B] mt-2">Sep 1, 2026</div>
+          <p class="text-xs text-slate-400 mt-1">Autonomous trigger via cron</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">WDK Whitelist Status</span>
+          <div class="text-2xl font-bold text-white mt-2">ALL ALLOWED</div>
+          <p class="text-xs text-[#2DD4BF] mt-1 font-mono-tech">Policy Guard Synchronized</p>
+        </div>
+      </section>
+
+      <!-- Employee Agent Grid -->
+      <section class="space-y-4">
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#2DD4BF]">groups</span>
+            Registered Employee Agents
+          </h3>
+          <span class="text-xs font-mono-tech text-slate-400">Autonomous Payment Signers</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="employeeCardsGrid">
+          
+          <!-- Card: Alice Developer -->
+          <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-4 hover:border-teal-500/40 transition-all">
+            <div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-slate-800 border border-teal-500/40 flex items-center justify-center font-bold text-lg text-[#2DD4BF]">
+                    AD
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-white text-base">Alice Developer</h4>
+                    <p class="text-xs text-slate-400">Senior Core Dev</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">ACTIVE</span>
+              </div>
+
+              <div class="mt-4 space-y-2 text-xs font-mono-tech bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Agent ID:</span>
+                  <span class="text-white">emp-001</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Salary:</span>
+                  <span class="text-[#2DD4BF] font-bold">2,500.00 USD₮ / mo</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Payday:</span>
+                  <span class="text-slate-200">1st of month</span>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-slate-800">
+                  <span class="text-slate-400">Address:</span>
+                  <span class="text-slate-300 truncate max-w-[150px]">0x9858...Eda94</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button onclick="triggerAliceClaim()" class="flex-1 bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                Trigger Claim
+              </button>
+              <button onclick="alert('Viewing Agent WDK HD Derivation m/44\'/60\'/0\'/0/1');" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 px-3 rounded-xl text-xs font-mono-tech transition-all">
+                Keys
+              </button>
+            </div>
+          </div>
+
+          <!-- Card: Bob Designer -->
+          <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-4 hover:border-teal-500/40 transition-all">
+            <div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-slate-800 border border-amber-500/40 flex items-center justify-center font-bold text-lg text-[#F59E0B]">
+                    BD
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-white text-base">Bob Designer</h4>
+                    <p class="text-xs text-slate-400">UI / UX Product Lead</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">ACTIVE</span>
+              </div>
+
+              <div class="mt-4 space-y-2 text-xs font-mono-tech bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Agent ID:</span>
+                  <span class="text-white">emp-002</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Salary:</span>
+                  <span class="text-[#2DD4BF] font-bold">1,800.00 USD₮ / mo</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Payday:</span>
+                  <span class="text-slate-200">1st of month</span>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-slate-800">
+                  <span class="text-slate-400">Address:</span>
+                  <span class="text-slate-300 truncate max-w-[150px]">0x3C44...93BC</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button onclick="alert('Bob agent x402 cycle trigger simulated');" class="flex-1 bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                Trigger Claim
+              </button>
+              <button onclick="alert('Viewing Agent WDK HD Derivation m/44\'/60\'/0\'/0/2');" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 px-3 rounded-xl text-xs font-mono-tech transition-all">
+                Keys
+              </button>
+            </div>
+          </div>
+
+          <!-- Card: Charlie Security -->
+          <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-4 hover:border-teal-500/40 transition-all">
+            <div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-slate-800 border border-purple-500/40 flex items-center justify-center font-bold text-lg text-purple-400">
+                    CS
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-white text-base">Charlie Security</h4>
+                    <p class="text-xs text-slate-400">Smart Contract Auditor</p>
+                  </div>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">ACTIVE</span>
+              </div>
+
+              <div class="mt-4 space-y-2 text-xs font-mono-tech bg-slate-900/90 p-3.5 rounded-xl border border-slate-800">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Agent ID:</span>
+                  <span class="text-white">emp-003</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Salary:</span>
+                  <span class="text-[#2DD4BF] font-bold">3,200.00 USD₮ / mo</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Payday:</span>
+                  <span class="text-slate-200">1st of month</span>
+                </div>
+                <div class="flex justify-between items-center pt-1 border-t border-slate-800">
+                  <span class="text-slate-400">Address:</span>
+                  <span class="text-slate-300 truncate max-w-[150px]">0x71bE...D2E8</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+              <button onclick="alert('Charlie agent x402 cycle trigger simulated');" class="flex-1 bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
+                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                Trigger Claim
+              </button>
+              <button onclick="alert('Viewing Agent WDK HD Derivation m/44\'/60\'/0\'/0/3');" class="bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 px-3 rounded-xl text-xs font-mono-tech transition-all">
+                Keys
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Register Modal -->
+  <div id="registerModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#1E293B] border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#2DD4BF]">person_add</span>
+          Register New Autonomous Agent
+        </h3>
+        <button onclick="closeRegisterModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <form onsubmit="handleRegister(event)" class="space-y-3 text-xs font-mono-tech">
+        <div>
+          <label class="text-slate-400 block mb-1">Agent Name & Role:</label>
+          <input id="agentName" type="text" placeholder="e.g. Elena Research (AI Ops)" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white" />
+        </div>
+
+        <div>
+          <label class="text-slate-400 block mb-1">Monthly Salary (USD₮):</label>
+          <input id="agentSalary" type="number" placeholder="2000" max="5000" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white" />
+        </div>
+
+        <div>
+          <label class="text-slate-400 block mb-1">Wallet Address (Sepolia):</label>
+          <input id="agentWallet" type="text" placeholder="0x..." required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white" />
+        </div>
+
+        <div class="pt-2 flex gap-2">
+          <button type="submit" class="flex-1 bg-[#2DD4BF] text-[#0F172A] font-bold py-2 rounded-xl">
+            Save & Add to WDK Whitelist
+          </button>
+          <button type="button" onclick="closeRegisterModal()" class="bg-slate-800 text-slate-300 py-2 px-4 rounded-xl">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); }
+    function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
+
+    async function triggerAliceClaim() {
+      try {
+        const res = await fetch('/api/payroll/trigger-employee-claim', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 Claim successful for Alice!\nTx: ${data.receipt.txHash}\nStatus: ${data.employeeStatus}`);
+        } else {
+          alert(`❌ Claim failed: ${data.error}`);
+        }
+      } catch (e) {
+        alert('Error triggering claim: ' + e.message);
+      }
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      alert('✅ New Employee Agent registered and added to WDK Policy Engine Whitelist!');
+      closeRegisterModal();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>WDK Policy Engine - Paygent</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      font-size: 24px;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: "#0F172A",
+              surface: "#1E293B",
+              surfaceLow: "#0D1C2D",
+              surfaceHigh: "#273647",
+              primary: "#2DD4BF",
+              secondary: "#F59E0B"
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-[#0F172A] text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
+    <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
+      <a href="/index.html" class="flex items-center gap-2 w-full">
+        <img src="/paygent-logo.svg" alt="Paygent Logo" class="h-10 w-auto object-contain" />
+      </a>
+    </div>
+
+    <nav class="flex-1 py-6 px-4 space-y-1.5">
+      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        <span>Overview / Cockpit</span>
+      </a>
+
+      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        <span>Company Treasury</span>
+      </a>
+
+      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+        <span>Employee Agents</span>
+      </a>
+
+      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
+        <span class="material-symbols-outlined text-[20px]">policy</span>
+        <span>WDK Policy Engine</span>
+      </a>
+
+      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        <span>x402 Audit Logs</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800/80">
+      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
+        </span>
+        <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
+          <p class="font-bold text-white">Sepolia Testnet</p>
+          <p class="text-slate-400">Non-Custodial WDK</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 ml-64 flex flex-col min-w-0">
+    <header class="h-20 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-sm font-semibold text-white">Tether WDK Policy Engine Guardrails</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 bg-[#1E293B] px-3 py-1.5 rounded-full border border-teal-500/30">
+          <span class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-pulse"></span>
+          <span class="text-xs font-mono-tech text-[#2DD4BF] font-semibold">Mode: DEFAULT-DENY</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
+      
+      <!-- Key Policy Principles -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 space-y-2">
+          <div class="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-[#2DD4BF]">
+            <span class="material-symbols-outlined text-[20px]">verified_user</span>
+          </div>
+          <h4 class="font-bold text-white text-sm">Default-Deny Baseline</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            All governed accounts reject any operation unless an explicit <span class="text-[#2DD4BF] font-mono-tech">ALLOW</span> rule evaluates to true.
+          </p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 space-y-2">
+          <div class="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-[#F59E0B]">
+            <span class="material-symbols-outlined text-[20px]">attach_money</span>
+          </div>
+          <h4 class="font-bold text-white text-sm">Hard Salary Ceiling</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Per-transaction cap is locked at <span class="text-[#F59E0B] font-mono-tech">5,000 USD₮</span>. Claims exceeding this limit fail pre-flight simulation.
+          </p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 space-y-2">
+          <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <span class="material-symbols-outlined text-[20px]">terminal</span>
+          </div>
+          <h4 class="font-bold text-white text-sm">Pre-Flight Simulation</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Transactions are evaluated via <span class="text-blue-400 font-mono-tech">account.simulate.transfer</span> without spending gas or broadcasting prematurely.
+          </p>
+        </div>
+      </section>
+
+      <!-- Active Rules & Interactive Sandbox -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Active Guardrail Rules List -->
+        <div class="lg:col-span-6 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 space-y-4">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#2DD4BF]">list_alt</span>
+              Registered Policy Rules
+            </h3>
+            <span class="text-xs font-mono-tech text-slate-400">Policy ID: payroll-guard-v1</span>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Rule 1 -->
+            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white font-mono-tech">1. deny-unauthorized-recipient</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-red-500/10 text-red-400 border border-red-500/30">DENY</span>
+              </div>
+              <p class="text-xs text-slate-400 font-mono-tech">Blocks transfers to addresses not present in the verified employee registry.</p>
+            </div>
+
+            <!-- Rule 2 -->
+            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white font-mono-tech">2. deny-excessive-amount</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-red-500/10 text-red-400 border border-red-500/30">DENY</span>
+              </div>
+              <p class="text-xs text-slate-400 font-mono-tech">Blocks any transaction greater than 5,000 USD₮ (5,000,000,000 units).</p>
+            </div>
+
+            <!-- Rule 3 -->
+            <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-white font-mono-tech">3. allow-valid-payroll-operations</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-400 border border-teal-500/30">ALLOW</span>
+              </div>
+              <p class="text-xs text-slate-400 font-mono-tech">Allows valid transfers meeting whitelist & amount constraints for operations: transfer, sendTransaction.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Sandbox -->
+        <div class="lg:col-span-6 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-4">
+          <div>
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+              <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-[#F59E0B]">science</span>
+                WDK Policy Simulator Sandbox
+              </h3>
+              <span class="text-xs font-mono-tech text-[#F59E0B]">account.simulate</span>
+            </div>
+
+            <form id="sandboxForm" onsubmit="runSimulation(event)" class="mt-4 space-y-3 text-xs font-mono-tech">
+              <div>
+                <label class="text-slate-400 block mb-1">Recipient Address:</label>
+                <input id="testRecipient" type="text" value="0x9858EfFD232B4033E47d90003D41EC34EcaEda94" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="text-slate-400 block mb-1">Amount (USD₮):</label>
+                  <input id="testAmount" type="number" value="2500" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white" />
+                </div>
+                <div>
+                  <label class="text-slate-400 block mb-1">Operation:</label>
+                  <select id="testOp" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white">
+                    <option value="transfer">account.transfer</option>
+                    <option value="sendTransaction">account.sendTransaction</option>
+                    <option value="approve">account.approve</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="w-full bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2.5 rounded-xl transition-all shadow-[0_0_12px_rgba(45,212,191,0.2)]">
+                Run Simulation against WDK Engine
+              </button>
+            </form>
+          </div>
+
+          <!-- Simulation Output Box -->
+          <div class="bg-[#0A0F1D] rounded-xl p-4 border border-slate-800 font-mono-tech text-xs">
+            <div class="text-slate-400 border-b border-slate-800 pb-2 mb-2 flex justify-between">
+              <span>Simulation Result</span>
+              <span id="sandboxResultBadge" class="text-[#2DD4BF] font-bold">READY</span>
+            </div>
+            <pre id="sandboxOutput" class="text-slate-300 text-[11px] overflow-x-auto">Click "Run Simulation" to evaluate policies in real-time...</pre>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const WHITELIST = [
+      '0x9858effd232b4033e47d90003d41ec34ecaeda94',
+      '0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc'
+    ];
+
+    function runSimulation(e) {
+      e.preventDefault();
+      const recipient = document.getElementById('testRecipient').value.trim().toLowerCase();
+      const amount = parseFloat(document.getElementById('testAmount').value);
+      const op = document.getElementById('testOp').value;
+
+      const outputBox = document.getElementById('sandboxOutput');
+      const badge = document.getElementById('sandboxResultBadge');
+
+      const isWhitelisted = WHITELIST.includes(recipient);
+      const isUnderCap = amount <= 5000;
+
+      if (!isWhitelisted) {
+        badge.innerText = 'DECISION: DENY';
+        badge.className = 'text-red-400 font-bold';
+        outputBox.innerHTML = JSON.stringify({
+          decision: "BLOCK",
+          reason: "PolicyViolationError",
+          matchedRule: "deny-unauthorized-recipient",
+          details: `Recipient ${recipient} is NOT in verified employee whitelist.`
+        }, null, 2);
+        outputBox.className = 'text-red-400 text-[11px] overflow-x-auto';
+        return;
+      }
+
+      if (!isUnderCap) {
+        badge.innerText = 'DECISION: DENY';
+        badge.className = 'text-amber-400 font-bold';
+        outputBox.innerHTML = JSON.stringify({
+          decision: "BLOCK",
+          reason: "PolicyViolationError",
+          matchedRule: "deny-excessive-amount",
+          details: `Amount ${amount} USD₮ exceeds maximum ceiling of 5,000 USD₮ per transaction.`
+        }, null, 2);
+        outputBox.className = 'text-amber-400 text-[11px] overflow-x-auto';
+        return;
+      }
+
+      badge.innerText = 'DECISION: ALLOW';
+      badge.className = 'text-[#2DD4BF] font-bold';
+      outputBox.innerHTML = JSON.stringify({
+        decision: "ALLOW",
+        matchedRule: "allow-valid-payroll-operations",
+        operation: op,
+        recipient: recipient,
+        amountUsdt: amount,
+        estimatedGas: "0.00042 ETH",
+        status: "CLEAR_TO_EXECUTE"
+      }, null, 2);
+      outputBox.className = 'text-[#2DD4BF] text-[11px] overflow-x-auto';
+    }
+  </script>
+</body>
+</html>

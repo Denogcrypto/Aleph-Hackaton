@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Company Treasury - Paygent WDK</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      font-size: 24px;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: "#0F172A",
+              surface: "#1E293B",
+              surfaceLow: "#0D1C2D",
+              surfaceHigh: "#273647",
+              primary: "#2DD4BF",
+              secondary: "#F59E0B"
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-[#0F172A] text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+
+  <!-- ========================================================================= -->
+  <!-- Sidebar -->
+  <!-- ========================================================================= -->
+  <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
+    <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
+      <a href="/index.html" class="flex items-center gap-2 w-full">
+        <img src="/paygent-logo.svg" alt="Paygent Logo" class="h-10 w-auto object-contain" />
+      </a>
+    </div>
+
+    <nav class="flex-1 py-6 px-4 space-y-1.5">
+      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">dashboard</span>
+        <span>Overview / Cockpit</span>
+      </a>
+
+      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
+        <span class="material-symbols-outlined text-[20px]">account_balance</span>
+        <span>Company Treasury</span>
+      </a>
+
+      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+        <span>Employee Agents</span>
+      </a>
+
+      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">policy</span>
+        <span>WDK Policy Engine</span>
+      </a>
+
+      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
+        <span>x402 Audit Logs</span>
+      </a>
+    </nav>
+
+    <div class="p-4 border-t border-slate-800/80">
+      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
+        <span class="relative flex h-2.5 w-2.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
+        </span>
+        <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
+          <p class="font-bold text-white">Sepolia Testnet</p>
+          <p class="text-slate-400">Non-Custodial WDK</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================================= -->
+  <!-- Main Content -->
+  <!-- ========================================================================= -->
+  <div class="flex-1 ml-64 flex flex-col min-w-0">
+    <header class="h-20 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
+        <span class="text-slate-600">/</span>
+        <span class="text-sm font-semibold text-white">Company Treasury & Multi-Chain Vault</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button onclick="openDepositModal()" class="bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 px-4 rounded-xl text-xs font-mono-tech flex items-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.25)] transition-all">
+          <span class="material-symbols-outlined text-[18px]">add_circle</span>
+          Deposit USD₮
+        </button>
+
+        <div class="flex items-center gap-2.5 bg-[#1E293B] px-3.5 py-1.5 rounded-xl border border-slate-700">
+          <span class="material-symbols-outlined text-[#2DD4BF] text-[18px]">account_balance_wallet</span>
+          <span id="treasuryAddr" class="text-xs font-mono-tech text-slate-200">0xf39Fd6...2266</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
+      
+      <!-- Top Metrics -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-5">
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Total Treasury Balance</span>
+          <div class="text-2xl font-bold text-white mt-2">$50,000.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
+          <p class="text-xs text-slate-400 mt-1 font-mono-tech">Non-custodial seed derivation</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Gas Reserve (Sepolia)</span>
+          <div class="text-2xl font-bold text-white mt-2">1.45 <span class="text-sm font-normal text-[#2DD4BF]">ETH</span></div>
+          <p class="text-xs text-emerald-400 mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check_circle</span> Sufficient for ~1,200 txs</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Estimated Runway</span>
+          <div class="text-2xl font-bold text-white mt-2">18.2 <span class="text-sm font-normal text-slate-400">Months</span></div>
+          <p class="text-xs text-slate-400 mt-1">Based on $2,750 avg monthly burn</p>
+        </div>
+
+        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5">
+          <span class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">WDK Policy Max Outflow</span>
+          <div class="text-2xl font-bold text-[#F59E0B] mt-2">5,000.00 <span class="text-sm font-normal text-slate-400">USD₮/tx</span></div>
+          <p class="text-xs text-slate-400 mt-1">Hard limit enforced on-chain</p>
+        </div>
+      </section>
+
+      <!-- Vault Details & Liquidity Distribution -->
+      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Vault Information Card -->
+        <div class="lg:col-span-6 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#2DD4BF]">security</span>
+              WDK Vault Architecture
+            </h3>
+            <span class="text-xs font-mono-tech px-2 py-0.5 rounded bg-teal-500/10 text-[#2DD4BF] border border-teal-500/30">HD Derivation</span>
+          </div>
+
+          <div class="space-y-3 text-xs font-mono-tech">
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Derivation Path:</span>
+              <span class="text-slate-200">m/44'/60'/0'/0/0 (EVM Standard)</span>
+            </div>
+
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Treasury Contract / Owner:</span>
+              <span class="text-[#2DD4BF]">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</span>
+            </div>
+
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">USD₮ Token (Sepolia):</span>
+              <span class="text-slate-200">0x7169D38820dfd117C3FA1f22a697dBA58d90BA06</span>
+            </div>
+
+            <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span class="text-slate-400">Orchestrator Module:</span>
+              <span class="text-slate-200">@tetherto/wdk v1.0.0-beta.16</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Multi-Chain Allocation -->
+        <div class="lg:col-span-6 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-[#F59E0B]">pie_chart</span>
+              Multi-Chain Liquidity Breakdown
+            </h3>
+            <span class="text-xs font-mono-tech text-slate-400">WDK Multi-Wallet</span>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-mono-tech mb-1">
+                <span>Ethereum Sepolia (Primary Treasury)</span>
+                <span class="text-[#2DD4BF] font-bold">35,000 USD₮ (70%)</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div class="bg-[#2DD4BF] h-2 rounded-full" style="width: 70%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-mono-tech mb-1">
+                <span>Arbitrum Sepolia (L2 Fast Settlement)</span>
+                <span class="text-blue-400 font-bold">10,000 USD₮ (20%)</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div class="bg-blue-400 h-2 rounded-full" style="width: 20%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-mono-tech mb-1">
+                <span>Base Sepolia (Micro-Payroll Agents)</span>
+                <span class="text-purple-400 font-bold">5,000 USD₮ (10%)</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div class="bg-purple-400 h-2 rounded-full" style="width: 10%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Treasury Movements Ledger -->
+      <section class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#2DD4BF]">swap_vert</span>
+            Treasury Cashflow & Settlement Ledger
+          </h3>
+          <span class="text-xs font-mono-tech text-slate-400">Live Inflow/Outflow</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono-tech">
+            <thead>
+              <tr class="text-slate-400 border-b border-slate-800">
+                <th class="pb-3">Date</th>
+                <th class="pb-3">Type</th>
+                <th class="pb-3">Counterparty / Agent</th>
+                <th class="pb-3">Amount</th>
+                <th class="pb-3">Chain</th>
+                <th class="pb-3">Tx Hash</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60 text-slate-300">
+              <tr class="hover:bg-slate-800/30">
+                <td class="py-3 text-slate-400">2026-08-22 15:35</td>
+                <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">OUTFLOW</span></td>
+                <td class="py-3 text-white font-bold">emp-001 (Alice Developer)</td>
+                <td class="py-3 text-[#2DD4BF] font-semibold">-2,500.00 USD₮</td>
+                <td class="py-3">Sepolia</td>
+                <td class="py-3 text-slate-400 truncate max-w-[120px]">0x74785f70...</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30">
+                <td class="py-3 text-slate-400">2026-08-22 14:10</td>
+                <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">OUTFLOW</span></td>
+                <td class="py-3 text-white font-bold">emp-002 (Bob Designer)</td>
+                <td class="py-3 text-[#2DD4BF] font-semibold">-1,800.00 USD₮</td>
+                <td class="py-3">Sepolia</td>
+                <td class="py-3 text-slate-400 truncate max-w-[120px]">0x3c44cddd...</td>
+              </tr>
+              <tr class="hover:bg-slate-800/30">
+                <td class="py-3 text-slate-400">2026-08-20 09:00</td>
+                <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">INFLOW</span></td>
+                <td class="py-3 text-white font-bold">Treasury Liquidity Inflow</td>
+                <td class="py-3 text-emerald-400 font-semibold">+50,000.00 USD₮</td>
+                <td class="py-3">Sepolia</td>
+                <td class="py-3 text-slate-400 truncate max-w-[120px]">0x18a99f3b...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Deposit Modal -->
+  <div id="depositModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#1E293B] border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#2DD4BF]">qr_code_scanner</span>
+          Deposit USD₮ to Treasury
+        </h3>
+        <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white">&times;</button>
+      </div>
+
+      <p class="text-xs text-slate-300">Send testnet USD₮ to the non-custodial WDK Treasury on Ethereum Sepolia:</p>
+
+      <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 font-mono-tech text-xs break-all text-[#2DD4BF]">
+        0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="navigator.clipboard.writeText('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'); alert('Address copied!');" class="flex-1 bg-[#2DD4BF] text-[#0F172A] font-bold py-2 rounded-xl text-xs font-mono-tech">
+          Copy Address
+        </button>
+        <button onclick="closeDepositModal()" class="bg-slate-800 text-slate-300 font-bold py-2 px-4 rounded-xl text-xs font-mono-tech">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openDepositModal() { document.getElementById('depositModal').classList.remove('hidden'); }
+    function closeDepositModal() { document.getElementById('depositModal').classList.add('hidden'); }
+  </script>
+</body>
+</html>
