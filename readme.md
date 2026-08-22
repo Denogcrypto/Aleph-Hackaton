@@ -3,49 +3,69 @@
 [![WDK Core](https://img.shields.io/badge/@tetherto/wdk-1.0.0--beta.16-blue.svg)](https://www.npmjs.com/package/@tetherto/wdk)
 [![WDK CLI](https://img.shields.io/badge/@tetherto/wdk--cli-1.0.0--beta.3-green.svg)](https://www.npmjs.com/package/@tetherto/wdk-cli)
 [![WDK Wallet EVM](https://img.shields.io/badge/@tetherto/wdk--wallet--evm-1.0.0--beta.17-orange.svg)](https://www.npmjs.com/package/@tetherto/wdk-wallet-evm)
-[![Tests](https://img.shields.io/badge/tests-174%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-176%20passed-brightgreen.svg)](tests/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
-**Paygent** es una infraestructura descentralizada y no custodial de agentes autónomos de IA que automatiza la negociación, validación, liquidación y recibos de nóminas corporativas en **USD₮**, utilizando el protocolo **x402 (HTTP 402 Payment Required)**, el **Tether Wallet Development Kit (WDK)** y su interfaz **WDK CLI / MCP Server**.
+**Paygent** es una infraestructura descentralizada y no custodial de agentes autónomos de IA que automatiza la negociación, validación, liquidación y recibos de nóminas corporativas en **USD₮**, utilizando el protocolo **x402 (HTTP 402 Payment Required)**, el **Tether Wallet Development Kit (WDK)** y el **WDK Policy Engine**.
 
 ---
 
-## 🎯 Resumen del Proyecto y Propuesta de Valor
+## 🎯 Propuesta de Valor y Paradigma Agéntico
 
-En la naciente **Economía Agéntica**, los agentes autónomos de IA trabajan para empresas y entre sí, pero no pueden abrir cuentas bancarias tradicionales ni pasar procesos de KYC humano presencial.
+En la naciente **Economía de Agentes**, los sistemas autónomos de IA trabajan 24/7 para empresas y entre sí, pero se enfrentan a una barrera insalvable: **no pueden abrir cuentas bancarias tradicionales** al carecer de DNI, pasaporte o presencia física para procesos de KYC.
 
 **Paygent** resuelve este cuello de botella con una arquitectura financiera nativa para máquinas:
-- 🤖 **Employee Agent:** Representa al agente trabajador/especialista, detecta las fechas de cobro pactadas (Scheduler Día 1), emite requerimientos estructurados bajo el protocolo **RFC x402** (`HTTP 402 + X-PAYMENT`) y valida criptográficamente la acreditación de USD₮ en su billetera.
-- 🏢 **Company Agent:** Representa a la tesorería corporativa, valida la identidad contra el registro oficial, evalúa las políticas de seguridad en el **Tether WDK Policy Engine** (Default-Deny, lista blanca y topes de gasto) y ejecuta la transferencia en **USD₮** de forma 100% no custodial.
-- ⚡ **Payroll Scheduler & Time Warp:** Un motor temporal que ejecuta los ciclos el Día 1 de cada mes y permite demostraciones aceleradas en vivo para el jurado.
+
+* 🤖 **Employee Agents (Alice & Bob):** Nodos autónomos con billeteras HD derivadas en memoria (BIP-39). Detectan sus fechas de cobro mediante el Scheduler, emiten requerimientos estandarizados bajo el protocolo **RFC x402** (`HTTP 402 + X-PAYMENT`) y validan criptográficamente el recibo de liquidación `X-PAYMENT-RESPONSE`.
+* 🏢 **Company Agent (Tesorería):** Representa a la tesorería corporativa no custodial, valida identidades contra el registro oficial, evalúa políticas en el **Tether WDK Policy Engine** (Default-Deny, lista blanca y límites de gasto) y ejecuta transferencias on-chain en **USD₮** en Ethereum Sepolia.
+* 🛡️ **Tether WDK Policy Engine:** Intercepta en memoria cada intento de transferencia antes de tocar la blockchain. Si una transacción excede el tope de $5,000 USD₮ o proviene de un atacante no autorizado, la bloquea instantáneamente (`PolicyViolationError`) protegiendo el balance de la empresa sin consumir gas.
+* ⏰ **Payroll Scheduler & Time Warp:** Motor de programación temporal que despierta a los agentes el Día 1 de cada mes (9:00 AM) y permite demostraciones aceleradas en vivo para el jurado.
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## 🏗️ Arquitectura del Flujo x402 + WDK
 
-```text
-                                   x402 Protocol
-┌──────────────────────┐   HTTP 402 / X-PAYMENT   ┌──────────────────────┐
-│    Employee Agent    │ ───────────────────────► │    Company Agent     │
-│                      │                          │                      │
-│ - Scheduler Día 1    │ ◄─────────────────────── │ - Payroll Registry   │
-│ - x402 Claim Creator │    X-PAYMENT-RESPONSE    │ - WDK Policy Engine  │
-│ - Receipt Validator  │    (Tx Hash Sepolia)     │ - WDK Simulate & Send│
-└──────────┬───────────┘                          └──────────┬───────────┘
-           │                                                 │
-           ▼                                                 ▼
-    Employee Wallet                                    Company Wallet
-(0x9858Ef...Eda94)                                (0xf39Fd6...2266)
-           ▲                                                 │
-           └─────────────── USD₮ Sepolia Transfer ───────────┘
-                            (ERC-20 On-Chain)
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Scheduler as ⏰ Payroll Scheduler
+    actor Employee as 🤖 Employee Agent (Alice)
+    actor Company as 🏢 Company Agent (Treasury)
+    participant Policy as 🛡️ WDK Policy Engine
+    participant Blockchain as ⛓️ Ethereum Sepolia (USD₮)
+
+    Scheduler->>Employee: Despertar por fecha de cobro (Día 1)
+    Employee->>Company: HTTP 402 + Header X-PAYMENT (Reclamo 2,500 USD₮)
+    Company->>Company: Validar contra Payroll Registry Oficial
+    Company->>Policy: Pre-Flight Check (Whitelist & Cap < 5,000 USD₮)
+    alt Regla Denegada (Default-Deny o Exceso de Límite)
+        Policy-->>Company: 🛑 DENY (PolicyViolationError)
+        Company-->>Employee: HTTP 403 Forbidden (Transacción Abortada)
+    else Regla Aprobada
+        Policy-->>Company: ✅ ALLOW (account.simulate.transfer)
+        Company->>Blockchain: WDK sendTransaction (USD₮ Transfer)
+        Blockchain-->>Company: Tx Hash Confirmado On-Chain
+        Company-->>Employee: HTTP 200 + Header X-PAYMENT-RESPONSE
+        Employee->>Employee: Validar recibo y marcar estado PAID_CONFIRMED
+    end
 ```
 
 ---
 
-## 🔗 Permalinks de Integración Tether WDK para el Jurado
+## 🖥️ Páginas del Ecosistema Paygent
 
-La integración con WDK es central, limpia y sigue las especificaciones oficiales:
+| Página | Ruta | Descripción |
+|---|---|---|
+| **Landing Page** | [`/`](http://localhost:3000/) | One-page con Shader WebGL, comparativa agéntica y simulador interactivo. |
+| **Cockpit Autónomo** | [`/index.html`](http://localhost:3000/index.html) | Dashboard 100% dinámico con Time Warp, KPIs on-chain, Chart.js interactivo y Ledger. |
+| **Bóveda de Tesorería** | [`/treasury.html`](http://localhost:3000/treasury.html) | Consulta en vivo de saldos USD₮ / ETH en Sepolia y modal de depósito no custodial. |
+| **Registro de Agentes** | [`/employees.html`](http://localhost:3000/employees.html) | Gestión de agentes autónomos, adición de nuevos nodos y disparo de cobro masivo. |
+| **Motor de Políticas** | [`/policy-engine.html`](http://localhost:3000/policy-engine.html) | Sandbox interactivo con chips de demo rápida (Válido, Exceso de Tope, Rogue Hacker). |
+| **Auditoría Criptográfica** | [`/logs.html`](http://localhost:3000/logs.html) | Registro histórico de recibos x402 con búsqueda, filtros y exportación a JSON/CSV. |
+
+---
+
+## 🔗 Permalinks de Integración Tether WDK para el Jurado
 
 1. **Instanciación y Registro de Billeteras WDK Core:**
    - [`src/payroll/wdk-payroll-service.js`](file:///Users/gabo/Desktop/Proyectos/aleph/src/payroll/wdk-payroll-service.js) — Inicialización de `new WDK(seedPhrase)` y registro del módulo `WalletManagerEvm` con provider RPC de Sepolia.
@@ -57,8 +77,6 @@ La integración con WDK es central, limpia y sigue las especificaciones oficiale
    - [`src/payroll/wdk-payroll-service.js`](file:///Users/gabo/Desktop/Proyectos/aleph/src/payroll/wdk-payroll-service.js) — Ejecución no custodial de la transferencia de USD₮ en Sepolia.
 5. **Derivación de Cuentas y Consulta de Balances On-Chain:**
    - [`src/payroll/employee-agent.js`](file:///Users/gabo/Desktop/Proyectos/aleph/src/payroll/employee-agent.js) y [`src/payroll/company-agent.js`](file:///Users/gabo/Desktop/Proyectos/aleph/src/payroll/company-agent.js) — Derivación de claves públicas y lectura de balances reales en Sepolia (`account.getBalance()`, `account.getTokenBalance()`).
-6. **Ejecución vía WDK CLI / MCP (`wdk send --json`):**
-   - [`src/payroll/wdk-payroll-service.js`](file:///Users/gabo/Desktop/Proyectos/aleph/src/payroll/wdk-payroll-service.js) — Integración por línea de comandos y salida estructurada JSON.
 
 ---
 
@@ -75,38 +93,30 @@ La integración con WDK es central, limpia y sigue las especificaciones oficiale
 
 ## 🌐 Wallets y Contrato en Ethereum Sepolia Testnet
 
-- **Tesorería de la Empresa (Payer):** [`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`](https://sepolia.etherscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266)
-- **Alice Developer (Senior Core Dev):** [`0x9858EfFD232B4033E47d90003D41EC34EcaEda94`](https://sepolia.etherscan.io/address/0x9858EfFD232B4033E47d90003D41EC34EcaEda94)
-- **Bob Designer (UI/UX Lead):** [`0x58A57ed9d8d624cBD12e2C467D34787555bB1b25`](https://sepolia.etherscan.io/address/0x58A57ed9d8d624cBD12e2C467D34787555bB1b25)
-- **Contrato Oficial USD₮ en Sepolia:** [`0x7169D38820dfd117C3FA1f22a697dBA58d90BA06`](https://sepolia.etherscan.io/address/0x7169D38820dfd117C3FA1f22a697dBA58d90BA06) (6 decimales)
+* **Tesorería de la Empresa (Company Agent):** [`0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`](https://sepolia.etherscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266)
+* **Alice Developer (Agente emp-001):** [`0x9858EfFD232B4033E47d90003D41EC34EcaEda94`](https://sepolia.etherscan.io/address/0x9858EfFD232B4033E47d90003D41EC34EcaEda94)
+* **Bob Designer (Agente emp-002):** [`0xb646F3a563fCdA69e5f583B1062b32FE53580546`](https://sepolia.etherscan.io/address/0xb646F3a563fCdA69e5f583B1062b32FE53580546)
+* **Contrato Oficial USD₮ en Sepolia:** [`0x7169D38820dfd117C3FA1f22a697dBA58d90BA06`](https://sepolia.etherscan.io/address/0x7169D38820dfd117C3FA1f22a697dBA58d90BA06) (6 decimales)
 
 ---
 
-## 🖥️ Interfaz Web, Landing Page y Experiencia de Usuario
+## 📚 Documentación Técnica Detallada
 
-1. **Landing Page One-Page Oficial (`/` o `/landing.html`):**
-   - Diseñada en **Google Stitch** con tema *Technical Premium*.
-   - Fondo con **Shader WebGL interactivo** de haces de energía y partículas USD₮.
-   - Visual dual de agentes holográficos interconectados por un haz cinético láser.
-   - **Sandbox interactivo en vivo** para que el jurado pruebe el WDK Policy Engine con 1 clic.
-2. **Dashboard / Cockpit Operativo (`/cockpit` o `/index.html`):**
-   - Control de Time Warp Scheduler (Adelanto de reloj al Día 1).
-   - Métricas KPI en tiempo real (Liquidez de tesorería, volumen liquidado, reclamos pendientes).
-   - Estación de reclamos de empleados y simulador de ataques.
-   - Inspector de protocolo en 5 fases y libro contable inmutable de auditoría x402.
-3. **Bilingüe e Internacionalización (`i18n`):**
-   - **Español (ES)** como idioma principal y predeterminado.
-   - **Inglés (EN)** secundario con conmutación en 1 clic.
-4. **Temas Dark / Light Mode (`☀️ / 🌙`):**
-   - Modo Oscuro por defecto y Modo Claro *Swiss Clean* de alto contraste.
+Todos los documentos y guías de arquitectura se encuentran organizados en la carpeta [`docs/`](docs/):
+
+* 🎙️ [**Guión y Pitch de 3 Minutos para el Demo**](docs/GUION_DEMO_Y_PITCH_3_MINUTOS.md)
+* 📐 [**Especificación Técnica del Protocolo x402**](docs/specs.md)
+* 🏛️ [**Arquitectura Integral del Sistema**](docs/architecture.md)
+* 🛡️ [**Guía de Integración Tether WDK y Políticas**](docs/wdk-integration-guide.md)
+* 🎬 [**Guía de Demostración del Hackathon**](docs/demo-guide.md)
 
 ---
 
-## ⚙️ Instrucciones de Configuración y Ejecución (Clean Clone)
+## ⚙️ Instrucciones de Instalación y Ejecución
 
 ### 1. Requisitos Previos
-- **Node.js**: $\ge$ 22.18.0 (probado en Node.js v24.19.0)
-- **npm**: $\ge$ 10.0.0
+* **Node.js**: $\ge$ 22.18.0 (recomendado v24.x)
+* **npm**: $\ge$ 10.0.0
 
 ### 2. Instalación
 ```bash
@@ -115,26 +125,21 @@ cd Aleph-Hackaton
 npm install
 ```
 
-### 3. Iniciar Servidor y Dashboard Web
+### 3. Iniciar el Servidor y Dashboard Web
 ```bash
 npm run dev
 ```
-Abre en tu navegador:
-- **Landing Page:** [http://localhost:3000/](http://localhost:3000/)
-- **Cockpit Operativo:** [http://localhost:3000/cockpit](http://localhost:3000/cockpit)
+Accede desde tu navegador:
+* **Landing Page:** [http://localhost:3000/](http://localhost:3000/)
+* **Cockpit Operativo:** [http://localhost:3000/index.html](http://localhost:3000/index.html)
 
-### 4. Ejecución de la Demo por Consola
-```bash
-npm run demo
-```
-
-### 5. Pruebas Automatizadas
+### 4. Pruebas Automatizadas
 ```bash
 npm test
 ```
-Ejecuta los **174 tests automatizados** cubriendo el core de WDK, el Policy Engine y los agentes de nómina x402.
+> Ejecuta los **176 tests automatizados** cubriendo el core de WDK, el Policy Engine, los agentes y el protocolo x402.
 
-### 6. Calidad de Código y Tipos TypeScript
+### 5. Validación de Código y Tipos TypeScript
 ```bash
 npm run lint
 npm run build:types
@@ -145,3 +150,4 @@ npm run build:types
 ## 📄 Licencia
 
 Este proyecto está bajo la licencia [Apache-2.0](LICENSE).
+
