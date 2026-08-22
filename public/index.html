@@ -28,17 +28,11 @@
       white-space: nowrap;
       direction: ltr;
     }
-    body {
-      font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    .font-mono-tech {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    /* Custom Scrollbar */
+    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
     .step-active {
       border-color: #2DD4BF !important;
       background: rgba(45, 212, 191, 0.15) !important;
@@ -77,14 +71,12 @@
   <!-- 1. Collapsible Sidebar (Left Navigation) -->
   <!-- ========================================================================= -->
   <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
-    <!-- Brand Header with SVG Logo -->
     <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
-      <a href="#" class="flex items-center gap-2 w-full">
+      <a href="/index.html" class="flex items-center gap-2 w-full">
         <img src="/paygent-logo.svg" alt="Paygent Logo" class="h-10 w-auto object-contain" />
       </a>
     </div>
 
-    <!-- Navigation Links -->
     <nav class="flex-1 py-6 px-4 space-y-1.5">
       <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
         <span class="material-symbols-outlined text-[20px]">dashboard</span>
@@ -112,7 +104,6 @@
       </a>
     </nav>
 
-    <!-- Footer Status -->
     <div class="p-4 border-t border-slate-800/80">
       <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
         <span class="relative flex h-2.5 w-2.5">
@@ -120,8 +111,8 @@
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
         </span>
         <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
-          <p class="font-bold text-white">Sepolia Testnet</p>
-          <p class="text-slate-400">Non-Custodial WDK</p>
+          <p class="font-bold text-white">Ethereum Sepolia</p>
+          <p class="text-slate-400">USD₮ Non-Custodial WDK</p>
         </div>
       </div>
     </div>
@@ -137,7 +128,7 @@
       <div class="flex items-center gap-3">
         <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
         <span class="text-slate-600">/</span>
-        <span class="text-sm font-semibold text-white">Treasury & Settlement Cockpit</span>
+        <span class="text-sm font-semibold text-white">Autonomous Treasury Cockpit</span>
       </div>
 
       <div class="flex items-center gap-4">
@@ -162,6 +153,39 @@
     <!-- Main Body Area -->
     <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
 
+      <!-- ========================================================================= -->
+      <!-- SCHEDULER & TIME WARP SIMULATOR CONTROL BAR -->
+      <!-- ========================================================================= -->
+      <section class="bg-gradient-to-r from-[#122131] via-[#1E293B] to-[#122131] rounded-2xl border border-teal-500/40 p-5 shadow-[0_0_20px_rgba(45,212,191,0.1)] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-xl bg-[#2DD4BF]/10 border border-[#2DD4BF]/40 flex items-center justify-center text-[#2DD4BF] shadow-[0_0_15px_rgba(45,212,191,0.2)]">
+            <span class="material-symbols-outlined text-[26px]">schedule</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-white tracking-tight">Payroll Scheduler & Time Warp Engine</h3>
+              <span id="schedulerBadge" class="text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">STANDBY (AWAITING DAY 1)</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-mono-tech text-slate-300 mt-1">
+              <span>📅 Simulated Clock: <strong id="simClockText" class="text-[#2DD4BF]">2026-08-22</strong></span>
+              <span>•</span>
+              <span>⏰ Scheduled Payday: <strong class="text-white">Day 1 of each month (9:00 AM)</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <button id="btnTimeWarp" onclick="advanceToPayday()" class="flex-1 md:flex-initial bg-gradient-to-r from-[#2DD4BF] to-teal-400 hover:from-teal-400 hover:to-[#2DD4BF] text-[#0F172A] font-bold py-2.5 px-5 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(45,212,191,0.35)] active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[18px]">fast_forward</span>
+            ⚡ Fast-Forward to Day 1 (Trigger Scheduler)
+          </button>
+          
+          <button onclick="resetClock()" title="Reset clock to today" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-mono-tech border border-slate-700 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[18px]">restart_alt</span>
+          </button>
+        </div>
+      </section>
+
       <!-- 3. Top Metrics Row (KPI Cards) -->
       <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
         <!-- Card 1: Treasury Liquidity -->
@@ -171,13 +195,12 @@
             <span class="material-symbols-outlined text-[#2DD4BF]/60 group-hover:text-[#2DD4BF] transition-colors">account_balance</span>
           </div>
           <div class="mt-3">
-            <div id="kpiLiquidity" class="text-2xl font-bold text-white tracking-tight">$50,000.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
+            <div id="kpiLiquidity" class="text-2xl font-bold text-white tracking-tight">$45,700.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
             <div class="text-xs font-medium text-[#2DD4BF] flex items-center gap-1 mt-1">
               <span class="material-symbols-outlined text-[14px]">trending_up</span>
-              +12.4% this month
+              Sepolia Testnet Non-Custodial
             </div>
           </div>
-          <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-[#2DD4BF]/5 rounded-full blur-xl pointer-events-none"></div>
         </div>
 
         <!-- Card 2: Settled Volume -->
@@ -187,8 +210,8 @@
             <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-[#2DD4BF]/10 text-[#2DD4BF] border border-[#2DD4BF]/30">SETTLED</span>
           </div>
           <div class="mt-3">
-            <div id="kpiSettled" class="text-2xl font-bold text-white tracking-tight">$22,500.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
-            <div class="text-xs text-slate-400 mt-1">Payroll cycles completed</div>
+            <div id="kpiSettled" class="text-2xl font-bold text-white tracking-tight">$4,300.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
+            <div class="text-xs text-slate-400 mt-1">Automated payroll cycles</div>
           </div>
         </div>
 
@@ -199,8 +222,8 @@
             <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">AWAITING_CYCLE</span>
           </div>
           <div class="mt-3">
-            <div id="kpiPending" class="text-2xl font-bold text-[#F59E0B] tracking-tight">3 Claims <span class="text-sm font-normal text-slate-400">($7,500 USD₮)</span></div>
-            <div class="text-xs text-slate-400 mt-1">Scheduled for Sep 1st, 2026</div>
+            <div id="kpiPending" class="text-2xl font-bold text-[#F59E0B] tracking-tight">2 Claims <span class="text-sm font-normal text-slate-400">($4,300 USD₮)</span></div>
+            <div class="text-xs text-slate-400 mt-1">Next: Day 1 Scheduled Run</div>
           </div>
         </div>
 
@@ -241,13 +264,13 @@
               <!-- Capacity Radial/Bar Card -->
               <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800">
                 <div class="text-xs font-mono-tech text-slate-400 uppercase">Monthly Payroll Budget</div>
-                <div id="budgetProgressText" class="text-lg font-bold text-white mt-1">$22,500 / $50,000 USD₮</div>
+                <div id="budgetProgressText" class="text-lg font-bold text-white mt-1">$4,300 / $50,000 USD₮</div>
                 <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
-                  <div id="budgetProgressBar" class="bg-gradient-to-r from-[#2DD4BF] to-teal-400 h-2 rounded-full transition-all duration-500" style="width: 45%"></div>
+                  <div id="budgetProgressBar" class="bg-gradient-to-r from-[#2DD4BF] to-teal-400 h-2 rounded-full transition-all duration-500" style="width: 15%"></div>
                 </div>
                 <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-mono-tech">
-                  <span id="budgetPercentText">45% Allocated</span>
-                  <span>55% Liquidity Reserve</span>
+                  <span id="budgetPercentText">15% Allocated</span>
+                  <span>85% Liquidity Reserve</span>
                 </div>
               </div>
 
@@ -281,7 +304,7 @@
               </span>
               <span id="simStatusHeader" class="text-[#2DD4BF]">account.simulate.transfer: READY</span>
             </div>
-            <div id="simLogBox" class="space-y-1.5 text-slate-300 min-h-[90px] flex flex-col justify-center">
+            <div id="simLogBox" class="space-y-1.5 text-slate-300 min-h-[100px] flex flex-col justify-center">
               <p><span class="text-slate-500">[STANDBY]</span> Waiting for incoming agent payment requirement...</p>
             </div>
           </div>
@@ -332,7 +355,7 @@
           <!-- Payload Preview Box -->
           <div class="bg-[#0A0F1D] rounded-xl p-4 border border-slate-800 font-mono-tech text-xs">
             <div class="text-slate-400 border-b border-slate-800 pb-2 mb-2 flex justify-between">
-              <span>x402 Requirement Payload</span>
+              <span>x402 Requirement & Receipt</span>
               <span class="text-[#F59E0B]">HTTP 402 / X-PAYMENT</span>
             </div>
             <pre id="jsonPayload" class="text-slate-300 text-[11px] overflow-x-auto">{
@@ -341,6 +364,7 @@
   "amountUsdt": 2500,
   "payTo": "0x9858EfFD232B4033E47d90003D41EC34EcaEda94",
   "concept": "Monthly Engineering Salary",
+  "network": "eip155:11155111 (Sepolia)",
   "status": "AWAITING_TRIGGER"
 }</pre>
           </div>
@@ -354,7 +378,7 @@
             <span class="material-symbols-outlined text-[#2DD4BF]">schema</span>
             <h3 class="text-lg font-bold text-white">Settlement Protocol Inspector (5-Stage Flow)</h3>
           </div>
-          <span class="text-xs font-mono-tech text-slate-400">Live Agent Handshake</span>
+          <span class="text-xs font-mono-tech text-slate-400">Live Agent Handshake on Sepolia</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
@@ -364,7 +388,7 @@
               <span class="material-symbols-outlined text-[20px]">calendar_today</span>
             </div>
             <h5 class="text-xs font-bold text-white">1. Due Date Detected</h5>
-            <p class="text-[11px] text-slate-400">Payroll Cycle Triggered</p>
+            <p class="text-[11px] text-slate-400">Day 1 Trigger by Scheduler</p>
           </div>
 
           <!-- Step 2 -->
@@ -391,7 +415,7 @@
               <span class="material-symbols-outlined text-[20px]">currency_exchange</span>
             </div>
             <h5 class="text-xs font-bold text-white">4. USD₮ Transfer Broadcast</h5>
-            <p class="text-[11px] text-slate-400">WDK Core Non-Custodial</p>
+            <p class="text-[11px] text-slate-400">Ethereum Sepolia Testnet</p>
           </div>
 
           <!-- Step 5 -->
@@ -399,8 +423,10 @@
             <div class="w-10 h-10 rounded-full bg-[#2DD4BF] text-[#0F172A] flex items-center justify-center font-bold">
               <span class="material-symbols-outlined text-[20px]">verified</span>
             </div>
-            <h5 id="flowStep5Title" class="text-xs font-bold text-[#2DD4BF]">5. Receipt Emitted</h5>
-            <p id="flowStep5Tx" class="text-[11px] font-mono-tech text-slate-300">Awaiting Settlement</p>
+            <h5 id="flowStep5Title" class="text-xs font-bold text-[#2DD4BF]">5. Receipt Validated</h5>
+            <div id="flowStep5Container">
+              <p id="flowStep5Tx" class="text-[11px] font-mono-tech text-slate-300">Awaiting Settlement</p>
+            </div>
           </div>
         </div>
       </section>
@@ -425,7 +451,7 @@
         <div class="xl:col-span-7 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
           <div class="flex justify-between items-center mb-4">
             <h4 class="text-base font-bold text-white">Autonomous Agent Settlement Ledger</h4>
-            <span class="text-xs font-mono-tech text-slate-400">Live On-Chain Events</span>
+            <span class="text-xs font-mono-tech text-slate-400">Verified On-Chain Events</span>
           </div>
 
           <div class="overflow-x-auto">
@@ -436,7 +462,7 @@
                   <th class="pb-3 font-semibold">Agent ID</th>
                   <th class="pb-3 font-semibold">Amount</th>
                   <th class="pb-3 font-semibold">Status</th>
-                  <th class="pb-3 font-semibold">Tx Hash</th>
+                  <th class="pb-3 font-semibold">Tx Hash (Sepolia)</th>
                 </tr>
               </thead>
               <tbody id="ledgerTbody" class="divide-y divide-slate-800/60 text-slate-300">
@@ -450,7 +476,7 @@
     </main>
   </div>
 
-  <!-- JavaScript: Live Backend Connection & Interactivity -->
+  <!-- JavaScript: Live Backend Connection, Scheduler & Interactivity -->
   <script>
     let payrollChartInstance = null;
 
@@ -464,7 +490,7 @@
           datasets: [
             {
               label: 'Settled USD₮',
-              data: [15000, 18000, 20000, 22500, 30000],
+              data: [15000, 18000, 20000, 22500, 26800],
               borderColor: '#2DD4BF',
               backgroundColor: 'rgba(45, 212, 191, 0.1)',
               tension: 0.4,
@@ -474,7 +500,7 @@
             },
             {
               label: 'Pending Claims',
-              data: [5000, 4200, 6000, 7500, 5000],
+              data: [5000, 4200, 6000, 4300, 2500],
               borderColor: '#F59E0B',
               backgroundColor: 'transparent',
               borderDash: [5, 5],
@@ -503,18 +529,25 @@
         if (!res.ok) return;
         const data = await res.json();
 
-        // Update Treasury Address
         if (data.treasuryAddress) {
           const shortTreasury = data.treasuryAddress.slice(0, 6) + '...' + data.treasuryAddress.slice(-4);
           document.getElementById('headerTreasuryAddress').innerText = shortTreasury;
         }
 
-        // Update Metrics
+        if (data.simulatedDate) {
+          document.getElementById('simClockText').innerText = data.simulatedDate;
+        }
+
+        if (data.isPaydayToday) {
+          const badge = document.getElementById('schedulerBadge');
+          badge.innerText = 'PAYDAY ACTIVE (DAY 1)';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30';
+        }
+
         if (data.metrics) {
           updateMetricsUI(data.metrics);
         }
 
-        // Render Ledger
         if (data.transactionHistory) {
           renderLedger(data.transactionHistory);
         }
@@ -541,6 +574,11 @@
           ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
           : 'bg-red-500/10 text-red-400 border-red-500/30';
         const amountColor = isSettled ? 'text-[#2DD4BF]' : 'text-slate-400';
+
+        const txLink = tx.explorerUrl
+          ? `<a href="${tx.explorerUrl}" target="_blank" class="text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${tx.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
+          : `<span class="text-slate-500 font-mono-tech">${tx.txHash}</span>`;
+
         return `
           <tr class="hover:bg-slate-800/30 transition-colors">
             <td class="py-3 text-slate-400">${tx.timestamp}</td>
@@ -549,23 +587,96 @@
             <td class="py-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${tx.status}</span>
             </td>
-            <td class="py-3 text-slate-400 truncate max-w-[120px] font-mono-tech">${tx.txHash}</td>
+            <td class="py-3 text-slate-400 max-w-[140px]">${txLink}</td>
           </tr>
         `;
       }).join('');
     }
 
-    // 3. Trigger Legitimate Claim
+    // 3. Fast-Forward Time to Day 1 & Trigger Scheduler
+    async function advanceToPayday() {
+      const btn = document.getElementById('btnTimeWarp');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">autorenew</span> Fast-Forwarding Time...`;
+
+      // Animate stages sequentially
+      const steps = [1, 2, 3, 4, 5];
+      for (const step of steps) {
+        document.getElementById(`flowStep${step}`).classList.add('step-active');
+        await new Promise(r => setTimeout(r, 220));
+      }
+
+      try {
+        const res = await fetch('/api/scheduler/advance-to-payday', { method: 'POST' });
+        const data = await res.json();
+
+        if (data.success) {
+          document.getElementById('simClockText').innerText = data.timeWarp.newDate;
+          const badge = document.getElementById('schedulerBadge');
+          badge.innerText = 'PAYDAY ACTIVE (DAY 1)';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30';
+
+          document.getElementById('aliceAgentStatus').innerText = 'PAID_CONFIRMED';
+          document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
+
+          // Update Simulation Box
+          const simBox = document.getElementById('simLogBox');
+          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-300 font-mono-tech">${line}</p>`).join('');
+
+          // Update Payload Box with full receipt
+          const payloadBox = document.getElementById('jsonPayload');
+          const firstResult = data.cycleResult.results[0];
+          payloadBox.innerHTML = JSON.stringify(firstResult?.receipt || data.cycleResult, null, 2);
+          payloadBox.classList.add('text-[#2DD4BF]');
+
+          // Update Step 5 Link
+          if (firstResult?.txHash) {
+            const txShort = firstResult.txHash.slice(0, 10) + '...';
+            document.getElementById('flowStep5Container').innerHTML = `
+              <a href="${firstResult.receipt?.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
+                Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+              </a>
+            `;
+          }
+
+          if (data.metrics) updateMetricsUI(data.metrics);
+          loadSystemStatus();
+        }
+      } catch (err) {
+        console.error('Time warp error:', err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">fast_forward</span> ⚡ Fast-Forward to Day 1 (Trigger Scheduler)`;
+      }
+    }
+
+    // 4. Reset Clock
+    async function resetClock() {
+      try {
+        const res = await fetch('/api/scheduler/reset-clock', { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('simClockText').innerText = data.simulatedDate;
+          const badge = document.getElementById('schedulerBadge');
+          badge.innerText = 'STANDBY (AWAITING DAY 1)';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30';
+          loadSystemStatus();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // 5. Individual Claim Trigger
     async function triggerClaim() {
       const btn = document.getElementById('btnTriggerClaim');
       btn.disabled = true;
       btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Processing...`;
 
-      // Animate stages
       const steps = [1, 2, 3, 4, 5];
       for (const step of steps) {
         document.getElementById(`flowStep${step}`).classList.add('step-active');
-        await new Promise(r => setTimeout(r, 200));
+        await new Promise(r => setTimeout(r, 180));
       }
 
       try {
@@ -576,20 +687,20 @@
           document.getElementById('aliceAgentStatus').innerText = data.employeeStatus || 'PAID_CONFIRMED';
           document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
 
-          // Update Simulation Box
           const simBox = document.getElementById('simLogBox');
           simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-300 font-mono-tech">${line}</p>`).join('');
 
-          // Update Payload Box
           const payloadBox = document.getElementById('jsonPayload');
           payloadBox.innerHTML = JSON.stringify(data.receipt, null, 2);
           payloadBox.classList.add('text-[#2DD4BF]');
 
-          // Update Pipeline Receipt
           const txShort = data.receipt.txHash.slice(0, 10) + '...';
-          document.getElementById('flowStep5Tx').innerText = `Tx: ${txShort}`;
+          document.getElementById('flowStep5Container').innerHTML = `
+            <a href="${data.receipt.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
+              Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+            </a>
+          `;
 
-          // Refresh Metrics & Ledger
           if (data.metrics) updateMetricsUI(data.metrics);
           loadSystemStatus();
         }
@@ -601,7 +712,7 @@
       }
     }
 
-    // 4. Simulate Threat / Exploit
+    // 6. Threat Simulation
     async function simulateThreat() {
       const btn = document.getElementById('btnSimulateThreat');
       btn.disabled = true;
@@ -614,11 +725,9 @@
         document.getElementById('simStatusHeader').classList.remove('text-[#2DD4BF]');
         document.getElementById('simStatusHeader').classList.add('text-[#F59E0B]');
 
-        // Update Simulation Box with DENY logs
         const simBox = document.getElementById('simLogBox');
         simBox.innerHTML = data.simulationLog.map(line => `<p class="text-amber-400 font-mono-tech">${line}</p>`).join('');
 
-        // Update Payload Box
         const payloadBox = document.getElementById('jsonPayload');
         payloadBox.innerHTML = JSON.stringify({
           error: data.error,
@@ -636,7 +745,7 @@
       }
     }
 
-    // Initialize on page load
+    // Initialize
     window.addEventListener('DOMContentLoaded', () => {
       initChart();
       loadSystemStatus();

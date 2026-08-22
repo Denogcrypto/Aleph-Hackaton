@@ -233,66 +233,61 @@
   </div>
 
   <script>
-    const LOGS_DATA = [
-      {
-        "x402Version": 1,
-        "status": "SETTLED",
-        "employeeId": "emp-001",
-        "name": "Alice Developer",
-        "amountUsdt": 2500,
-        "recipient": "0x9858EfFD232B4033E47d90003D41EC34EcaEda94",
-        "concept": "Monthly Engineering Salary",
-        "policyEngine": {
-          "status": "ALLOW",
-          "matchedRule": "allow-valid-payroll-operations",
-          "simulation": "account.simulate.transfer passed"
-        },
-        "receipt": {
-          "txHash": "0x74785f706179726f6c6c5f313738373432363430333138395f30783938353845",
-          "network": "eip155:11155111 (Sepolia)",
-          "settledAt": "2026-08-22T15:35:00.000Z"
+    let logsData = [];
+
+    async function loadLogs() {
+      try {
+        const res = await fetch('/api/payroll/status');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.transactionHistory) {
+          logsData = data.transactionHistory;
+          renderLogs(logsData);
         }
-      },
-      {
-        "x402Version": 1,
-        "status": "SETTLED",
-        "employeeId": "emp-002",
-        "name": "Bob Designer",
-        "amountUsdt": 1800,
-        "recipient": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-        "concept": "Design Contract",
-        "policyEngine": {
-          "status": "ALLOW",
-          "matchedRule": "allow-valid-payroll-operations"
-        },
-        "receipt": {
-          "txHash": "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc9f7823ab",
-          "network": "eip155:11155111 (Sepolia)",
-          "settledAt": "2026-08-22T14:10:00.000Z"
-        }
-      },
-      {
-        "x402Version": 1,
-        "status": "BLOCKED",
-        "employeeId": "hacker-999",
-        "amountUsdt": 10000,
-        "policyEngine": {
-          "status": "DENY",
-          "matchedRule": "deny-excessive-amount",
-          "error": "PolicyViolationError: Amount 10000 exceeds ceiling of 5000 USDt"
-        },
-        "blockedAt": "2026-08-22T12:00:00.000Z"
+      } catch (err) {
+        console.warn(err);
       }
-    ];
+    }
+
+    function renderLogs(list) {
+      const tbody = document.getElementById('logsTbody');
+      tbody.innerHTML = list.map((item, idx) => {
+        const isSettled = item.status === 'SETTLED';
+        const badgeClass = isSettled
+          ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
+          : 'bg-red-500/10 text-red-400 border-red-500/30';
+        const policyText = isSettled ? 'ALLOW (whitelisted & cap ok)' : 'DENY (policy violation)';
+        const policyClass = isSettled ? 'text-[#2DD4BF]' : 'text-red-400 font-bold';
+
+        const link = item.explorerUrl
+          ? `<a href="${item.explorerUrl}" target="_blank" onclick="event.stopPropagation()" class="text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${item.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
+          : `<span class="text-slate-500 font-mono-tech">${item.txHash}</span>`;
+
+        return `
+          <tr onclick="showLogModal(${idx})" class="hover:bg-slate-800/50 cursor-pointer transition-colors">
+            <td class="py-3 text-slate-400">${item.timestamp}</td>
+            <td class="py-3 text-white font-bold">${item.agentId}</td>
+            <td class="py-3 text-slate-300">Monthly Engineering Salary</td>
+            <td class="py-3 text-[#2DD4BF] font-bold">${item.amountUsdt.toLocaleString()}.00 USD₮</td>
+            <td class="py-3 ${policyClass}">${policyText}</td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${item.status}</span></td>
+            <td class="py-3">${link}</td>
+          </tr>
+        `;
+      }).join('');
+    }
 
     function showLogModal(index) {
-      document.getElementById('modalJson').innerText = JSON.stringify(LOGS_DATA[index], null, 2);
+      const logItem = logsData[index] || {};
+      document.getElementById('modalJson').innerText = JSON.stringify(logItem, null, 2);
       document.getElementById('logModal').classList.remove('hidden');
     }
 
     function closeLogModal() {
       document.getElementById('logModal').classList.add('hidden');
     }
+
+    window.addEventListener('DOMContentLoaded', loadLogs);
   </script>
 </body>
 </html>

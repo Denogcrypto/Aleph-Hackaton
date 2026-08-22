@@ -4,6 +4,7 @@ import { create402Requirement, createPaymentPayload, createPaymentReceipt } from
 import { WdkPayrollService } from '../src/payroll/wdk-payroll-service.js'
 import { CompanyAgent } from '../src/payroll/company-agent.js'
 import { EmployeeAgent } from '../src/payroll/employee-agent.js'
+import { PayrollScheduler } from '../src/payroll/payroll-scheduler.js'
 
 describe('Autonomous Payroll Agents Test Suite', () => {
   const SEED_PHRASE_COMPANY = 'test test test test test test test test test test test junk'
@@ -69,7 +70,7 @@ describe('Autonomous Payroll Agents Test Suite', () => {
       expect(req.accepts[0].extra.employeeId).toBe('emp-001')
     })
 
-    test('createPaymentReceipt should format X-PAYMENT-RESPONSE receipt', () => {
+    test('createPaymentReceipt should format X-PAYMENT-RESPONSE receipt with Sepolia explorer URL', () => {
       const receipt = createPaymentReceipt({
         txHash: '0xabc123',
         employeeId: 'emp-001',
@@ -81,6 +82,8 @@ describe('Autonomous Payroll Agents Test Suite', () => {
       expect(receipt.status).toBe('SETTLED')
       expect(receipt.txHash).toBe('0xabc123')
       expect(receipt.currency).toBe('USD₮')
+      expect(receipt.network).toBe('eip155:11155111')
+      expect(receipt.explorerUrl).toBe('https://sepolia.etherscan.io/tx/0xabc123')
     })
   })
 
@@ -133,7 +136,7 @@ describe('Autonomous Payroll Agents Test Suite', () => {
     })
   })
 
-  describe('4. Autonomous Agent-to-Agent End-to-End Flow', () => {
+  describe('4. Autonomous Agent-to-Agent End-to-End Flow & Receipt Validation', () => {
     let companyAgent
     let employeeAgent
 
@@ -166,7 +169,7 @@ describe('Autonomous Payroll Agents Test Suite', () => {
       employeeAgent.dispose()
     })
 
-    test('Employee Agent successfully claims and settles salary with Company Agent', async () => {
+    test('Employee Agent successfully claims, verifies receipt, and updates status to PAID_CONFIRMED', async () => {
       const response = await employeeAgent.claimSalaryFromCompany(companyAgent, '2026-09')
 
       expect(response.success).toBe(true)
@@ -174,7 +177,10 @@ describe('Autonomous Payroll Agents Test Suite', () => {
       expect(response.receipt.status).toBe('SETTLED')
       expect(response.receipt.amountUsdt).toBe(2500)
       expect(response.receipt.currency).toBe('USD₮')
+      expect(response.receipt.network).toBe('eip155:11155111')
+      expect(response.receipt.explorerUrl).toContain('https://sepolia.etherscan.io/tx/')
       expect(employeeAgent.status).toBe('PAID_CONFIRMED')
+      expect(employeeAgent.paymentHistory).toHaveLength(1)
     })
 
     test('Company Agent rejects unwhitelisted employee claim', async () => {
@@ -186,6 +192,67 @@ describe('Autonomous Payroll Agents Test Suite', () => {
 
       expect(response.success).toBe(false)
       expect(response.error).toContain('Validation Error')
+    })
+  })
+
+  describe('5. Payroll Scheduler & Time Warp Execution', () => {
+    let scheduler
+    let companyAgent
+    let employeeAgent
+
+    beforeAll(async () => {
+      scheduler = new PayrollScheduler({
+        initialDate: '2026-08-22',
+        defaultPaymentDay: 1
+      })
+
+      companyAgent = new CompanyAgent({
+        seedPhrase: SEED_PHRASE_COMPANY,
+        maxSalaryCapUsdt: 5000
+      })
+
+      employeeAgent = new EmployeeAgent({
+        employeeId: 'emp-001',
+        name: 'Alice Developer',
+        salaryUsdt: 2500,
+        paymentDay: 1,
+        seedPhrase: SEED_PHRASE_EMPLOYEE
+      })
+
+      const aliceAddress = await employeeAgent.getWalletAddress()
+      registerEmployee({
+        employeeId: 'emp-001',
+        name: 'Alice Developer',
+        walletAddress: aliceAddress,
+        salaryUsdt: 2500,
+        paymentDay: 1,
+        status: 'ACTIVE'
+      })
+    })
+
+    afterAll(() => {
+      companyAgent.stop()
+      employeeAgent.dispose()
+    })
+
+    test('advanceToNextPayday should fast forward the clock to Day 1 of next month', () => {
+      const result = scheduler.advanceToNextPayday()
+      expect(result.newDate).toBe('2026-09-01')
+      expect(result.period).toBe('2026-09')
+      expect(scheduler.isPaydayForEmployee(1)).toBe(true)
+    })
+
+    test('executeScheduledPayroll should trigger and settle eligible employee agents on Day 1', async () => {
+      const summary = await scheduler.executeScheduledPayroll({
+        companyAgent,
+        employeeAgents: [employeeAgent]
+      })
+
+      expect(summary.settledCount).toBe(1)
+      expect(summary.totalAmountUsdt).toBe(2500)
+      expect(summary.period).toBe('2026-09')
+      expect(summary.results[0].status).toBe('SETTLED')
+      expect(summary.results[0].txHash).toMatch(/^0x/)
     })
   })
 })

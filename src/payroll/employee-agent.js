@@ -1,7 +1,7 @@
 /**
  * @fileoverview Employee Agent - Agente autónomo que representa al colaborador.
- * Gestiona su wallet WDK, detecta fechas de pago, genera requerimientos x402
- * y valida la recepción de fondos en USD₮.
+ * Gestiona su wallet WDK, detecta fechas de pago, genera requerimientos x402,
+ * valida recibos on-chain y mantiene constancia de sus liquidaciones.
  */
 
 import WDK from '../../index.js'
@@ -16,8 +16,8 @@ export class EmployeeAgent {
    * @param {number} options.salaryUsdt - Salario pactado en USD₮
    * @param {string} [options.seedPhrase] - Frase semilla BIP-39 de la wallet del empleado
    * @param {number} [options.paymentDay=1] - Día del mes de cobro
-   * @param {string} [options.rpcUrl] - RPC de la red
-   * @param {string} [options.tokenAddress] - Dirección de USD₮
+   * @param {string} [options.rpcUrl] - RPC de la red Ethereum Sepolia
+   * @param {string} [options.tokenAddress] - Dirección de USD₮ en Sepolia
    */
   constructor ({
     employeeId,
@@ -26,7 +26,7 @@ export class EmployeeAgent {
     seedPhrase = 'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about',
     paymentDay = 1,
     rpcUrl = 'https://ethereum-sepolia-rpc.publicnode.com',
-    tokenAddress = '0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0'
+    tokenAddress = '0x7169D38820dfd117C3FA1f22a697dBA58d90BA06'
   }) {
     this.employeeId = employeeId
     this.name = name
@@ -37,6 +37,7 @@ export class EmployeeAgent {
     this.tokenAddress = tokenAddress
     this.status = 'INITIAL'
     this.lastReceipt = null
+    this.paymentHistory = []
 
     // Inicialización de la wallet WDK del empleado
     this.wdk = new WDK(this.seedPhrase)
@@ -88,13 +89,58 @@ export class EmployeeAgent {
   async generatePaymentPayload (period) {
     const requirement = await this.generatePayrollRequirement(period)
     const account = await this.wdk.getAccount('ethereum', 0)
-    const address = await account.getAddress()
-    const signature = await account.sign(`Payroll Claim: ${this.employeeId} - ${this.salaryUsdt} USDT`)
+    const signature = await account.sign(`Payroll Claim: ${this.employeeId} - ${this.salaryUsdt} USDT - ${period || 'current'}`)
     return createPaymentPayload(requirement, signature)
   }
 
   /**
-   * Reclama el pago de nómina enviando el payload x402 al Company Agent.
+   * Valida y reconoce formalmente el recibo de pago devuelto por el Company Agent.
+   * @param {Object} receipt - Recibo X-PAYMENT-RESPONSE
+   * @returns {Promise<{ valid: boolean, reason?: string }>}
+   */
+  async validateAndAcknowledgeReceipt (receipt) {
+    const myAddress = await this.getWalletAddress()
+
+    if (!receipt || receipt.status !== 'SETTLED') {
+      this.status = 'RECEIPT_VALIDATION_FAILED'
+      return { valid: false, reason: 'Recibo ausente o estado no liquidado' }
+    }
+
+    if (receipt.recipient?.toLowerCase() !== myAddress.toLowerCase()) {
+      this.status = 'RECEIPT_VALIDATION_FAILED'
+      return { valid: false, reason: `Dirección receptora no coincide: ${receipt.recipient} vs ${myAddress}` }
+    }
+
+    if (receipt.amountUsdt !== this.salaryUsdt) {
+      this.status = 'RECEIPT_VALIDATION_FAILED'
+      return { valid: false, reason: `Monto liquidado no coincide: ${receipt.amountUsdt} vs ${this.salaryUsdt}` }
+    }
+
+    if (receipt.network !== 'eip155:11155111') {
+      this.status = 'RECEIPT_VALIDATION_FAILED'
+      return { valid: false, reason: `Red inválida: ${receipt.network} (Debe ser Sepolia eip155:11155111)` }
+    }
+
+    if (!receipt.txHash || !receipt.txHash.startsWith('0x')) {
+      this.status = 'RECEIPT_VALIDATION_FAILED'
+      return { valid: false, reason: 'Hash de transacción inválido' }
+    }
+
+    // Recibo verificado con éxito
+    this.status = 'PAID_CONFIRMED'
+    this.lastReceipt = receipt
+    this.paymentHistory.push({
+      ...receipt,
+      acknowledgedAt: new Date().toISOString(),
+      explorerUrl: `https://sepolia.etherscan.io/tx/${receipt.txHash}`
+    })
+
+    console.log(`[Employee Agent - ${this.name}] ✅ Recibo x402 validado y reconocido exitosamente. Tx: ${receipt.txHash}`)
+    return { valid: true }
+  }
+
+  /**
+   * Reclama el pago de nómina enviando el payload x402 al Company Agent y valida el recibo.
    * @param {import('./company-agent.js').CompanyAgent} companyAgent - Instancia del agente de la empresa
    * @param {string} [period]
    * @returns {Promise<{ success: boolean, receipt?: Object, error?: string }>}
@@ -107,9 +153,12 @@ export class EmployeeAgent {
     const response = await companyAgent.processPaymentClaim(paymentPayload)
 
     if (response.success) {
-      this.status = 'PAID_CONFIRMED'
-      this.lastReceipt = response.receipt
-      console.log(`[Employee Agent - ${this.name}] 🎉 ¡Salario liquidado y confirmado! Tx: ${response.receipt.txHash}`)
+      const validation = await this.validateAndAcknowledgeReceipt(response.receipt)
+      if (validation.valid) {
+        console.log(`[Employee Agent - ${this.name}] 🎉 ¡Salario liquidado y confirmado! Tx: ${response.receipt.txHash}`)
+      } else {
+        console.warn(`[Employee Agent - ${this.name}] ⚠️ Fallo en validación del recibo: ${validation.reason}`)
+      }
     } else {
       this.status = 'REJECTED'
       console.error(`[Employee Agent - ${this.name}] ❌ El reclamo fue rechazado: ${response.error}`)
