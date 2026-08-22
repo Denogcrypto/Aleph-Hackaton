@@ -91,7 +91,7 @@ const transactionHistory = [
   }
 ]
 
-let metrics = {
+const metrics = {
   treasuryLiquidity: 45700,
   settledVolume: 4300,
   pendingClaimsCount: 2,
@@ -222,7 +222,7 @@ const server = http.createServer(async (req, res) => {
             `🤖 AGENTS: Triggered payment claims for ${employeeAgents.length} active employee agents`,
             '🛡️ WDK POLICY ENGINE: Evaluated spend caps and whitelists -> ALL ALLOWED',
             `💸 SETTLEMENT: Settled ${cycleResult.settledCount} claims on Sepolia USD₮ (Total: ${cycleResult.totalAmountUsdt} USD₮)`,
-            `RECEIPTS: Emitted X-PAYMENT-RESPONSE with confirmed Sepolia Tx hashes`
+            'RECEIPTS: Emitted X-PAYMENT-RESPONSE with confirmed Sepolia Tx hashes'
           ]
         }))
       } catch (err) {
@@ -282,7 +282,7 @@ const server = http.createServer(async (req, res) => {
           'RULE: Max Cap 5,000 USDt -> PASS (2,500 USDt requested)',
           'SIMULATION: account.simulate.transfer -> ALLOW',
           `SETTLEMENT: Broadcast on Sepolia -> ${claimResult.receipt?.txHash}`,
-          `ACKNOWLEDGEMENT: Employee Agent validated receipt and confirmed status: PAID_CONFIRMED`
+          'ACKNOWLEDGEMENT: Employee Agent validated receipt and confirmed status: PAID_CONFIRMED'
         ]
       }))
     } catch (err) {
@@ -359,9 +359,11 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 8. Servir archivos estáticos del Dashboard y Landing Page (HTML, CSS, SVG, etc.)
-  let targetFile = pathname === '/' || pathname === '/landing' ? 'landing.html'
-    : (pathname === '/cockpit' ? 'index.html'
-      : (pathname.startsWith('/') ? pathname.slice(1) : pathname))
+  const targetFile = pathname === '/' || pathname === '/landing'
+    ? 'landing.html'
+    : (pathname === '/cockpit'
+        ? 'index.html'
+        : (pathname.startsWith('/') ? pathname.slice(1) : pathname))
 
   let filePath = path.join(PUBLIC_DIR, targetFile)
   let ext = path.extname(filePath)
@@ -395,6 +397,6 @@ server.listen(PORT, async () => {
   const treasury = await companyAgent.getTreasuryAddress()
   console.log(`\n🚀 [Paygent Dashboard & x402 Server] running at http://localhost:${PORT}`)
   console.log(`🏢 Treasury Address: ${treasury}`)
-  console.log(`🛡️ WDK Policy Engine: ACTIVE`)
-  console.log(`⏰ Payroll Scheduler: Active on Day 1 (Ethereum Sepolia USD₮)\n`)
+  console.log('🛡️ WDK Policy Engine: ACTIVE')
+  console.log('⏰ Payroll Scheduler: Active on Day 1 (Ethereum Sepolia USD₮)\n')
 })

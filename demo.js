@@ -44,7 +44,7 @@ async function runDemo () {
 
   const treasuryAddress = await companyAgent.getTreasuryAddress()
   console.log(`🏢 [Company Agent] Billetera de Tesorería WDK: ${treasuryAddress}`)
-  console.log(`🛡️ [Company Agent] WDK Policy Engine activo: DEFAULT-DENY + Tope 5,000 USD₮ + Whitelist.`)
+  console.log('🛡️ [Company Agent] WDK Policy Engine activo: DEFAULT-DENY + Tope 5,000 USD₮ + Whitelist.')
 
   const aliceAgent = new EmployeeAgent({
     employeeId: 'emp-001',

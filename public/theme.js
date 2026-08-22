@@ -1,3 +1,4 @@
+/* global localStorage */
 /**
  * @fileoverview Paygent Global Theme Manager (Dark / Light Mode)
  * Default Mode: Dark (#0B1326 / #0F172A)

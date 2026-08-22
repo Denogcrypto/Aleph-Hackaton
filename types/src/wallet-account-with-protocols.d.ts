@@ -1,3 +1,15 @@
+/** @typedef {import('@tetherto/wdk-wallet/protocols').ISwapProtocol} ISwapProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').IBridgeProtocol} IBridgeProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').ILendingProtocol} ILendingProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').IFiatProtocol} IFiatProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').ISwidgeProtocol} ISwidgeProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').ISdaProtocol} ISdaProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').SwapProtocol} SwapProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').BridgeProtocol} BridgeProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').LendingProtocol} LendingProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').FiatProtocol} FiatProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').SwidgeProtocol} SwidgeProtocol */
+/** @typedef {import('@tetherto/wdk-wallet/protocols').SdaProtocol} SdaProtocol */
 /**
  * Interface for wallet accounts that also expose the WDK's protocol-getter
  * helpers (`registerProtocol`, `getSwapProtocol`, `getBridgeProtocol`,
@@ -78,9 +90,9 @@ export type ILendingProtocol = import("@tetherto/wdk-wallet/protocols").ILending
 export type IFiatProtocol = import("@tetherto/wdk-wallet/protocols").IFiatProtocol;
 export type ISwidgeProtocol = import("@tetherto/wdk-wallet/protocols").ISwidgeProtocol;
 export type ISdaProtocol = import("@tetherto/wdk-wallet/protocols").ISdaProtocol;
-import { SwapProtocol } from '@tetherto/wdk-wallet/protocols';
-import { BridgeProtocol } from '@tetherto/wdk-wallet/protocols';
-import { LendingProtocol } from '@tetherto/wdk-wallet/protocols';
-import { FiatProtocol } from '@tetherto/wdk-wallet/protocols';
-import { SwidgeProtocol } from '@tetherto/wdk-wallet/protocols';
-import { SdaProtocol } from '@tetherto/wdk-wallet/protocols';
+export type SwapProtocol = import("@tetherto/wdk-wallet/protocols").SwapProtocol;
+export type BridgeProtocol = import("@tetherto/wdk-wallet/protocols").BridgeProtocol;
+export type LendingProtocol = import("@tetherto/wdk-wallet/protocols").LendingProtocol;
+export type FiatProtocol = import("@tetherto/wdk-wallet/protocols").FiatProtocol;
+export type SwidgeProtocol = import("@tetherto/wdk-wallet/protocols").SwidgeProtocol;
+export type SdaProtocol = import("@tetherto/wdk-wallet/protocols").SdaProtocol;
