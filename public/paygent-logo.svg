@@ -1,52 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 180" width="100%" height="100%" fill="none">
-  <defs>
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-  </defs>
-
-  <!-- ========================================== -->
-  <!-- 1. Left Emblem / Dual-Node Icon -->
-  <!-- ========================================== -->
-  <g transform="translate(10, 10)">
-    <!-- Teal Diagonal Link & Nodes -->
-    <!-- Lower node inside orange ring -->
-    <circle cx="68" cy="112" r="10" fill="#30C9B3" />
-    <!-- Connector stem -->
-    <line x1="68" y1="112" x2="114" y2="66" stroke="#30C9B3" stroke-width="13" stroke-linecap="round" />
-    <!-- Upper right solid teal circle -->
-    <circle cx="114" cy="66" r="22" fill="#30C9B3" />
-
-    <!-- Orange Ring with cut-out / layering -->
-    <circle cx="68" cy="112" r="26" stroke="#EFA638" stroke-width="14" fill="none" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1505.5 350.0">
+  <g transform="translate(20,40) scale(0.52734375)">
+    <path d="M 176,336 Q 300,220 352,176" fill="none" stroke="#3FBFAD" stroke-width="42" stroke-linecap="round"/>
+    <circle cx="176" cy="336" r="92" fill="none" stroke="#E8A33D" stroke-width="42"/>
+    <circle cx="352" cy="176" r="80" fill="#3FBFAD"/>
   </g>
-
-  <!-- ========================================== -->
-  <!-- 2. Typography: "Paygent" -->
-  <!-- ========================================== -->
-  <g transform="translate(165, 0)">
-    <!-- Text "P a y " in Bold Modern White -->
-    <text x="0" y="126" font-family="'Hanken Grotesk', 'Inter', -apple-system, sans-serif" font-size="124" font-weight="800" fill="#FFFFFF" letter-spacing="-2">Pay</text>
-
-    <!-- Custom "g" composed of Orange Loop + Teal Headset/Agent Hook -->
-    <!-- Position of 'g' roughly around x = 232 -->
-    <g transform="translate(232, 0)">
-      <!-- Orange Top Ring of 'g' -->
-      <circle cx="64" cy="92" r="34" stroke="#EFA638" stroke-width="16" fill="none" />
-
-      <!-- Teal Descender Hook -->
-      <path d="M 98 90 L 98 128 C 98 148 78 152 64 152" stroke="#30C9B3" stroke-width="14" stroke-linecap="round" fill="none" />
-      <!-- Teal Terminal Circle -->
-      <circle cx="48" cy="152" r="18" fill="#30C9B3" />
+  <g transform="translate(240,250.0) scale(0.3,-0.3)">
+    <path d="M66 0V700H354Q420 700 470.5 673.5Q521 647 549.5 599.0Q578 551 578 485V471Q578 406 548.5 357.5Q519 309 468.5 282.5Q418 256 354 256H198V0ZM198 376H341Q388 376 417.0 402.0Q446 428 446 473V483Q446 528 417.0 554.0Q388 580 341 580H198Z" transform="translate(0,0)" fill="#FBFAF7"/>
+    <path d="M224 -14Q171 -14 129.0 4.5Q87 23 62.5 58.5Q38 94 38 145Q38 222 92.0 261.0Q146 300 230 300H366V328Q366 363 344.0 385.5Q322 408 274 408Q227 408 204.0 386.5Q181 365 174 331L58 370Q70 408 96.5 439.5Q123 471 167.5 490.5Q212 510 276 510Q374 510 431.0 461.0Q488 412 488 319V134Q488 104 516 104H556V0H472Q435 0 411.0 18.0Q387 36 387 66V67H368Q364 55 350.0 35.5Q336 16 306.0 1.0Q276 -14 224 -14ZM246 88Q299 88 332.5 117.5Q366 147 366 196V206H239Q204 206 184.0 191.0Q164 176 164 149Q164 122 185.0 105.0Q206 88 246 88Z" transform="translate(604,0)" fill="#FBFAF7"/>
+    <path d="M124 -200V-90H394Q422 -90 422 -60V65H404Q392 40 359.0 16.0Q326 -8 259 -8Q201 -8 157.5 18.5Q114 45 90.0 92.0Q66 139 66 200V496H192V210Q192 154 219.5 126.0Q247 98 298 98Q356 98 388.0 136.5Q420 175 420 244V496H546V-88Q546 -139 516.0 -169.5Q486 -200 436 -200Z" transform="translate(1182,0)" fill="#FBFAF7"/>
+    <path d="M296 -14Q222 -14 165.5 17.5Q109 49 77.5 106.5Q46 164 46 242V254Q46 332 77.0 389.5Q108 447 164.0 478.5Q220 510 294 510Q367 510 421.0 477.5Q475 445 505.0 387.5Q535 330 535 254V211H174Q176 160 212.0 128.0Q248 96 300 96Q353 96 378.0 119.0Q403 142 416 170L519 116Q505 90 478.5 59.5Q452 29 408.0 7.5Q364 -14 296 -14ZM175 305H407Q403 348 372.5 374.0Q342 400 293 400Q242 400 212.0 374.0Q182 348 175 305Z" transform="translate(2436,0)" fill="#FBFAF7"/>
+    <path d="M70 0V496H194V431H212Q224 457 257.0 480.5Q290 504 357 504Q415 504 458.5 477.5Q502 451 526.0 404.5Q550 358 550 296V0H424V286Q424 342 396.5 370.0Q369 398 318 398Q260 398 228.0 359.5Q196 321 196 252V0Z" transform="translate(3013,0)" fill="#FBFAF7"/>
+    <path d="M260 0Q211 0 180.5 30.5Q150 61 150 112V392H26V496H150V650H276V496H412V392H276V134Q276 104 304 104H400V0Z" transform="translate(3629,0)" fill="#FBFAF7"/>
+    <g transform="translate(1798,0)">
+      <circle cx="300" cy="275" r="225" fill="none" stroke="#E8A33D" stroke-width="92"/>
+      <path d="M 468,150 L 468,-40 C 468,-118 405,-150 330,-150" fill="none" stroke="#3FBFAD" stroke-width="80" stroke-linecap="round"/>
+      <circle cx="205" cy="-150" r="140" fill="#3FBFAD"/>
     </g>
-
-    <!-- Text "ent" -->
-    <text x="350" y="126" font-family="'Hanken Grotesk', 'Inter', -apple-system, sans-serif" font-size="124" font-weight="800" fill="#FFFFFF" letter-spacing="-2">ent</text>
   </g>
-
-  <!-- ========================================== -->
-  <!-- 3. Subtitle: "AUTONOMOUS PAYROLL AGENTS" -->
-  <!-- ========================================== -->
-  <text x="175" y="162" font-family="'JetBrains Mono', 'Geist', sans-serif" font-size="13" font-weight="700" fill="#64748B" letter-spacing="4.5">AUTONOMOUS PAYROLL AGENTS</text>
 </svg>
