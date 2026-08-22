@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Paygent - Autonomous Payroll & Agent Settlement Dashboard</title>
+  <title>Paygent - Autonomous Payroll Cockpit | Tether WDK</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <!-- Google Fonts: Hanken Grotesk, Geist, JetBrains Mono & Material Symbols -->
+  <!-- Chart.js for Live Protocol Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts & Material Symbols -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
-  <!-- Chart.js for high-precision dual-line analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Theme Manager (Dark / Light Mode) -->
   <script src="/theme.js"></script>
   <!-- i18n Engine (Spanish Primary, English Secondary) -->
@@ -32,15 +32,28 @@
       white-space: nowrap;
       direction: ltr;
     }
-    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
-    .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    body {
+      font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .font-mono-tech {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
     .step-active {
       border-color: #2DD4BF !important;
-      background: rgba(45, 212, 191, 0.15) !important;
-      box-shadow: 0 0 15px rgba(45, 212, 191, 0.3) !important;
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+      transform: scale(1.02);
     }
   </style>
 
@@ -69,47 +82,47 @@
   </script>
 </head>
 
-<body class="bg-[#0F172A] text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+<body class="bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
 
   <!-- ========================================================================= -->
   <!-- 1. Collapsible Sidebar (Left Navigation) -->
   <!-- ========================================================================= -->
-  <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
-    <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
+  <aside class="w-64 bg-white/95 dark:bg-[#122131]/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
+    <div class="h-20 flex items-center px-5 border-b border-slate-200 dark:border-slate-800/80">
       <a href="/index.html" class="flex items-center gap-2 w-full">
         <img src="/paygent-logo.svg" alt="Paygent Logo" class="brand-logo-img h-10 w-auto object-contain" />
       </a>
     </div>
 
     <nav class="flex-1 py-6 px-4 space-y-1.5">
-      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
+      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-teal-700 dark:text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
         <span class="material-symbols-outlined text-[20px]">dashboard</span>
         <span data-i18n="nav_overview">Resumen / Cockpit</span>
       </a>
 
-      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">account_balance</span>
         <span data-i18n="nav_treasury">Tesorería de Empresa</span>
       </a>
 
-      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">smart_toy</span>
         <span data-i18n="nav_employees">Agentes Empleados</span>
       </a>
 
-      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">policy</span>
         <span data-i18n="nav_policy">Motor de Políticas WDK</span>
       </a>
 
-      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">receipt_long</span>
         <span data-i18n="nav_logs">Registros de Auditoría x402</span>
       </a>
     </nav>
 
-    <!-- Bottom Sidebar Section with Language Switcher, Theme Toggle & Sepolia Badge -->
-    <div class="p-4 border-t border-slate-800/80">
+    <!-- Bottom Sidebar Section with Language Switcher, Theme Toggle, Sepolia Badge & Exit -->
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800/80">
       
       <!-- Controls Container: Language Switcher + Theme Toggle -->
       <div class="flex items-center gap-2 mb-3">
@@ -118,16 +131,22 @@
       </div>
 
       <!-- Connected Chain Badge -->
-      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
+      <div class="bg-slate-100 dark:bg-slate-900/80 rounded-xl p-3 border border-slate-200 dark:border-slate-800 flex items-center gap-2.5">
         <span class="relative flex h-2.5 w-2.5">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
         </span>
-        <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
-          <p class="font-bold text-white" data-i18n="nav_network_title">Ethereum Sepolia</p>
-          <p class="text-slate-400" data-i18n="nav_network_subtitle">USD₮ WDK No Custodial</p>
+        <div class="text-[11px] font-mono-tech leading-tight text-slate-700 dark:text-slate-300">
+          <p class="font-bold text-slate-900 dark:text-white" data-i18n="nav_network_title">Ethereum Sepolia</p>
+          <p class="text-slate-500 dark:text-slate-400" data-i18n="nav_network_subtitle">USD₮ WDK No Custodial</p>
         </div>
       </div>
+
+      <!-- Exit Button / Volver a la Landing -->
+      <a href="/" class="flex items-center justify-center gap-2 w-full py-2.5 px-3 mt-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-mono-tech border border-slate-300 dark:border-slate-700 font-semibold transition-all">
+        <span class="material-symbols-outlined text-[16px]">logout</span>
+        <span data-i18n="nav_exit_home">Salir / Volver a la Landing</span>
+      </a>
     </div>
   </aside>
 
@@ -137,27 +156,27 @@
   <div class="flex-1 ml-64 flex flex-col min-w-0">
 
     <!-- 2. Top Header Bar -->
-    <header class="h-20 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between">
+    <header class="h-20 bg-white/80 dark:bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between transition-colors">
       <div class="flex items-center gap-3">
-        <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
-        <span class="text-slate-600">/</span>
-        <span data-i18n="header_subtitle" class="text-sm font-semibold text-white">Cockpit Autónomo de Tesorería</span>
+        <span class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Paygent</span>
+        <span class="text-slate-400 dark:text-slate-600">/</span>
+        <span data-i18n="header_subtitle" class="text-sm font-semibold text-slate-900 dark:text-white">Cockpit Autónomo de Tesorería</span>
       </div>
 
       <div class="flex items-center gap-4">
         <!-- Live System Status Chip -->
-        <div class="flex items-center gap-2 bg-[#1E293B] px-3 py-1.5 rounded-full border border-teal-500/30 shadow-[0_0_10px_rgba(45,212,191,0.15)]">
+        <div class="flex items-center gap-2 bg-slate-100 dark:bg-[#1E293B] px-3 py-1.5 rounded-full border border-teal-500/30 shadow-[0_0_10px_rgba(45,212,191,0.15)]">
           <span class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-pulse"></span>
-          <span data-i18n="header_policy_active" class="text-xs font-mono-tech text-[#2DD4BF] font-semibold">Motor de Políticas: ACTIVO</span>
+          <span data-i18n="header_policy_active" class="text-xs font-mono-tech text-teal-700 dark:text-[#2DD4BF] font-semibold">Motor de Políticas: ACTIVO</span>
         </div>
 
         <!-- Connected Treasury Badge -->
-        <div class="flex items-center gap-2.5 bg-[#1E293B] px-3.5 py-1.5 rounded-xl border border-slate-700">
-          <span class="material-symbols-outlined text-[#2DD4BF] text-[18px]">account_balance_wallet</span>
-          <span id="headerTreasuryAddress" class="text-xs font-mono-tech text-slate-200">0xf39Fd6...2266</span>
+        <div class="flex items-center gap-2.5 bg-slate-100 dark:bg-[#1E293B] px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700">
+          <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]">account_balance_wallet</span>
+          <span id="headerTreasuryAddress" class="text-xs font-mono-tech text-slate-700 dark:text-slate-200">0xf39Fd6...2266</span>
         </div>
 
-        <button class="w-9 h-9 rounded-xl bg-[#1E293B] border border-slate-700 flex items-center justify-center text-slate-300 hover:text-white hover:border-slate-500 transition-all">
+        <button class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-500 transition-all">
           <span class="material-symbols-outlined text-[20px]">notifications</span>
         </button>
       </div>
@@ -169,20 +188,20 @@
       <!-- ========================================================================= -->
       <!-- SCHEDULER & TIME WARP SIMULATOR CONTROL BAR -->
       <!-- ========================================================================= -->
-      <section class="bg-gradient-to-r from-[#122131] via-[#1E293B] to-[#122131] rounded-2xl border border-teal-500/40 p-5 shadow-[0_0_20px_rgba(45,212,191,0.1)] flex flex-col md:flex-row items-center justify-between gap-4">
+      <section class="bg-gradient-to-r from-teal-500/10 via-slate-100 to-slate-100 dark:from-[#122131] dark:via-[#1E293B] dark:to-[#122131] rounded-2xl border border-teal-500/40 p-5 shadow-[0_0_20px_rgba(45,212,191,0.1)] flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-[#2DD4BF]/10 border border-[#2DD4BF]/40 flex items-center justify-center text-[#2DD4BF] shadow-[0_0_15px_rgba(45,212,191,0.2)]">
+          <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/40 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF] shadow-[0_0_15px_rgba(45,212,191,0.2)]">
             <span class="material-symbols-outlined text-[26px]">schedule</span>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h3 data-i18n="scheduler_title" class="text-base font-bold text-white tracking-tight">Motor de Programación y Simulación Temporal (Time Warp)</h3>
-              <span id="schedulerBadge" data-i18n="scheduler_standby" class="text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">EN ESPERA (ESPERANDO DÍA 1)</span>
+              <h3 data-i18n="scheduler_title" class="text-base font-bold text-slate-900 dark:text-white tracking-tight">Motor de Programación y Simulación Temporal (Time Warp)</h3>
+              <span id="schedulerBadge" data-i18n="scheduler_standby" class="text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">EN ESPERA (ESPERANDO DÍA 1)</span>
             </div>
-            <div class="flex items-center gap-4 text-xs font-mono-tech text-slate-300 mt-1">
-              <span><span data-i18n="scheduler_clock_label">📅 Reloj Simulado:</span> <strong id="simClockText" class="text-[#2DD4BF]">2026-08-22</strong></span>
+            <div class="flex items-center gap-4 text-xs font-mono-tech text-slate-600 dark:text-slate-300 mt-1">
+              <span><span data-i18n="scheduler_clock_label">📅 Reloj Simulado:</span> <strong id="simClockText" class="text-teal-600 dark:text-[#2DD4BF]">2026-08-22</strong></span>
               <span>•</span>
-              <span><span data-i18n="scheduler_payday_label">⏰ Pago Programado:</span> <strong data-i18n="scheduler_payday_value" class="text-white">Día 1 de cada mes (9:00 AM)</strong></span>
+              <span><span data-i18n="scheduler_payday_label">⏰ Pago Programado:</span> <strong data-i18n="scheduler_payday_value" class="text-slate-900 dark:text-white">Día 1 de cada mes (9:00 AM)</strong></span>
             </div>
           </div>
         </div>
@@ -193,7 +212,7 @@
             <span data-i18n="scheduler_btn_fast_forward">⚡ Adelantar al Día 1 (Disparar Scheduler)</span>
           </button>
           
-          <button onclick="resetClock()" title="Reiniciar reloj" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-mono-tech border border-slate-700 active:scale-95 transition-all">
+          <button onclick="resetClock()" title="Reiniciar reloj" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 px-3 rounded-xl text-xs font-mono-tech border border-slate-300 dark:border-slate-700 active:scale-95 transition-all">
             <span class="material-symbols-outlined text-[18px]">restart_alt</span>
           </button>
         </div>
@@ -202,14 +221,14 @@
       <!-- 3. Top Metrics Row (KPI Cards) -->
       <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
         <!-- Card 1: Treasury Liquidity -->
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 transition-all">
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
           <div class="flex justify-between items-start">
-            <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold tracking-wider">Liquidez en Tesorería</span>
-            <span class="material-symbols-outlined text-[#2DD4BF]/60 group-hover:text-[#2DD4BF] transition-colors">account_balance</span>
+            <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Liquidez en Tesorería</span>
+            <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]/60 group-hover:text-[#2DD4BF] transition-colors">account_balance</span>
           </div>
           <div class="mt-3">
-            <div id="kpiLiquidity" class="text-2xl font-bold text-white tracking-tight">$45,700.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
-            <div class="text-xs font-medium text-[#2DD4BF] flex items-center gap-1 mt-1">
+            <div id="kpiLiquidity" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">$45,700.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
+            <div class="text-xs font-medium text-teal-600 dark:text-[#2DD4BF] flex items-center gap-1 mt-1">
               <span class="material-symbols-outlined text-[14px]">trending_up</span>
               <span data-i18n="kpi_liquidity_sub">Sepolia Testnet No Custodial</span>
             </div>
@@ -217,43 +236,43 @@
         </div>
 
         <!-- Card 2: Settled Volume -->
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 transition-all">
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
           <div class="flex justify-between items-start">
-            <span data-i18n="kpi_settled_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold tracking-wider">Volumen Liquidado</span>
-            <span data-i18n="kpi_settled_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-[#2DD4BF]/10 text-[#2DD4BF] border border-[#2DD4BF]/30">LIQUIDADO</span>
+            <span data-i18n="kpi_settled_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Volumen Liquidado</span>
+            <span data-i18n="kpi_settled_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30">LIQUIDADO</span>
           </div>
           <div class="mt-3">
-            <div id="kpiSettled" class="text-2xl font-bold text-white tracking-tight">$4,300.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
-            <div data-i18n="kpi_settled_sub" class="text-xs text-slate-400 mt-1">Ciclos automáticos de nómina</div>
+            <div id="kpiSettled" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">$4,300.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
+            <div data-i18n="kpi_settled_sub" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ciclos automáticos de nómina</div>
           </div>
         </div>
 
         <!-- Card 3: Pending x402 Claims -->
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 relative overflow-hidden group hover:border-amber-500/40 transition-all">
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-amber-500/40 shadow-sm transition-all">
           <div class="flex justify-between items-start">
-            <span data-i18n="kpi_pending_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold tracking-wider">Reclamos x402 Pendientes</span>
-            <span data-i18n="kpi_pending_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-[#F59E0B]/10 text-[#F59E0B] border border-[#F59E0B]/30">ESPERANDO_CICLO</span>
+            <span data-i18n="kpi_pending_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Reclamos x402 Pendientes</span>
+            <span data-i18n="kpi_pending_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/30">ESPERANDO_CICLO</span>
           </div>
           <div class="mt-3">
-            <div id="kpiPending" class="text-2xl font-bold text-[#F59E0B] tracking-tight">2 Reclamos <span class="text-sm font-normal text-slate-400">($4,300 USD₮)</span></div>
-            <div data-i18n="kpi_pending_sub" class="text-xs text-slate-400 mt-1">Siguiente: Ejecución programada Día 1</div>
+            <div id="kpiPending" class="text-2xl font-bold text-amber-600 dark:text-[#F59E0B] tracking-tight">2 Reclamos <span class="text-sm font-normal text-slate-500 dark:text-slate-400">($4,300 USD₮)</span></div>
+            <div data-i18n="kpi_pending_sub" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Siguiente: Ejecución programada Día 1</div>
           </div>
         </div>
 
         <!-- Card 4: Active Agents -->
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 transition-all">
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
           <div class="flex justify-between items-start">
-            <span data-i18n="kpi_agents_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold tracking-wider">Agentes Activos</span>
-            <span class="material-symbols-outlined text-slate-500 group-hover:text-[#2DD4BF] transition-colors">smart_toy</span>
+            <span data-i18n="kpi_agents_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Agentes Activos</span>
+            <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-[#2DD4BF] transition-colors">smart_toy</span>
           </div>
           <div class="mt-3">
-            <div id="kpiAgents" class="text-2xl font-bold text-white tracking-tight">12 <span data-i18n="kpi_agents_nodes" class="text-sm font-normal text-slate-400">Nodos Autónomos</span></div>
+            <div id="kpiAgents" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">12 <span data-i18n="kpi_agents_nodes" class="text-sm font-normal text-slate-500 dark:text-slate-400">Nodos Autónomos</span></div>
             <div class="flex items-center gap-1.5 mt-2">
               <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
               <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
               <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
-              <span class="w-2 h-2 rounded-full bg-slate-600"></span>
-              <span data-i18n="kpi_agents_sub" class="text-[11px] text-slate-400 ml-1">100% Sincronización WDK</span>
+              <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600"></span>
+              <span data-i18n="kpi_agents_sub" class="text-[11px] text-slate-500 dark:text-slate-400 ml-1">100% Sincronización WDK</span>
             </div>
           </div>
         </div>
@@ -262,44 +281,44 @@
       <!-- 4. Main Section: Split-Screen Agent Cockpit -->
       <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Left Panel: Company Treasury & WDK Policy Guard -->
-        <div class="lg:col-span-7 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-6">
+        <div class="lg:col-span-7 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between space-y-6 shadow-sm">
           <div>
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
               <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-[#2DD4BF]">shield</span>
-                <h3 data-i18n="panel_treasury_title" class="text-lg font-bold text-white">Tesorería Corporativa & Guardián WDK</h3>
+                <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">shield</span>
+                <h3 data-i18n="panel_treasury_title" class="text-lg font-bold text-slate-900 dark:text-white">Tesorería Corporativa & Guardián WDK</h3>
               </div>
-              <span data-i18n="panel_treasury_enforcement" class="text-xs font-mono-tech px-2.5 py-1 rounded-md bg-slate-900 border border-slate-700 text-slate-300">ENFORCEMENT EN VIVO</span>
+              <span data-i18n="panel_treasury_enforcement" class="text-xs font-mono-tech px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">ENFORCEMENT EN VIVO</span>
             </div>
 
             <!-- Guardrail Rules Badges & Capacity -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
               <!-- Capacity Radial/Bar Card -->
-              <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800">
-                <div data-i18n="panel_budget_title" class="text-xs font-mono-tech text-slate-400 uppercase">Presupuesto Mensual de Nómina</div>
-                <div id="budgetProgressText" class="text-lg font-bold text-white mt-1">$4,300 / $50,000 USD₮</div>
-                <div class="w-full bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+              <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
+                <div data-i18n="panel_budget_title" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400 uppercase">Presupuesto Mensual de Nómina</div>
+                <div id="budgetProgressText" class="text-lg font-bold text-slate-900 dark:text-white mt-1">$4,300 / $50,000 USD₮</div>
+                <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
                   <div id="budgetProgressBar" class="bg-gradient-to-r from-[#2DD4BF] to-teal-400 h-2 rounded-full transition-all duration-500" style="width: 15%"></div>
                 </div>
-                <div class="flex justify-between text-[11px] text-slate-400 mt-2 font-mono-tech">
+                <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mt-2 font-mono-tech">
                   <span id="budgetPercentText">15% Asignado</span>
                   <span data-i18n="panel_budget_reserve">85% Reserva de Liquidez</span>
                 </div>
               </div>
 
               <!-- Active Guardrail Badges -->
-              <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col justify-between">
-                <div data-i18n="panel_rules_title" class="text-xs font-mono-tech text-slate-400 uppercase">Reglas WDK Aplicadas</div>
+              <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+                <div data-i18n="panel_rules_title" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400 uppercase">Reglas WDK Aplicadas</div>
                 <div class="space-y-2 mt-2">
-                  <div class="flex items-center gap-2 text-xs text-slate-200">
+                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
                     <span data-i18n="rule_whitelist">Regla: Solo Lista Blanca (Activa)</span>
                   </div>
-                  <div class="flex items-center gap-2 text-xs text-slate-200">
+                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
                     <span data-i18n="rule_cap">Regla: Máx. 5,000 USD₮ / tx (Aplicada)</span>
                   </div>
-                  <div class="flex items-center gap-2 text-xs text-slate-200">
+                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
                     <span data-i18n="rule_default_deny">Regla: Default-Deny para Ops Desconocidas</span>
                   </div>
@@ -309,45 +328,45 @@
           </div>
 
           <!-- Live Policy Simulation Box -->
-          <div class="bg-[#0A0F1D] rounded-xl p-4 border border-slate-800 font-mono-tech text-xs">
-            <div class="flex items-center justify-between text-slate-400 border-b border-slate-800 pb-2 mb-2">
+          <div class="bg-slate-100 dark:bg-[#0A0F1D] rounded-xl p-4 border border-slate-200 dark:border-slate-800 font-mono-tech text-xs">
+            <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2 mb-2">
               <span class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-ping"></span>
                 <span data-i18n="sim_box_title">Simulación Pre-Flight de Políticas WDK</span>
               </span>
-              <span id="simStatusHeader" class="text-[#2DD4BF]">account.simulate.transfer: LISTO</span>
+              <span id="simStatusHeader" class="text-teal-600 dark:text-[#2DD4BF] font-semibold">account.simulate.transfer: LISTO</span>
             </div>
-            <div id="simLogBox" class="space-y-1.5 text-slate-300 min-h-[100px] flex flex-col justify-center">
-              <p><span class="text-slate-500">[EN ESPERA]</span> Aguardando requerimiento entrante de pago de agente...</p>
+            <div id="simLogBox" class="space-y-1.5 text-slate-700 dark:text-slate-300 min-h-[100px] flex flex-col justify-center">
+              <p><span class="text-slate-400 dark:text-slate-500">[EN ESPERA]</span> Aguardando requerimiento entrante de pago de agente...</p>
             </div>
           </div>
         </div>
 
         <!-- Right Panel: Employee Agent Claim Station -->
-        <div class="lg:col-span-5 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between space-y-6">
+        <div class="lg:col-span-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between space-y-6 shadow-sm">
           <div>
-            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
               <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-[#F59E0B]">badge</span>
-                <h3 data-i18n="panel_claim_title" class="text-lg font-bold text-white">Estación de Reclamos del Agente Empleado</h3>
+                <span class="material-symbols-outlined text-amber-600 dark:text-[#F59E0B]">badge</span>
+                <h3 data-i18n="panel_claim_title" class="text-lg font-bold text-slate-900 dark:text-white">Estación de Reclamos del Agente Empleado</h3>
               </div>
-              <span class="text-xs font-mono-tech px-2 py-0.5 rounded bg-teal-500/10 text-[#2DD4BF] border border-teal-500/30">emp-001</span>
+              <span class="text-xs font-mono-tech px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30 font-bold">emp-001</span>
             </div>
 
             <!-- Profile Info Card -->
-            <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 mt-6 flex items-center justify-between">
+            <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 mt-6 flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-slate-800 border border-teal-500/40 flex items-center justify-center font-bold text-lg text-[#2DD4BF]">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-slate-800 border border-teal-500/40 flex items-center justify-center font-bold text-lg text-teal-600 dark:text-[#2DD4BF]">
                   AD
                 </div>
                 <div>
-                  <h4 class="font-bold text-white">Alice Developer</h4>
-                  <p data-i18n="emp_role_alice" class="text-xs text-slate-400">Desarrolladora Senior Core · 2,500 USD₮ / mes</p>
+                  <h4 class="font-bold text-slate-900 dark:text-white">Alice Developer</h4>
+                  <p data-i18n="emp_role_alice" class="text-xs text-slate-500 dark:text-slate-400">Desarrolladora Senior Core · 2,500 USD₮ / mes</p>
                 </div>
               </div>
               <div class="text-right">
-                <span data-i18n="emp_status_label" class="text-xs font-mono-tech text-slate-400">Estado</span>
-                <p id="aliceAgentStatus" data-i18n="emp_status_ready" class="text-xs font-mono-tech text-[#2DD4BF] font-bold">LISTO_PARA_COBRAR</p>
+                <span data-i18n="emp_status_label" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Estado</span>
+                <p id="aliceAgentStatus" data-i18n="emp_status_ready" class="text-xs font-mono-tech text-teal-600 dark:text-[#2DD4BF] font-bold">LISTO_PARA_COBRAR</p>
               </div>
             </div>
 
@@ -358,7 +377,7 @@
                 <span data-i18n="btn_trigger_claim">Disparar Reclamo x402</span>
               </button>
 
-              <button id="btnSimulateThreat" onclick="simulateThreat()" class="bg-transparent hover:bg-amber-500/10 text-[#F59E0B] border border-[#F59E0B]/60 font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 transition-all">
+              <button id="btnSimulateThreat" onclick="simulateThreat()" class="bg-transparent hover:bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/60 font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 transition-all">
                 <span class="material-symbols-outlined text-[18px]">warning</span>
                 <span data-i18n="btn_simulate_threat">Simular Amenaza</span>
               </button>
@@ -366,12 +385,12 @@
           </div>
 
           <!-- Payload Preview Box -->
-          <div class="bg-[#0A0F1D] rounded-xl p-4 border border-slate-800 font-mono-tech text-xs">
-            <div class="text-slate-400 border-b border-slate-800 pb-2 mb-2 flex justify-between">
+          <div class="bg-slate-100 dark:bg-[#0A0F1D] rounded-xl p-4 border border-slate-200 dark:border-slate-800 font-mono-tech text-xs">
+            <div class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2 mb-2 flex justify-between">
               <span data-i18n="payload_preview_title">Requerimiento x402 & Recibo</span>
-              <span class="text-[#F59E0B]">HTTP 402 / X-PAYMENT</span>
+              <span class="text-amber-600 dark:text-[#F59E0B] font-semibold">HTTP 402 / X-PAYMENT</span>
             </div>
-            <pre id="jsonPayload" class="text-slate-300 text-[11px] overflow-x-auto">{
+            <pre id="jsonPayload" class="text-slate-800 dark:text-slate-300 text-[11px] overflow-x-auto">{
   "x402Version": 1,
   "employeeId": "emp-001",
   "amountUsdt": 2500,
@@ -385,60 +404,60 @@
       </section>
 
       <!-- 5. Interactive Visual Pipeline: "Settlement Protocol Inspector" -->
-      <section class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6">
+      <section class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-[#2DD4BF]">schema</span>
-            <h3 data-i18n="pipeline_title" class="text-lg font-bold text-white">Inspector del Protocolo de Liquidación (Flujo en 5 Fases)</h3>
+            <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">schema</span>
+            <h3 data-i18n="pipeline_title" class="text-lg font-bold text-slate-900 dark:text-white">Inspector del Protocolo de Liquidación (Flujo en 5 Fases)</h3>
           </div>
-          <span data-i18n="pipeline_subtitle" class="text-xs font-mono-tech text-slate-400">Handshake Autónomo entre Agentes en Sepolia</span>
+          <span data-i18n="pipeline_subtitle" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Handshake Autónomo entre Agentes en Sepolia</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
           <!-- Step 1 -->
-          <div id="flowStep1" class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-[#2DD4BF]/10 text-[#2DD4BF] flex items-center justify-center border border-[#2DD4BF]/40">
+          <div id="flowStep1" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
+            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
               <span class="material-symbols-outlined text-[20px]">calendar_today</span>
             </div>
-            <h5 data-i18n="step1_title" class="text-xs font-bold text-white">1. Fecha de Cobro Detectada</h5>
-            <p data-i18n="step1_desc" class="text-[11px] text-slate-400">Disparo de Día 1 por Scheduler</p>
+            <h5 data-i18n="step1_title" class="text-xs font-bold text-slate-900 dark:text-white">1. Fecha de Cobro Detectada</h5>
+            <p data-i18n="step1_desc" class="text-[11px] text-slate-500 dark:text-slate-400">Disparo de Día 1 por Scheduler</p>
           </div>
 
           <!-- Step 2 -->
-          <div id="flowStep2" class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-[#2DD4BF]/10 text-[#2DD4BF] flex items-center justify-center border border-[#2DD4BF]/40">
+          <div id="flowStep2" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
+            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
               <span class="material-symbols-outlined text-[20px]">receipt_long</span>
             </div>
-            <h5 data-i18n="step2_title" class="text-xs font-bold text-white">2. Requerimiento x402 Emitido</h5>
-            <p data-i18n="step2_desc" class="text-[11px] text-slate-400">HTTP 402 + Cabecera X-PAYMENT</p>
+            <h5 data-i18n="step2_title" class="text-xs font-bold text-slate-900 dark:text-white">2. Requerimiento x402 Emitido</h5>
+            <p data-i18n="step2_desc" class="text-[11px] text-slate-500 dark:text-slate-400">HTTP 402 + Cabecera X-PAYMENT</p>
           </div>
 
           <!-- Step 3 -->
-          <div id="flowStep3" class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-[#2DD4BF]/10 text-[#2DD4BF] flex items-center justify-center border border-[#2DD4BF]/40">
+          <div id="flowStep3" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
+            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
               <span class="material-symbols-outlined text-[20px]">policy</span>
             </div>
-            <h5 data-i18n="step3_title" class="text-xs font-bold text-white">3. Simulación de Política WDK</h5>
-            <p data-i18n="step3_desc" class="text-[11px] text-slate-400">ALLOW (Lista Blanca & Tope)</p>
+            <h5 data-i18n="step3_title" class="text-xs font-bold text-slate-900 dark:text-white">3. Simulación de Política WDK</h5>
+            <p data-i18n="step3_desc" class="text-[11px] text-slate-500 dark:text-slate-400">ALLOW (Lista Blanca & Tope)</p>
           </div>
 
           <!-- Step 4 -->
-          <div id="flowStep4" class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-[#2DD4BF]/10 text-[#2DD4BF] flex items-center justify-center border border-[#2DD4BF]/40">
+          <div id="flowStep4" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
+            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
               <span class="material-symbols-outlined text-[20px]">currency_exchange</span>
             </div>
-            <h5 data-i18n="step4_title" class="text-xs font-bold text-white">4. Transferencia USD₮ Emitida</h5>
-            <p data-i18n="step4_desc" class="text-[11px] text-slate-400">Ethereum Sepolia Testnet</p>
+            <h5 data-i18n="step4_title" class="text-xs font-bold text-slate-900 dark:text-white">4. Transferencia USD₮ Emitida</h5>
+            <p data-i18n="step4_desc" class="text-[11px] text-slate-500 dark:text-slate-400">Ethereum Sepolia Testnet</p>
           </div>
 
           <!-- Step 5 -->
-          <div id="flowStep5" class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
+          <div id="flowStep5" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
             <div class="w-10 h-10 rounded-full bg-[#2DD4BF] text-[#0F172A] flex items-center justify-center font-bold">
               <span class="material-symbols-outlined text-[20px]">verified</span>
             </div>
-            <h5 id="flowStep5Title" data-i18n="step5_title" class="text-xs font-bold text-[#2DD4BF]">5. Recibo Validado</h5>
+            <h5 id="flowStep5Title" data-i18n="step5_title" class="text-xs font-bold text-teal-600 dark:text-[#2DD4BF]">5. Recibo Validado</h5>
             <div id="flowStep5Container">
-              <p id="flowStep5Tx" data-i18n="step5_awaiting" class="text-[11px] font-mono-tech text-slate-300">Aguardando Liquidación</p>
+              <p id="flowStep5Tx" data-i18n="step5_awaiting" class="text-[11px] font-mono-tech text-slate-600 dark:text-slate-300">Aguardando Liquidación</p>
             </div>
           </div>
         </div>
@@ -447,12 +466,12 @@
       <!-- 6. Comparative Analytics & Activity Ledger -->
       <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <!-- Analytics Chart -->
-        <div class="xl:col-span-5 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
+        <div class="xl:col-span-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
           <div class="flex justify-between items-center mb-4">
-            <h4 data-i18n="analytics_title" class="text-base font-bold text-white">Volumen Liquidado vs Pendiente</h4>
+            <h4 data-i18n="analytics_title" class="text-base font-bold text-slate-900 dark:text-white">Volumen Liquidado vs Pendiente</h4>
             <div class="flex items-center gap-3 text-xs font-mono-tech">
-              <span class="flex items-center gap-1.5 text-[#2DD4BF]"><span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span> <span data-i18n="analytics_legend_settled">Liquidado</span></span>
-              <span class="flex items-center gap-1.5 text-[#F59E0B]"><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span> <span data-i18n="analytics_legend_pending">Pendiente</span></span>
+              <span class="flex items-center gap-1.5 text-teal-600 dark:text-[#2DD4BF] font-semibold"><span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span> <span data-i18n="analytics_legend_settled">Liquidado</span></span>
+              <span class="flex items-center gap-1.5 text-amber-600 dark:text-[#F59E0B] font-semibold"><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span> <span data-i18n="analytics_legend_pending">Pendiente</span></span>
             </div>
           </div>
           <div class="h-60 w-full">
@@ -461,16 +480,16 @@
         </div>
 
         <!-- Ledger Table -->
-        <div class="xl:col-span-7 bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
+        <div class="xl:col-span-7 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
           <div class="flex justify-between items-center mb-4">
-            <h4 data-i18n="ledger_title" class="text-base font-bold text-white">Libro Contable de Liquidaciones Autónomas</h4>
-            <span data-i18n="ledger_subtitle" class="text-xs font-mono-tech text-slate-400">Eventos Verificados On-Chain</span>
+            <h4 data-i18n="ledger_title" class="text-base font-bold text-slate-900 dark:text-white">Libro Contable de Liquidaciones Autónomas</h4>
+            <span data-i18n="ledger_subtitle" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Eventos Verificados On-Chain</span>
           </div>
 
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs font-mono-tech">
               <thead>
-                <tr class="text-slate-400 border-b border-slate-800">
+                <tr class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                   <th data-i18n="th_timestamp" class="pb-3 font-semibold">Marca Temporal</th>
                   <th data-i18n="th_agent_id" class="pb-3 font-semibold">ID de Agente</th>
                   <th data-i18n="th_amount" class="pb-3 font-semibold">Monto</th>
@@ -478,7 +497,7 @@
                   <th data-i18n="th_tx_hash" class="pb-3 font-semibold">Hash Tx (Sepolia)</th>
                 </tr>
               </thead>
-              <tbody id="ledgerTbody" class="divide-y divide-slate-800/60 text-slate-300">
+              <tbody id="ledgerTbody" class="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
                 <!-- Dynamically populated -->
               </tbody>
             </table>
@@ -496,6 +515,10 @@
     // 1. Initialize Chart
     function initChart() {
       const ctx = document.getElementById('payrollChart').getContext('2d');
+      const isDark = document.documentElement.classList.contains('dark');
+      const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+      const tickColor = isDark ? '#94A3B8' : '#64748B';
+
       payrollChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -528,8 +551,8 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94A3B8', font: { family: 'JetBrains Mono', size: 10 } } }
+            x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'JetBrains Mono', size: 10 } } },
+            y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'JetBrains Mono', size: 10 } } }
           }
         }
       });
@@ -554,7 +577,7 @@
         if (data.isPaydayToday) {
           const badge = document.getElementById('schedulerBadge');
           badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_active') : 'DÍA DE PAGO ACTIVO (DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30';
         }
 
         if (data.metrics) {
@@ -570,9 +593,9 @@
     }
 
     function updateMetricsUI(metrics) {
-      document.getElementById('kpiLiquidity').innerHTML = `$${metrics.treasuryLiquidity.toLocaleString()}.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span>`;
-      document.getElementById('kpiSettled').innerHTML = `$${metrics.settledVolume.toLocaleString()}.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span>`;
-      document.getElementById('kpiPending').innerHTML = `${metrics.pendingClaimsCount} ${window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Claims' : 'Reclamos'} <span class="text-sm font-normal text-slate-400">($${metrics.pendingClaimsUsdt.toLocaleString()} USD₮)</span>`;
+      document.getElementById('kpiLiquidity').innerHTML = `$${metrics.treasuryLiquidity.toLocaleString()}.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
+      document.getElementById('kpiSettled').innerHTML = `$${metrics.settledVolume.toLocaleString()}.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
+      document.getElementById('kpiPending').innerHTML = `${metrics.pendingClaimsCount} ${window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Claims' : 'Reclamos'} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">($${metrics.pendingClaimsUsdt.toLocaleString()} USD₮)</span>`;
       document.getElementById('budgetProgressText').innerText = `$${metrics.settledVolume.toLocaleString()} / $50,000 USD₮`;
       const pct = Math.min(100, Math.round((metrics.settledVolume / 50000) * 100));
       document.getElementById('budgetProgressBar').style.width = `${pct}%`;
@@ -585,23 +608,23 @@
       tbody.innerHTML = txList.map(tx => {
         const isSettled = tx.status === 'SETTLED';
         const badgeClass = isSettled
-          ? 'bg-teal-500/10 text-teal-400 border-teal-500/30'
-          : 'bg-red-500/10 text-red-400 border-red-500/30';
-        const amountColor = isSettled ? 'text-[#2DD4BF]' : 'text-slate-400';
+          ? 'bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-500/30'
+          : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30';
+        const amountColor = isSettled ? 'text-teal-600 dark:text-[#2DD4BF]' : 'text-slate-500 dark:text-slate-400';
 
         const txLink = tx.explorerUrl
-          ? `<a href="${tx.explorerUrl}" target="_blank" class="text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${tx.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
-          : `<span class="text-slate-500 font-mono-tech">${tx.txHash}</span>`;
+          ? `<a href="${tx.explorerUrl}" target="_blank" class="text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${tx.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
+          : `<span class="text-slate-400 dark:text-slate-500 font-mono-tech">${tx.txHash}</span>`;
 
         return `
-          <tr class="hover:bg-slate-800/30 transition-colors">
-            <td class="py-3 text-slate-400">${tx.timestamp}</td>
-            <td class="py-3 text-white font-bold">${tx.agentId}</td>
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+            <td class="py-3 text-slate-500 dark:text-slate-400">${tx.timestamp}</td>
+            <td class="py-3 text-slate-900 dark:text-white font-bold">${tx.agentId}</td>
             <td class="py-3 ${amountColor} font-semibold">${tx.amountUsdt.toLocaleString()}.00 USD₮</td>
             <td class="py-3">
               <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeClass}">${tx.status}</span>
             </td>
-            <td class="py-3 text-slate-400 max-w-[140px]">${txLink}</td>
+            <td class="py-3 text-slate-500 dark:text-slate-400 max-w-[140px]">${txLink}</td>
           </tr>
         `;
       }).join('');
@@ -628,26 +651,26 @@
           document.getElementById('simClockText').innerText = data.timeWarp.newDate;
           const badge = document.getElementById('schedulerBadge');
           badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_active') : 'DÍA DE PAGO ACTIVO (DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-400 border border-teal-500/30';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30';
 
           document.getElementById('aliceAgentStatus').innerText = window.PaygentI18n ? window.PaygentI18n.t('emp_status_paid') : 'PAGO_CONFIRMADO';
           document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
 
           // Update Simulation Box
           const simBox = document.getElementById('simLogBox');
-          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-300 font-mono-tech">${line}</p>`).join('');
+          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`).join('');
 
           // Update Payload Box with full receipt
           const payloadBox = document.getElementById('jsonPayload');
           const firstResult = data.cycleResult.results[0];
           payloadBox.innerHTML = JSON.stringify(firstResult?.receipt || data.cycleResult, null, 2);
-          payloadBox.classList.add('text-[#2DD4BF]');
+          payloadBox.classList.add('text-teal-700', 'dark:text-[#2DD4BF]');
 
           // Update Step 5 Link
           if (firstResult?.txHash) {
             const txShort = firstResult.txHash.slice(0, 10) + '...';
             document.getElementById('flowStep5Container').innerHTML = `
-              <a href="${firstResult.receipt?.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
+              <a href="${firstResult.receipt?.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-600 dark:text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
                 Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
               </a>
             `;
@@ -674,7 +697,7 @@
           document.getElementById('simClockText').innerText = data.simulatedDate;
           const badge = document.getElementById('schedulerBadge');
           badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_standby') : 'EN ESPERA (ESPERANDO DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30';
+          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30';
           loadSystemStatus();
         }
       } catch (e) {
@@ -703,15 +726,15 @@
           document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
 
           const simBox = document.getElementById('simLogBox');
-          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-300 font-mono-tech">${line}</p>`).join('');
+          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`).join('');
 
           const payloadBox = document.getElementById('jsonPayload');
           payloadBox.innerHTML = JSON.stringify(data.receipt, null, 2);
-          payloadBox.classList.add('text-[#2DD4BF]');
+          payloadBox.classList.add('text-teal-700', 'dark:text-[#2DD4BF]');
 
           const txShort = data.receipt.txHash.slice(0, 10) + '...';
           document.getElementById('flowStep5Container').innerHTML = `
-            <a href="${data.receipt.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
+            <a href="${data.receipt.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-600 dark:text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
               Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
             </a>
           `;
@@ -738,11 +761,11 @@
         const data = await res.json();
 
         document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: DENY';
-        document.getElementById('simStatusHeader').classList.remove('text-[#2DD4BF]');
-        document.getElementById('simStatusHeader').classList.add('text-[#F59E0B]');
+        document.getElementById('simStatusHeader').classList.remove('text-teal-600', 'dark:text-[#2DD4BF]');
+        document.getElementById('simStatusHeader').classList.add('text-amber-600', 'dark:text-[#F59E0B]');
 
         const simBox = document.getElementById('simLogBox');
-        simBox.innerHTML = data.simulationLog.map(line => `<p class="text-amber-400 font-mono-tech">${line}</p>`).join('');
+        simBox.innerHTML = data.simulationLog.map(line => `<p class="text-amber-600 dark:text-amber-400 font-mono-tech">${line}</p>`).join('');
 
         const payloadBox = document.getElementById('jsonPayload');
         payloadBox.innerHTML = JSON.stringify({
@@ -750,8 +773,8 @@
           policyDecision: "DENY",
           timestamp: new Date().toISOString()
         }, null, 2);
-        payloadBox.classList.remove('text-[#2DD4BF]');
-        payloadBox.classList.add('text-[#F59E0B]');
+        payloadBox.classList.remove('text-teal-700', 'dark:text-[#2DD4BF]');
+        payloadBox.classList.add('text-amber-600', 'dark:text-[#F59E0B]');
 
         loadSystemStatus();
       } catch (err) {

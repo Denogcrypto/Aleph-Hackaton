@@ -15,6 +15,7 @@ const TRANSLATIONS = {
     nav_logs: 'Registros de Auditoría x402',
     nav_network_title: 'Ethereum Sepolia',
     nav_network_subtitle: 'USD₮ WDK No Custodial',
+    nav_exit_home: 'Salir / Volver a la Landing',
 
     // Header
     header_subtitle: 'Cockpit Autónomo de Tesorería',
@@ -196,6 +197,7 @@ const TRANSLATIONS = {
     nav_logs: 'x402 Audit Logs',
     nav_network_title: 'Ethereum Sepolia',
     nav_network_subtitle: 'USD₮ Non-Custodial WDK',
+    nav_exit_home: 'Exit / Back to Home',
 
     // Header
     header_subtitle: 'Autonomous Treasury Cockpit',
