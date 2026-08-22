@@ -30,7 +30,10 @@
       white-space: nowrap;
       direction: ltr;
     }
-    body { font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif; }
+    body {
+      font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
     .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -58,58 +61,58 @@
   </script>
 </head>
 
-<body class="bg-[#0F172A] text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+<body class="bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
-    <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
+  <aside class="w-64 bg-white/95 dark:bg-[#122131]/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
+    <div class="h-20 flex items-center px-5 border-b border-slate-200 dark:border-slate-800/80">
       <a href="/index.html" class="flex items-center gap-2 w-full">
         <img src="/paygent-logo.svg" alt="Paygent Logo" class="brand-logo-img h-10 w-auto object-contain" />
       </a>
     </div>
 
     <nav class="flex-1 py-6 px-4 space-y-1.5">
-      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">dashboard</span>
         <span data-i18n="nav_overview">Resumen / Cockpit</span>
       </a>
 
-      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
+      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-teal-700 dark:text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
         <span class="material-symbols-outlined text-[20px]">account_balance</span>
         <span data-i18n="nav_treasury">Tesorería de Empresa</span>
       </a>
 
-      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">smart_toy</span>
         <span data-i18n="nav_employees">Agentes Empleados</span>
       </a>
 
-      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">policy</span>
         <span data-i18n="nav_policy">Motor de Políticas WDK</span>
       </a>
 
-      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 font-medium transition-all">
+      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
         <span class="material-symbols-outlined text-[20px]">receipt_long</span>
         <span data-i18n="nav_logs">Registros de Auditoría x402</span>
       </a>
     </nav>
 
     <!-- Bottom Sidebar with Language Switcher, Theme Toggle & Sepolia Badge -->
-    <div class="p-4 border-t border-slate-800/80">
+    <div class="p-4 border-t border-slate-200 dark:border-slate-800/80">
       <div class="flex items-center gap-2 mb-3">
         <div id="langSwitcherContainer" class="flex-1"></div>
         <div id="themeToggleContainer"></div>
       </div>
 
-      <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
+      <div class="bg-slate-100 dark:bg-slate-900/80 rounded-xl p-3 border border-slate-200 dark:border-slate-800 flex items-center gap-2.5">
         <span class="relative flex h-2.5 w-2.5">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
         </span>
-        <div class="text-[11px] font-mono-tech leading-tight text-slate-300">
-          <p class="font-bold text-white" data-i18n="nav_network_title">Ethereum Sepolia</p>
-          <p class="text-slate-400" data-i18n="nav_network_subtitle">USD₮ WDK No Custodial</p>
+        <div class="text-[11px] font-mono-tech leading-tight text-slate-700 dark:text-slate-300">
+          <p class="font-bold text-slate-900 dark:text-white" data-i18n="nav_network_title">Ethereum Sepolia</p>
+          <p class="text-slate-500 dark:text-slate-400" data-i18n="nav_network_subtitle">USD₮ WDK No Custodial</p>
         </div>
       </div>
     </div>
@@ -117,14 +120,19 @@
 
   <!-- Main Content -->
   <div class="flex-1 ml-64 flex flex-col min-w-0">
-    <header class="h-20 bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between">
+    <header class="h-20 bg-white/80 dark:bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between transition-colors">
       <div class="flex items-center gap-3">
-        <span class="text-xs font-mono-tech text-slate-400">Paygent</span>
-        <span class="text-slate-600">/</span>
-        <span data-i18n="treasury_page_title" class="text-sm font-semibold text-white">Bóveda de Tesorería y Reservas de Gas</span>
+        <span class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Paygent</span>
+        <span class="text-slate-400 dark:text-slate-600">/</span>
+        <span data-i18n="treasury_page_title" class="text-sm font-semibold text-slate-900 dark:text-white">Bóveda de Tesorería y Reservas de Gas</span>
       </div>
 
       <div class="flex items-center gap-3">
+        <button onclick="loadTreasuryData()" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 px-3.5 rounded-xl text-xs font-mono-tech border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 transition-all">
+          <span class="material-symbols-outlined text-[16px]">refresh</span>
+          <span>Refrescar On-Chain</span>
+        </button>
+
         <button onclick="openDepositModal()" class="bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-2 px-4 rounded-xl text-xs font-mono-tech flex items-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.3)] transition-all">
           <span class="material-symbols-outlined text-[18px]">add_card</span>
           <span data-i18n="btn_deposit_funds">Depositar Fondos</span>
@@ -136,65 +144,65 @@
       
       <!-- Top Overview Stats -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
-          <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Liquidez en Tesorería</span>
-          <div class="text-3xl font-bold text-white mt-2">$45,700.00 <span class="text-sm font-normal text-[#2DD4BF]">USD₮</span></div>
-          <p class="text-xs text-[#2DD4BF] mt-2 font-mono-tech">Ethereum Sepolia Non-Custodial</p>
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
+          <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Liquidez en Tesorería</span>
+          <div id="treasuryUsdtText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$45,700.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
+          <p class="text-xs text-teal-600 dark:text-[#2DD4BF] mt-2 font-mono-tech">Ethereum Sepolia Non-Custodial</p>
         </div>
 
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
-          <span data-i18n="vault_gas_reserve" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Reserva de Gas (Sepolia ETH)</span>
-          <div class="text-3xl font-bold text-white mt-2">0.0500 <span class="text-sm font-normal text-[#F59E0B]">ETH</span></div>
-          <p class="text-xs text-slate-400 mt-2 font-mono-tech">~150 transferencias cubiertas</p>
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
+          <span data-i18n="vault_gas_reserve" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Reserva de Gas (Sepolia ETH)</span>
+          <div id="treasuryEthText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">0.0500 <span class="text-sm font-normal text-amber-600 dark:text-[#F59E0B]">ETH</span></div>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 font-mono-tech">Balance On-Chain detectado</p>
         </div>
 
-        <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 flex flex-col justify-between">
-          <span data-i18n="panel_budget_title" class="text-xs font-mono-tech uppercase text-slate-400 font-semibold">Presupuesto Mensual de Nómina</span>
-          <div class="text-3xl font-bold text-white mt-2">$4,300 <span class="text-sm font-normal text-slate-400">/ $50,000</span></div>
-          <p class="text-xs text-emerald-400 mt-2 font-mono-tech">8.6% asignado</p>
+        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
+          <span data-i18n="panel_budget_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold">Presupuesto Mensual de Nómina</span>
+          <div id="treasuryBudgetText" class="text-3xl font-bold text-slate-900 dark:text-white mt-2">$4,300 <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span></div>
+          <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-2 font-mono-tech">8.6% asignado</p>
         </div>
       </section>
 
       <!-- Vault Cards -->
       <section class="space-y-4">
-        <h3 data-i18n="vault_title" class="text-lg font-bold text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-[#2DD4BF]">account_balance</span>
+        <h3 data-i18n="vault_title" class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">account_balance</span>
           Bóveda Corporativa Multichain
         </h3>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Sepolia Vault Card -->
-          <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 space-y-4">
+          <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 shadow-sm">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#2DD4BF]/10 border border-[#2DD4BF]/30 flex items-center justify-center text-[#2DD4BF] font-bold">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF] font-bold">
                   Ξ
                 </div>
                 <div>
-                  <h4 data-i18n="vault_sepolia_label" class="font-bold text-white">Bóveda Ethereum Sepolia (Principal)</h4>
-                  <p class="text-xs text-slate-400 font-mono-tech">Chain ID: 11155111</p>
+                  <h4 data-i18n="vault_sepolia_label" class="font-bold text-slate-900 dark:text-white">Bóveda Ethereum Sepolia (Principal)</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-mono-tech">Chain ID: 11155111</p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-[#2DD4BF] border border-teal-500/30">ACTIVA</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30">ACTIVA</span>
             </div>
 
-            <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2 text-xs font-mono-tech">
+            <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono-tech">
               <div class="flex justify-between">
-                <span class="text-slate-400">Dirección:</span>
-                <span class="text-white">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</span>
+                <span class="text-slate-500 dark:text-slate-400">Dirección:</span>
+                <span id="vaultAddressText" class="text-slate-900 dark:text-white">0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-slate-400">Balance USD₮:</span>
-                <span class="text-[#2DD4BF] font-bold">45,700.00 USD₮</span>
+                <span class="text-slate-500 dark:text-slate-400">Balance USD₮:</span>
+                <span id="vaultUsdtText" class="text-teal-600 dark:text-[#2DD4BF] font-bold">5,576.04 USD₮</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-slate-400">Gas ETH:</span>
-                <span class="text-white">0.05 ETH</span>
+                <span class="text-slate-500 dark:text-slate-400">Gas ETH:</span>
+                <span id="vaultEthText" class="text-slate-900 dark:text-white">0.05 ETH</span>
               </div>
             </div>
 
             <div class="flex gap-2">
-              <a href="https://sepolia.etherscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" target="_blank" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
+              <a id="etherscanLink" href="https://sepolia.etherscan.io/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" target="_blank" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-2 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-1.5 transition-all">
                 <span class="material-symbols-outlined text-[16px]">open_in_new</span>
                 Ver en Sepolia Etherscan
               </a>
@@ -202,37 +210,37 @@
           </div>
 
           <!-- TON Testnet Vault Card -->
-          <div class="bg-[#1E293B] rounded-2xl border border-slate-800 p-6 space-y-4 opacity-80">
+          <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4 opacity-75 shadow-sm">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 font-bold">
                   💎
                 </div>
                 <div>
-                  <h4 data-i18n="vault_ton_label" class="font-bold text-white">Bóveda TON Testnet (Secundaria)</h4>
-                  <p class="text-xs text-slate-400 font-mono-tech">WDK TON Module</p>
+                  <h4 data-i18n="vault_ton_label" class="font-bold text-slate-900 dark:text-white">Bóveda TON Testnet (Secundaria)</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-mono-tech">WDK TON Module</p>
                 </div>
               </div>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-slate-800 text-slate-400 border border-slate-700">STANDBY</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700">STANDBY</span>
             </div>
 
-            <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800 space-y-2 text-xs font-mono-tech">
+            <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono-tech">
               <div class="flex justify-between">
-                <span class="text-slate-400">Dirección:</span>
-                <span class="text-white">EQD...ton_vault_testnet</span>
+                <span class="text-slate-500 dark:text-slate-400">Dirección:</span>
+                <span class="text-slate-700 dark:text-white">EQD...ton_vault_testnet</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-slate-400">Balance USD₮:</span>
-                <span class="text-slate-300">0.00 USD₮</span>
+                <span class="text-slate-500 dark:text-slate-400">Balance USD₮:</span>
+                <span class="text-slate-600 dark:text-slate-300">0.00 USD₮</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-slate-400">Gas TON:</span>
-                <span class="text-white">0.00 TON</span>
+                <span class="text-slate-500 dark:text-slate-400">Gas TON:</span>
+                <span class="text-slate-700 dark:text-white">0.00 TON</span>
               </div>
             </div>
 
             <div class="flex gap-2">
-              <button disabled class="flex-1 bg-slate-900 text-slate-600 font-bold py-2 rounded-xl text-xs font-mono-tech cursor-not-allowed">
+              <button disabled class="flex-1 bg-slate-100 dark:bg-slate-900 text-slate-400 dark:text-slate-600 font-bold py-2 rounded-xl text-xs font-mono-tech cursor-not-allowed">
                 Módulo Opcional
               </button>
             </div>
@@ -245,28 +253,28 @@
 
   <!-- Deposit Modal -->
   <div id="depositModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-[#1E293B] border border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4">
-      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <span class="material-symbols-outlined text-[#2DD4BF]">qr_code_2</span>
+    <div class="bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">qr_code_2</span>
           Recibir Fondos en Tesorería
         </h3>
-        <button onclick="closeDepositModal()" class="text-slate-400 hover:text-white">&times;</button>
+        <button onclick="closeDepositModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">&times;</button>
       </div>
 
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Envía <strong class="text-[#2DD4BF]">USD₮</strong> o <strong class="text-[#F59E0B]">Sepolia ETH</strong> a la dirección no custodial de la tesorería corporativa:
+      <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        Envía <strong class="text-teal-600 dark:text-[#2DD4BF]">USD₮</strong> o <strong class="text-amber-600 dark:text-[#F59E0B]">Sepolia ETH</strong> a la dirección no custodial de la tesorería corporativa:
       </p>
 
-      <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 font-mono-tech text-xs text-white break-all select-all">
+      <div id="modalAddressBox" class="bg-slate-100 dark:bg-slate-900 p-3 rounded-xl border border-slate-300 dark:border-slate-800 font-mono-tech text-xs text-slate-900 dark:text-white break-all select-all">
         0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
-        <button onclick="navigator.clipboard.writeText('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'); alert('Dirección copiada al portapapeles');" class="bg-[#2DD4BF] text-[#0F172A] font-bold py-2 px-4 rounded-xl text-xs font-mono-tech">
+        <button onclick="copyAddress()" class="bg-[#2DD4BF] text-[#0F172A] font-bold py-2 px-4 rounded-xl text-xs font-mono-tech">
           Copiar Dirección
         </button>
-        <button onclick="closeDepositModal()" class="bg-slate-800 text-slate-300 font-bold py-2 px-4 rounded-xl text-xs font-mono-tech">
+        <button onclick="closeDepositModal()" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold py-2 px-4 rounded-xl text-xs font-mono-tech">
           Cerrar
         </button>
       </div>
@@ -274,12 +282,52 @@
   </div>
 
   <script>
+    let currentTreasuryAddr = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';
+
     function openDepositModal() {
       document.getElementById('depositModal').classList.remove('hidden');
     }
     function closeDepositModal() {
       document.getElementById('depositModal').classList.add('hidden');
     }
+    function copyAddress() {
+      navigator.clipboard.writeText(currentTreasuryAddr);
+      alert('Dirección de tesorería copiada al portapapeles: ' + currentTreasuryAddr);
+    }
+
+    async function loadTreasuryData() {
+      try {
+        const res = await fetch('/api/payroll/status');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        if (data.treasuryAddress) {
+          currentTreasuryAddr = data.treasuryAddress;
+          document.getElementById('vaultAddressText').innerText = data.treasuryAddress;
+          document.getElementById('modalAddressBox').innerText = data.treasuryAddress;
+          document.getElementById('etherscanLink').href = `https://sepolia.etherscan.io/address/${data.treasuryAddress}`;
+        }
+
+        if (data.treasuryBalances) {
+          const usdtVal = Number(data.treasuryBalances.usdt).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          document.getElementById('treasuryUsdtText').innerHTML = `$${usdtVal} <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
+          document.getElementById('vaultUsdtText').innerText = `${usdtVal} USD₮`;
+
+          const ethVal = Number(data.treasuryBalances.eth).toFixed(4);
+          document.getElementById('treasuryEthText').innerHTML = `${ethVal} <span class="text-sm font-normal text-amber-600 dark:text-[#F59E0B]">ETH</span>`;
+          document.getElementById('vaultEthText').innerText = `${ethVal} ETH`;
+        }
+
+        if (data.metrics) {
+          const settled = Number(data.metrics.settledVolume).toLocaleString();
+          document.getElementById('treasuryBudgetText').innerHTML = `$${settled} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">/ $50,000</span>`;
+        }
+      } catch (err) {
+        console.warn('Error loading treasury on-chain data:', err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadTreasuryData);
   </script>
 </body>
 </html>

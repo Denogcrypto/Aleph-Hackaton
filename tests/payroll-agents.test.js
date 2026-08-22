@@ -255,4 +255,41 @@ describe('Autonomous Payroll Agents Test Suite', () => {
       expect(summary.results[0].txHash).toMatch(/^0x/)
     })
   })
+
+  describe('6. Dynamic Agent Registration & Whitelist Verification', () => {
+    test('registerEmployee should add a new employee agent to whitelist and enable settlement', async () => {
+      const charlieAddress = '0x71bE63f3384f5fb98995898A86B02Fb2426c5788'
+      expect(isEmployeeWhitelisted(charlieAddress)).toBe(false)
+
+      registerEmployee({
+        employeeId: 'emp-004',
+        name: 'Charlie Security',
+        walletAddress: charlieAddress,
+        salaryUsdt: 3200,
+        paymentDay: 1,
+        status: 'ACTIVE'
+      })
+
+      expect(isEmployeeWhitelisted(charlieAddress)).toBe(true)
+
+      const validation = validatePayrollClaim({
+        employeeId: 'emp-004',
+        walletAddress: charlieAddress,
+        amountUsdt: 3200
+      })
+      expect(validation.valid).toBe(true)
+      expect(validation.employee.name).toBe('Charlie Security')
+    })
+
+    test('validatePayrollClaim should reject tampered salary amount for dynamic agent', () => {
+      const charlieAddress = '0x71bE63f3384f5fb98995898A86B02Fb2426c5788'
+      const validation = validatePayrollClaim({
+        employeeId: 'emp-004',
+        walletAddress: charlieAddress,
+        amountUsdt: 4500 // Exceeds contract salary of 3200
+      })
+      expect(validation.valid).toBe(false)
+      expect(validation.reason).toContain('no coincide con el salario contractual')
+    })
+  })
 })

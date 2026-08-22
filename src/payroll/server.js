@@ -11,11 +11,15 @@ import { CompanyAgent } from './company-agent.js'
 import { EmployeeAgent } from './employee-agent.js'
 import { PayrollScheduler } from './payroll-scheduler.js'
 import { parsePaymentHeader } from './x402-protocol.js'
-import { listActiveEmployees, registerEmployee } from './payroll-registry.js'
+import { listActiveEmployees, registerEmployee, isEmployeeWhitelisted } from './payroll-registry.js'
 
 try {
   process.loadEnvFile()
 } catch {}
+
+const RPC_URL = process.env.RPC_URL || 'https://ethereum-sepolia-rpc.publicnode.com'
+const CHAIN_ID = Number(process.env.CHAIN_ID) || 11155111
+const USDT_TOKEN_ADDRESS = process.env.USDT_TOKEN_ADDRESS || '0x7169D38820dfd117C3FA1f22a697dBA58d90BA06'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -249,46 +253,160 @@ const server = http.createServer(async (req, res) => {
 
   // 5. Disparo Individual de Reclamo Legítimo (POST /api/payroll/trigger-employee-claim)
   if (pathname === '/api/payroll/trigger-employee-claim' && req.method === 'POST') {
-    try {
-      const period = scheduler.getCurrentPeriod()
-      const claimResult = await aliceAgent.claimSalaryFromCompany(companyAgent, period)
+    let body = ''
+    req.on('data', chunk => { body += chunk })
+    req.on('end', async () => {
+      try {
+        const payload = body ? JSON.parse(body) : {}
+        const employeeId = payload.employeeId || 'emp-001'
+        const targetAgent = employeeAgents.find(a => a.employeeId === employeeId) || aliceAgent
+        const period = scheduler.getCurrentPeriod()
+        const claimResult = await targetAgent.claimSalaryFromCompany(companyAgent, period)
 
-      if (claimResult.success) {
-        metrics.settledVolume += 2500
-        metrics.treasuryLiquidity = Math.max(0, metrics.treasuryLiquidity - 2500)
-        metrics.pendingClaimsCount = Math.max(0, metrics.pendingClaimsCount - 1)
-        metrics.pendingClaimsUsdt = Math.max(0, metrics.pendingClaimsUsdt - 2500)
+        if (claimResult.success) {
+          const amount = targetAgent.salaryUsdt || 2500
+          metrics.settledVolume += amount
+          metrics.treasuryLiquidity = Math.max(0, metrics.treasuryLiquidity - amount)
+          metrics.pendingClaimsCount = Math.max(0, metrics.pendingClaimsCount - 1)
+          metrics.pendingClaimsUsdt = Math.max(0, metrics.pendingClaimsUsdt - amount)
 
-        const newTx = {
-          timestamp: `${scheduler.getFormattedDate()} ${new Date().toTimeString().slice(0, 5)}`,
-          agentId: 'emp-001 (Alice)',
-          amountUsdt: 2500,
-          status: 'SETTLED',
-          txHash: claimResult.receipt.txHash,
-          explorerUrl: claimResult.receipt.explorerUrl || `https://sepolia.etherscan.io/tx/${claimResult.receipt.txHash}`
+          const newTx = {
+            timestamp: `${scheduler.getFormattedDate()} ${new Date().toTimeString().slice(0, 5)}`,
+            agentId: `${targetAgent.employeeId} (${targetAgent.name.split(' ')[0]})`,
+            amountUsdt: amount,
+            status: 'SETTLED',
+            txHash: claimResult.receipt.txHash,
+            explorerUrl: claimResult.receipt.explorerUrl || `https://sepolia.etherscan.io/tx/${claimResult.receipt.txHash}`
+          }
+          transactionHistory.unshift(newTx)
         }
-        transactionHistory.unshift(newTx)
-      }
 
-      res.writeHead(200, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({
-        success: claimResult.success,
-        receipt: claimResult.receipt,
-        employeeStatus: aliceAgent.status,
-        metrics,
-        simulationLog: [
-          'INIT: Policy check triggered for emp-001 (Alice Developer)',
-          'RULE: Whitelist Only -> PASS (0x9858...Eda94)',
-          'RULE: Max Cap 5,000 USDt -> PASS (2,500 USDt requested)',
-          'SIMULATION: account.simulate.transfer -> ALLOW',
-          `SETTLEMENT: Broadcast on Sepolia -> ${claimResult.receipt?.txHash}`,
-          'ACKNOWLEDGEMENT: Employee Agent validated receipt and confirmed status: PAID_CONFIRMED'
-        ]
-      }))
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' })
-      res.end(JSON.stringify({ success: false, error: err.message }))
-    }
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({
+          success: claimResult.success,
+          receipt: claimResult.receipt,
+          employeeStatus: targetAgent.status,
+          metrics,
+          simulationLog: [
+            `INIT: Policy check triggered for ${targetAgent.employeeId} (${targetAgent.name})`,
+            `RULE: Whitelist Only -> PASS (${targetAgent.walletAddress || 'verified'})`,
+            `RULE: Max Cap 5,000 USDt -> PASS (${targetAgent.salaryUsdt} USDt requested)`,
+            'SIMULATION: account.simulate.transfer -> ALLOW',
+            `SETTLEMENT: Broadcast on Sepolia -> ${claimResult.receipt?.txHash}`,
+            'ACKNOWLEDGEMENT: Employee Agent validated receipt and confirmed status: PAID_CONFIRMED'
+          ]
+        }))
+      } catch (err) {
+        res.writeHead(500, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ success: false, error: err.message }))
+      }
+    })
+    return
+  }
+
+  // 6. Registrar Nuevo Agente Empleado (POST /api/employees)
+  if (pathname === '/api/employees' && req.method === 'POST') {
+    let body = ''
+    req.on('data', chunk => { body += chunk })
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}')
+        if (!payload.name || !payload.salaryUsdt || !payload.walletAddress) {
+          res.writeHead(400, { 'Content-Type': 'application/json' })
+          res.end(JSON.stringify({ success: false, error: 'Faltan campos obligatorios: name, salaryUsdt, walletAddress' }))
+          return
+        }
+
+        const employeeId = payload.employeeId || `emp-${String(listActiveEmployees().length + 1).padStart(3, '0')}`
+        const newRecord = {
+          employeeId,
+          name: payload.name,
+          walletAddress: payload.walletAddress,
+          salaryUsdt: Number(payload.salaryUsdt),
+          paymentDay: Number(payload.paymentDay || 1),
+          status: 'ACTIVE'
+        }
+
+        registerEmployee(newRecord)
+
+        const newAgent = new EmployeeAgent({
+          employeeId: newRecord.employeeId,
+          name: newRecord.name,
+          salaryUsdt: newRecord.salaryUsdt,
+          paymentDay: newRecord.paymentDay,
+          rpcUrl: RPC_URL,
+          chainId: CHAIN_ID,
+          usdtTokenAddress: USDT_TOKEN_ADDRESS
+        })
+        newAgent.walletAddress = newRecord.walletAddress
+        employeeAgents.push(newAgent)
+
+        metrics.activeAgentsCount = listActiveEmployees().length
+        metrics.pendingClaimsCount += 1
+        metrics.pendingClaimsUsdt += newRecord.salaryUsdt
+
+        res.writeHead(201, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({
+          success: true,
+          employee: newRecord,
+          employees: listActiveEmployees()
+        }))
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ success: false, error: err.message }))
+      }
+    })
+    return
+  }
+
+  // 7. Evaluación y Simulación de Políticas WDK (POST /api/policy/evaluate)
+  if (pathname === '/api/policy/evaluate' && req.method === 'POST') {
+    let body = ''
+    req.on('data', chunk => { body += chunk })
+    req.on('end', async () => {
+      try {
+        const payload = JSON.parse(body || '{}')
+        const recipient = payload.recipient || payload.walletAddress || ''
+        const amountUsdt = Number(payload.amountUsdt || 0)
+
+        const isWhitelisted = isEmployeeWhitelisted(recipient)
+        const isUnderCap = amountUsdt > 0 && amountUsdt <= 5000
+
+        let decision = 'ALLOW'
+        let reason = 'Transacción autorizada: Destinatario verificado en lista blanca y monto dentro del tope salarial.'
+
+        if (!isWhitelisted) {
+          decision = 'DENY'
+          reason = `Violación de Política WDK: La dirección '${recipient}' no se encuentra en la lista blanca oficial de empleados autorizados.`
+        } else if (!isUnderCap) {
+          decision = 'DENY'
+          reason = `Violación de Política WDK: El monto solicitado (${amountUsdt} USD₮) excede el límite máximo de 5,000 USD₮ por transacción.`
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({
+          success: true,
+          decision,
+          reason,
+          evaluation: {
+            recipient,
+            amountUsdt,
+            isWhitelisted,
+            isUnderCap,
+            maxSalaryCapUsdt: 5000,
+            policyEngineMode: 'DEFAULT_DENY',
+            rulesChecked: [
+              { name: 'allow-whitelisted-employees', matched: isWhitelisted, action: 'ALLOW' },
+              { name: 'deny-above-cap', matched: !isUnderCap, action: 'DENY' },
+              { name: 'default-deny-unmatched', action: 'DENY' }
+            ]
+          }
+        }))
+      } catch (err) {
+        res.writeHead(400, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ success: false, error: err.message }))
+      }
+    })
     return
   }
 
