@@ -37,6 +37,14 @@ export class CompanyAgent {
   }
 
   /**
+   * Obtiene los balances en vivo on-chain (ETH y USD₮) de la tesorería en Sepolia.
+   * @returns {Promise<{ eth: number, usdt: number, rawEth?: string, rawUsdt?: string, error?: string }>}
+   */
+  async getBalances () {
+    return await this.wdkService.getOnChainBalances(0)
+  }
+
+  /**
    * Procesa y liquida un requerimiento de nómina x402 entrante.
    * @param {Object | string} rawClaim - Carga útil x402
    * @returns {Promise<{ success: boolean, receipt?: Object, error?: string, policyResult?: Object }>}

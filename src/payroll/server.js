@@ -124,6 +124,7 @@ const server = http.createServer(async (req, res) => {
     const treasuryAddress = await companyAgent.getTreasuryAddress()
     const aliceAddress = await aliceAgent.getWalletAddress()
     const bobAddress = await bobAgent.getWalletAddress()
+    const treasuryBalances = await companyAgent.getBalances()
     const employees = listActiveEmployees()
 
     res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -131,6 +132,7 @@ const server = http.createServer(async (req, res) => {
       treasuryAddress,
       aliceAddress,
       bobAddress,
+      treasuryBalances,
       policyEngine: 'ACTIVE',
       network: 'Ethereum Sepolia (eip155:11155111)',
       token: 'USDT Sepolia (0x7169D38820dfd117C3FA1f22a697dBA58d90BA06)',

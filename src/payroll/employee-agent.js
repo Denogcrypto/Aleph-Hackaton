@@ -42,6 +42,8 @@ export class EmployeeAgent {
     // Inicialización de la wallet WDK del empleado
     this.wdk = new WDK(this.seedPhrase)
       .registerWallet('ethereum', WalletManagerEvm, {
+        provider: this.rpcUrl,
+        chainId: 11155111,
         rpcUrl: this.rpcUrl,
         tokenAddress: this.tokenAddress
       })
@@ -54,6 +56,24 @@ export class EmployeeAgent {
   async getWalletAddress () {
     const account = await this.wdk.getAccount('ethereum', 0)
     return await account.getAddress()
+  }
+
+  /**
+   * Obtiene los balances on-chain en Sepolia del agente empleado.
+   * @returns {Promise<{ eth: number, usdt: number }>}
+   */
+  async getBalances () {
+    try {
+      const account = await this.wdk.getAccount('ethereum', 0)
+      const ethWei = await account.getBalance()
+      const usdtUnits = await account.getTokenBalance(this.tokenAddress)
+      return {
+        eth: Number(ethWei) / 1e18,
+        usdt: Number(usdtUnits) / 1e6
+      }
+    } catch {
+      return { eth: 0, usdt: 0 }
+    }
   }
 
   /**

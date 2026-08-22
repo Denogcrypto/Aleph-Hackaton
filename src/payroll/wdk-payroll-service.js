@@ -36,6 +36,8 @@ export class WdkPayrollService {
     // 1. Inicializar WDK Core y registrar el módulo EVM
     this.wdk = new WDK(seedPhrase)
       .registerWallet('ethereum', WalletManagerEvm, {
+        provider: this.rpcUrl,
+        chainId: 11155111,
         rpcUrl: this.rpcUrl,
         tokenAddress: this.tokenAddress
       })
@@ -147,6 +149,31 @@ export class WdkPayrollService {
       recipient,
       amount: BigInt(amountUnits)
     })
+  }
+
+  /**
+   * Obtiene los balances en vivo on-chain (ETH para gas y USD₮) de la cuenta en Sepolia.
+   * @param {number} [index=0]
+   * @returns {Promise<{ eth: number, usdt: number, rawEth?: string, rawUsdt?: string, error?: string }>}
+   */
+  async getOnChainBalances (index = 0) {
+    try {
+      const account = await this.getAccount(index)
+      const ethWei = await account.getBalance()
+      const usdtUnits = await account.getTokenBalance(this.tokenAddress)
+      return {
+        eth: Number(ethWei) / 1e18,
+        usdt: Number(usdtUnits) / 1e6,
+        rawEth: ethWei.toString(),
+        rawUsdt: usdtUnits.toString()
+      }
+    } catch (err) {
+      return {
+        eth: 0,
+        usdt: 0,
+        error: err.message
+      }
+    }
   }
 
   /**
