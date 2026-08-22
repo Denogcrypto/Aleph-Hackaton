@@ -108,6 +108,8 @@ export function createPaymentReceipt ({
   employeeId,
   walletAddress,
   amountUsdt,
+  amountEth = 0.0001,
+  currency = 'USD₮',
   network = 'eip155:11155111'
 }) {
   return {
@@ -118,7 +120,8 @@ export function createPaymentReceipt ({
     employeeId,
     recipient: walletAddress,
     amountUsdt,
-    currency: 'USD₮',
+    amountEth,
+    currency,
     explorerUrl: `https://sepolia.etherscan.io/tx/${txHash}`,
     settledAt: new Date().toISOString()
   }

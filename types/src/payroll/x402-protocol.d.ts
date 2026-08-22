@@ -45,7 +45,7 @@ export function parsePaymentHeader(headerValue: string | any): any;
  * @param {string} [params.network] - Identificador de la red (Sepolia)
  * @returns {Object} Recibo formal de nómina x402 con URL de Etherscan
  */
-export function createPaymentReceipt({ txHash, employeeId, walletAddress, amountUsdt, network }: {
+export function createPaymentReceipt({ txHash, employeeId, walletAddress, amountUsdt, amountEth, currency, network }: {
     txHash: string;
     employeeId: string;
     walletAddress: string;

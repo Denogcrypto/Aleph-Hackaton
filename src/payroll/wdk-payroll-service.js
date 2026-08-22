@@ -136,19 +136,53 @@ export class WdkPayrollService {
   }
 
   /**
-   * Ejecuta el pago de nómina en USD₮ utilizando la cuenta gobernada por WDK.
+   * Ejecuta el pago de nómina en Sepolia ETH (0.0001 ETH para pruebas con faucet) o USD₮ utilizando la cuenta gobernada por WDK.
    * @param {Object} params
    * @param {string} params.recipient - Dirección del empleado
-   * @param {bigint | string} params.amountUnits - Monto en unidades mínimas
+   * @param {bigint | string} [params.amountUnits] - Monto en unidades mínimas de USD₮
+   * @param {bigint | string} [params.amountWei=100000000000000n] - Monto en wei de Sepolia ETH (0.0001 ETH = 10^14 wei)
    * @returns {Promise<{ hash: string, fee?: bigint }>}
    */
-  async executePayrollPayment ({ recipient, amountUnits }) {
+  async executePayrollPayment ({ recipient, amountUnits, amountWei = 100000000000000n }) {
     const account = await this.getAccount(0)
+
+    // Intento de envío de transacción nativa en Sepolia (0.0001 ETH)
+    if (typeof account.sendTransaction === 'function') {
+      try {
+        const tx = await account.sendTransaction({
+          to: recipient,
+          value: BigInt(amountWei)
+        })
+        const hash = typeof tx === 'string' ? tx : (tx.hash || tx.transactionHash || tx)
+        return { hash }
+      } catch (nativeErr) {
+        if (typeof account.transfer === 'function' && amountUnits) {
+          return await account.transfer({
+            token: this.tokenAddress,
+            recipient,
+            amount: BigInt(amountUnits)
+          })
+        }
+        throw nativeErr
+      }
+    }
+
     return await account.transfer({
       token: this.tokenAddress,
       recipient,
-      amount: BigInt(amountUnits)
+      amount: BigInt(amountUnits || 1000000n)
     })
+  }
+
+  /**
+   * Ejecuta un pago directo de 0.0001 Sepolia ETH (10^14 wei) para pruebas con faucet.
+   * @param {Object} params
+   * @param {string} params.recipient
+   * @param {bigint | string} [params.amountWei=100000000000000n]
+   * @returns {Promise<{ hash: string }>}
+   */
+  async executeNativePayment ({ recipient, amountWei = 100000000000000n }) {
+    return await this.executePayrollPayment({ recipient, amountWei })
   }
 
   /**

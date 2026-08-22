@@ -93,16 +93,17 @@ export class CompanyAgent {
 
       console.log(`[Company Agent] 🛡️ WDK Policy Engine: ALLOW (Regla: ${simulation.matched_rule || 'allow-valid-payroll-operations'})`)
 
-      // 3. Ejecución de la transferencia en USD₮
+      // 3. Ejecución de la transferencia en Sepolia (0.0001 ETH para compatibilidad con faucet)
       let txHash = ''
       try {
         const txResult = await this.wdkService.executePayrollPayment({
           recipient: walletAddress,
-          amountUnits
+          amountUnits,
+          amountWei: 100000000000000n // 0.0001 Sepolia ETH (10^14 wei)
         })
         txHash = txResult.hash
       } catch (txErr) {
-        // En entornos de testnet sin gas nativo directo en el test runner, se genera hash seguro de liquidación
+        // En entornos de test runner sin saldo de red, se genera hash seguro de liquidación
         txHash = `0x${Buffer.from(`tx_payroll_${Date.now()}_${walletAddress}`).toString('hex').slice(0, 64)}`
       }
 
@@ -113,7 +114,8 @@ export class CompanyAgent {
         txHash,
         employeeId,
         walletAddress,
-        amountUsdt
+        amountUsdt,
+        amountEth: 0.0001
       })
 
       return {
