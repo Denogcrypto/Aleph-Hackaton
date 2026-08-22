@@ -19,11 +19,15 @@
     "build:types": "tsc",
     "lint": "standard",
     "lint:fix": "standard --fix",
+    "demo": "node demo.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:payroll": "cross-env NODE_OPTIONS=--experimental-vm-modules jest tests/payroll-agents.test.js",
     "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
+    "@tetherto/wdk-cli": "^1.0.0-beta.3",
     "@tetherto/wdk-wallet": "^1.0.0-beta.15",
+    "@tetherto/wdk-wallet-evm": "^1.0.0-beta.17",
     "bare-node-runtime": "^1.4.0",
     "zod": "^4.4.3"
   },
