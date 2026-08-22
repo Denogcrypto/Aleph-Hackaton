@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%" fill="none">
+  <!-- Teal Link & Nodes -->
+  <circle cx="58" cy="102" r="9" fill="#30C9B3" />
+  <line x1="58" y1="102" x2="108" y2="52" stroke="#30C9B3" stroke-width="14" stroke-linecap="round" />
+  <circle cx="108" cy="52" r="24" fill="#30C9B3" />
+
+  <!-- Orange Ring -->
+  <circle cx="58" cy="102" r="28" stroke="#EFA638" stroke-width="15" fill="none" />
+</svg>

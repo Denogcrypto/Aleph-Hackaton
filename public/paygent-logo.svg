@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 180" width="100%" height="100%" fill="none">
+  <defs>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- ========================================== -->
+  <!-- 1. Left Emblem / Dual-Node Icon -->
+  <!-- ========================================== -->
+  <g transform="translate(10, 10)">
+    <!-- Teal Diagonal Link & Nodes -->
+    <!-- Lower node inside orange ring -->
+    <circle cx="68" cy="112" r="10" fill="#30C9B3" />
+    <!-- Connector stem -->
+    <line x1="68" y1="112" x2="114" y2="66" stroke="#30C9B3" stroke-width="13" stroke-linecap="round" />
+    <!-- Upper right solid teal circle -->
+    <circle cx="114" cy="66" r="22" fill="#30C9B3" />
+
+    <!-- Orange Ring with cut-out / layering -->
+    <circle cx="68" cy="112" r="26" stroke="#EFA638" stroke-width="14" fill="none" />
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 2. Typography: "Paygent" -->
+  <!-- ========================================== -->
+  <g transform="translate(165, 0)">
+    <!-- Text "P a y " in Bold Modern White -->
+    <text x="0" y="126" font-family="'Hanken Grotesk', 'Inter', -apple-system, sans-serif" font-size="124" font-weight="800" fill="#FFFFFF" letter-spacing="-2">Pay</text>
+
+    <!-- Custom "g" composed of Orange Loop + Teal Headset/Agent Hook -->
+    <!-- Position of 'g' roughly around x = 232 -->
+    <g transform="translate(232, 0)">
+      <!-- Orange Top Ring of 'g' -->
+      <circle cx="64" cy="92" r="34" stroke="#EFA638" stroke-width="16" fill="none" />
+
+      <!-- Teal Descender Hook -->
+      <path d="M 98 90 L 98 128 C 98 148 78 152 64 152" stroke="#30C9B3" stroke-width="14" stroke-linecap="round" fill="none" />
+      <!-- Teal Terminal Circle -->
+      <circle cx="48" cy="152" r="18" fill="#30C9B3" />
+    </g>
+
+    <!-- Text "ent" -->
+    <text x="350" y="126" font-family="'Hanken Grotesk', 'Inter', -apple-system, sans-serif" font-size="124" font-weight="800" fill="#FFFFFF" letter-spacing="-2">ent</text>
+  </g>
+
+  <!-- ========================================== -->
+  <!-- 3. Subtitle: "AUTONOMOUS PAYROLL AGENTS" -->
+  <!-- ========================================== -->
+  <text x="175" y="162" font-family="'JetBrains Mono', 'Geist', sans-serif" font-size="13" font-weight="700" fill="#64748B" letter-spacing="4.5">AUTONOMOUS PAYROLL AGENTS</text>
+</svg>
