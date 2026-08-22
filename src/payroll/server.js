@@ -119,8 +119,11 @@ const server = http.createServer(async (req, res) => {
     return
   }
 
+  const parsedUrl = new URL(req.url, 'http://localhost:3000')
+  const pathname = parsedUrl.pathname
+
   // 1. Estado Global del Sistema (GET /api/payroll/status)
-  if (req.url === '/api/payroll/status' && req.method === 'GET') {
+  if (pathname === '/api/payroll/status' && req.method === 'GET') {
     const treasuryAddress = await companyAgent.getTreasuryAddress()
     const aliceAddress = await aliceAgent.getWalletAddress()
     const bobAddress = await bobAgent.getWalletAddress()
@@ -148,7 +151,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 2. Estado del Scheduler (GET /api/scheduler/status)
-  if (req.url === '/api/scheduler/status' && req.method === 'GET') {
+  if (pathname === '/api/scheduler/status' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json' })
     res.end(JSON.stringify({
       simulatedDate: scheduler.getFormattedDate(),
@@ -162,7 +165,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 3. Time Warp: Adelantar al Día 1 y Disparar Scheduler (POST /api/scheduler/advance-to-payday)
-  if (req.url === '/api/scheduler/advance-to-payday' && req.method === 'POST') {
+  if (pathname === '/api/scheduler/advance-to-payday' && req.method === 'POST') {
     let body = ''
     req.on('data', chunk => { body += chunk })
     req.on('end', async () => {
@@ -231,7 +234,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 4. Resetear reloj simulado (POST /api/scheduler/reset-clock)
-  if (req.url === '/api/scheduler/reset-clock' && req.method === 'POST') {
+  if (pathname === '/api/scheduler/reset-clock' && req.method === 'POST') {
     const today = new Date().toISOString().slice(0, 10)
     scheduler.setSimulatedDate(today)
     res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -245,7 +248,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 5. Disparo Individual de Reclamo Legítimo (POST /api/payroll/trigger-employee-claim)
-  if (req.url === '/api/payroll/trigger-employee-claim' && req.method === 'POST') {
+  if (pathname === '/api/payroll/trigger-employee-claim' && req.method === 'POST') {
     try {
       const period = scheduler.getCurrentPeriod()
       const claimResult = await aliceAgent.claimSalaryFromCompany(companyAgent, period)
@@ -290,7 +293,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 6. Simulación de Amenaza / Ataque (POST /api/payroll/simulate-threat)
-  if (req.url === '/api/payroll/simulate-threat' && req.method === 'POST') {
+  if (pathname === '/api/payroll/simulate-threat' && req.method === 'POST') {
     const rogueClaim = {
       employeeId: 'hacker-999',
       walletAddress: '0x000000000000000000000000000000000000dEaD',
@@ -327,7 +330,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 7. Endpoint directo de Reclamos x402 (POST /api/payroll/claim)
-  if (req.url === '/api/payroll/claim' && req.method === 'POST') {
+  if (pathname === '/api/payroll/claim' && req.method === 'POST') {
     let body = ''
     req.on('data', chunk => { body += chunk })
     req.on('end', async () => {
@@ -355,10 +358,21 @@ const server = http.createServer(async (req, res) => {
     return
   }
 
-  // 8. Servir archivos estáticos del Dashboard (HTML, CSS, SVG, etc.)
-  let targetFile = req.url === '/' ? 'landing.html' : (req.url === '/cockpit' ? 'index.html' : req.url)
+  // 8. Servir archivos estáticos del Dashboard y Landing Page (HTML, CSS, SVG, etc.)
+  let targetFile = pathname === '/' || pathname === '/landing' ? 'landing.html'
+    : (pathname === '/cockpit' ? 'index.html'
+      : (pathname.startsWith('/') ? pathname.slice(1) : pathname))
+
   let filePath = path.join(PUBLIC_DIR, targetFile)
-  const ext = path.extname(filePath)
+  let ext = path.extname(filePath)
+
+  // Si no tiene extensión y no existe, probar con .html
+  if (!ext && !fs.existsSync(filePath)) {
+    if (fs.existsSync(`${filePath}.html`)) {
+      filePath = `${filePath}.html`
+      ext = '.html'
+    }
+  }
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     const contentType = MIME_TYPES[ext] || 'application/octet-stream'
