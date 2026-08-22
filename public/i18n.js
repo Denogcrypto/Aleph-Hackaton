@@ -28,7 +28,7 @@ const TRANSLATIONS = {
     landing_nav_team: 'Equipo',
     landing_nav_launch: 'Lanzar Cockpit',
 
-    landing_team_badge: 'TALENTO & INGENIERÍA',
+    landing_team_badge: 'TALENTO E INGENIERÍA',
     landing_team_title: 'Equipo Core de Desarrollo',
     landing_team_subtitle: 'Ingeniería, producto y diseño construyendo la infraestructura de nómina autónoma con Tether WDK.',
 
