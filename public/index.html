@@ -179,9 +179,50 @@
           <span id="headerTreasuryAddress" class="text-xs font-mono-tech text-slate-700 dark:text-slate-200">Cargando...</span>
         </div>
 
-        <button class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-500 transition-all">
-          <span class="material-symbols-outlined text-[20px]">notifications</span>
-        </button>
+        <!-- Notifications Bell & Dropdown -->
+        <div class="relative">
+          <button id="btnNotifications" onclick="toggleNotifications()" title="Centro de Notificaciones" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-teal-500 transition-all relative">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
+          </button>
+
+          <!-- Notification Dropdown -->
+          <div id="notificationDropdown" class="hidden absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 p-4 space-y-3 font-mono-tech text-xs">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-2.5">
+              <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 font-sans">
+                <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]">notifications_active</span>
+                Centro de Notificaciones
+              </span>
+              <button onclick="clearNotifications()" class="text-[10px] text-slate-500 hover:text-teal-600 dark:hover:text-[#2DD4BF] transition-colors">Marcar como leídas</button>
+            </div>
+
+            <div id="notificationList" class="space-y-2 max-h-72 overflow-y-auto pr-1">
+              <div class="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-900 dark:text-teal-200">
+                <div class="flex items-center justify-between font-bold">
+                  <span>🛡️ WDK Policy Guard</span>
+                  <span class="text-[10px] text-teal-600 dark:text-teal-400">ACTIVO</span>
+                </div>
+                <p class="text-[11px] mt-1 opacity-90">Modo Default-Deny activo. Límite de gasto configurado en 5,000 USD₮ / tx.</p>
+              </div>
+
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+                <div class="flex items-center justify-between font-bold">
+                  <span>⏰ Scheduler Autónomo</span>
+                  <span class="text-[10px] text-slate-400">Día 1</span>
+                </div>
+                <p class="text-[11px] mt-1 opacity-80">Próxima liquidación de salarios el Día 1 de cada mes (9:00 AM).</p>
+              </div>
+
+              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+                <div class="flex items-center justify-between font-bold">
+                  <span>🤖 Nodos Agentes</span>
+                  <span class="text-[10px] text-slate-400">Online</span>
+                </div>
+                <p class="text-[11px] mt-1 opacity-80">2 agentes autónomos conectados (Alice Developer, Bob Designer).</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -859,6 +900,37 @@
         btn.disabled = false;
       }
     }
+
+    // 7. Notification Panel Handlers
+    function toggleNotifications() {
+      const dropdown = document.getElementById('notificationDropdown');
+      if (dropdown) {
+        dropdown.classList.toggle('hidden');
+      }
+    }
+
+    function clearNotifications() {
+      const badge = document.getElementById('notifBadge');
+      if (badge) badge.classList.add('hidden');
+      const list = document.getElementById('notificationList');
+      if (list) {
+        list.innerHTML = `
+          <div class="py-6 text-center text-slate-400 text-xs">
+            <span class="material-symbols-outlined text-[24px] mb-1 opacity-50">drafts</span>
+            <p>No tienes notificaciones pendientes.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Close dropdown on outside click
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('notificationDropdown');
+      const btn = document.getElementById('btnNotifications');
+      if (dropdown && !dropdown.classList.contains('hidden') && btn && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
 
     // Initialize
     window.addEventListener('DOMContentLoaded', () => {
