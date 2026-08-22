@@ -19,6 +19,66 @@ const TRANSLATIONS = {
     header_subtitle: "Cockpit Autónomo de Tesorería",
     header_policy_active: "Motor de Políticas: ACTIVO",
 
+    // Landing Page
+    landing_nav_how: "Cómo Funciona",
+    landing_nav_security: "Seguridad WDK",
+    landing_nav_sandbox: "Simulador en Vivo",
+    landing_nav_arch: "Arquitectura",
+    landing_nav_launch: "Lanzar Cockpit",
+
+    landing_hero_badge: "LA ERA DE LA NÓMINA AUTÓNOMA",
+    landing_hero_title: "Nómina Autónoma para la Economía de Agentes",
+    landing_hero_subtitle: "Liquidación de salarios de máquina a máquina gobernada por Tether WDK Policy Engine, protocolo puro x402 y USD₮ no custodial en Ethereum Sepolia.",
+    landing_btn_cockpit: "🚀 Lanzar Cockpit Autónomo",
+    landing_btn_sandbox: "⚡ Probar Simulador en Vivo",
+
+    landing_stat_liquidity: "Liquidez en Tesorería",
+    landing_stat_latency: "Latencia de Acuerdo",
+    landing_stat_friction: "Intervención Humana",
+    landing_stat_custody: "No Custodial",
+
+    landing_agent_company_title: "Agente Empresa",
+    landing_agent_company_role: "Tesorería No Custodial · WDK Policy Engine",
+    landing_agent_employee_title: "Agente Empleado",
+    landing_agent_employee_role: "Desarrollador Autónomo · Emisor x402",
+    landing_synapse_label: "Protocolo de Pago RFC x402 (HTTP 402 + X-PAYMENT)",
+
+    landing_problem_badge: "EL PARADIGMA AGÉNTICO",
+    landing_problem_title: "¿Por qué los Agentes de IA no pueden usar bancos tradicionales?",
+    landing_problem_desc: "Las finanzas tradicionales requieren identidad humana (DNI, SSN, KYC presencial). Los agentes de IA necesitan soberanía no custodial, interoperabilidad de máquina a máquina y gobernanza programable con USD₮.",
+    landing_card_legacy_title: "Finanzas Tradicionales (Legacy)",
+    landing_card_legacy_item1: "Requiere DNI / SSN y KYC humano presencial",
+    landing_card_legacy_item2: "Fricción de 48-72 horas hábiles para liquidación",
+    landing_card_legacy_item3: "Cuentas bancarias congelables por terceros",
+    landing_card_paygent_title: "Paygent (Tether WDK + x402)",
+    landing_card_paygent_item1: "Billeteras HD no custodiales (BIP-39 en memoria)",
+    landing_card_paygent_item2: "Liquidación instantánea en segundos con USD₮",
+    landing_card_paygent_item3: "Gobernanza Default-Deny con WDK Policy Engine",
+
+    landing_how_title: "Cómo Funciona: Flujo de Acuerdo en 4 Fases",
+    landing_how_subtitle: "De la detección temporal autónoma al recibo criptográfico inmutable on-chain",
+    landing_how_step1_title: "1. Detección de Fecha (Día 1)",
+    landing_how_step1_desc: "El Scheduler despierta autónomamente al agente en el día pactado en su contrato.",
+    landing_how_step2_title: "2. Requerimiento x402",
+    landing_how_step2_desc: "El agente empleado emite la cabecera HTTP 402 y el payload firmado X-PAYMENT.",
+    landing_how_step3_title: "3. Pre-Flight WDK Policy",
+    landing_how_step3_desc: "La empresa simula con account.simulate.transfer verificando lista blanca y topes.",
+    landing_how_step4_title: "4. Liquidación On-Chain USD₮",
+    landing_how_step4_desc: "Se emite la transferencia en Sepolia y se devuelve el recibo X-PAYMENT-RESPONSE con enlace a Etherscan.",
+
+    landing_sandbox_title: "Sandbox Interactivo en Vivo",
+    landing_sandbox_subtitle: "Prueba en tiempo real cómo el WDK Policy Engine aprueba cobros válidos y bloquea exploits",
+    landing_sandbox_btn_alice: "⚡ Disparar Reclamo Válido (Alice: 2,500 USD₮)",
+    landing_sandbox_btn_threat: "🛑 Simular Ataque Malicioso (Hacker: 10,000 USD₮)",
+
+    landing_arch_title: "Arquitectura Modular Tether WDK",
+    landing_arch_subtitle: "Diseñado para máxima extensibilidad, soberanía no custodial y compatibilidad multi-cadena",
+
+    landing_jury_title: "Showcase para el Jurado de Aleph Hackathon",
+    landing_jury_tests: "174 Tests Automatizados Pasando al 100%",
+    landing_jury_network: "Red: Ethereum Sepolia Testnet (USD₮)",
+    landing_jury_track: "Pista 1: Tether WDK Integration ($1,000 USDt)",
+
     // Scheduler & Time Warp Bar
     scheduler_title: "Motor de Programación y Simulación Temporal (Time Warp)",
     scheduler_standby: "EN ESPERA (ESPERANDO DÍA 1)",
@@ -140,6 +200,66 @@ const TRANSLATIONS = {
     header_subtitle: "Autonomous Treasury Cockpit",
     header_policy_active: "Policy Engine: ACTIVE",
 
+    // Landing Page
+    landing_nav_how: "How It Works",
+    landing_nav_security: "WDK Security",
+    landing_nav_sandbox: "Live Sandbox",
+    landing_nav_arch: "Architecture",
+    landing_nav_launch: "Launch Cockpit",
+
+    landing_hero_badge: "THE AUTONOMOUS PAYROLL EPOCH",
+    landing_hero_title: "Autonomous Payroll for the Agentic Economy",
+    landing_hero_subtitle: "Machine-to-machine salary settlement governed by Tether WDK Policy Engine, pure x402 protocol, and non-custodial USD₮ on Ethereum Sepolia.",
+    landing_btn_cockpit: "🚀 Launch Cockpit",
+    landing_btn_sandbox: "⚡ Try Live Simulator",
+
+    landing_stat_liquidity: "Treasury Liquidity",
+    landing_stat_latency: "Settlement Latency",
+    landing_stat_friction: "Human Friction",
+    landing_stat_custody: "Non-Custodial",
+
+    landing_agent_company_title: "Company Agent",
+    landing_agent_company_role: "Non-Custodial Treasury · WDK Policy Engine",
+    landing_agent_employee_title: "Employee Agent",
+    landing_agent_employee_role: "Autonomous Developer · x402 Emitter",
+    landing_synapse_label: "RFC x402 Payment Protocol (HTTP 402 + X-PAYMENT)",
+
+    landing_problem_badge: "THE AGENTIC SHIFT",
+    landing_problem_title: "Why AI Agents Cannot Use Legacy Banks",
+    landing_problem_desc: "Traditional finance demands human identity (ID, SSN, physical KYC). AI agents need non-custodial sovereignty, machine-to-machine interoperability, and programmable USD₮ governance.",
+    landing_card_legacy_title: "Legacy Banking",
+    landing_card_legacy_item1: "Requires human ID/SSN and in-person KYC",
+    landing_card_legacy_item2: "48-72 business hour delays for settlement",
+    landing_card_legacy_item3: "Freezable bank accounts by centralized entities",
+    landing_card_paygent_title: "Paygent (Tether WDK + x402)",
+    landing_card_paygent_item1: "Non-custodial HD Wallets (in-memory BIP-39)",
+    landing_card_paygent_item2: "Instant settlement in seconds with USD₮",
+    landing_card_paygent_item3: "Default-Deny governance via WDK Policy Engine",
+
+    landing_how_title: "How It Works: 4-Stage Settlement Flow",
+    landing_how_subtitle: "From autonomous scheduled trigger to immutable on-chain cryptographic receipt",
+    landing_how_step1_title: "1. Due Date Detection (Day 1)",
+    landing_how_step1_desc: "The Scheduler autonomously wakes the agent on the contracted payday.",
+    landing_how_step2_title: "2. x402 Requirement",
+    landing_how_step2_desc: "The employee agent emits the HTTP 402 header and signed X-PAYMENT payload.",
+    landing_how_step3_title: "3. Pre-Flight WDK Policy",
+    landing_how_step3_desc: "The company simulates with account.simulate.transfer verifying whitelist & caps.",
+    landing_how_step4_title: "4. On-Chain USD₮ Settlement",
+    landing_how_step4_desc: "The Sepolia transfer executes and returns an X-PAYMENT-RESPONSE receipt with Etherscan link.",
+
+    landing_sandbox_title: "Live Interactive Sandbox",
+    landing_sandbox_subtitle: "Test in real time how the WDK Policy Engine approves legitimate claims and blocks exploits",
+    landing_sandbox_btn_alice: "⚡ Trigger Valid Claim (Alice: 2,500 USD₮)",
+    landing_sandbox_btn_threat: "🛑 Simulate Exploit Attempt (Hacker: 10,000 USD₮)",
+
+    landing_arch_title: "Tether WDK Modular Architecture",
+    landing_arch_subtitle: "Engineered for maximum extensibility, non-custodial sovereignty, and multi-chain support",
+
+    landing_jury_title: "Aleph Hackathon Jury Showcase",
+    landing_jury_tests: "174 Automated Tests Passing at 100%",
+    landing_jury_network: "Network: Ethereum Sepolia Testnet (USD₮)",
+    landing_jury_track: "Track 1: Tether WDK Integration ($1,000 USDt)",
+
     // Scheduler & Time Warp Bar
     scheduler_title: "Payroll Scheduler & Time Warp Engine",
     scheduler_standby: "STANDBY (AWAITING DAY 1)",
@@ -243,7 +363,7 @@ const TRANSLATIONS = {
     btn_close: "Close",
 
     // Language Toggle
-    lang_label: "Language",
+    lang_label: "Idioma",
     lang_es: "Español",
     lang_en: "English"
   }
@@ -289,18 +409,10 @@ window.PaygentI18n = {
     if (!containerElement) return
     const isEs = this.currentLang === 'es'
     containerElement.innerHTML = `
-      <div class="mb-3">
-        <button onclick="window.PaygentI18n.toggleLanguage()" class="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 text-xs font-mono-tech transition-all group">
-          <span class="flex items-center gap-2 text-slate-300">
-            <span class="material-symbols-outlined text-[16px] text-[#2DD4BF]">translate</span>
-            <span class="text-slate-400" data-i18n="lang_label">${this.t('lang_label')}:</span>
-            <strong class="text-white">${isEs ? 'Español' : 'English'}</strong>
-          </span>
-          <span class="flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#2DD4BF]/10 text-[#2DD4BF] border border-[#2DD4BF]/30">
-            ${isEs ? 'ES 🇪🇸' : 'EN 🇬🇧'}
-          </span>
-        </button>
-      </div>
+      <button onclick="window.PaygentI18n.toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 text-xs font-mono-tech transition-all group">
+        <span class="material-symbols-outlined text-[16px] text-[#2DD4BF]">translate</span>
+        <strong class="text-white">${isEs ? 'ES 🇪🇸' : 'EN 🇬🇧'}</strong>
+      </button>
     `
   },
 
@@ -309,12 +421,20 @@ window.PaygentI18n = {
     if (container) {
       this.renderSwitcher(container)
     }
+    const topContainer = document.getElementById('topLangSwitcher')
+    if (topContainer) {
+      this.renderSwitcher(topContainer)
+    }
   },
 
   init () {
     const container = document.getElementById('langSwitcherContainer')
     if (container) {
       this.renderSwitcher(container)
+    }
+    const topContainer = document.getElementById('topLangSwitcher')
+    if (topContainer) {
+      this.renderSwitcher(topContainer)
     }
     this.applyTranslations()
   }

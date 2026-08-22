@@ -356,7 +356,8 @@ const server = http.createServer(async (req, res) => {
   }
 
   // 8. Servir archivos estáticos del Dashboard (HTML, CSS, SVG, etc.)
-  let filePath = path.join(PUBLIC_DIR, req.url === '/' ? 'index.html' : req.url)
+  let targetFile = req.url === '/' ? 'landing.html' : (req.url === '/cockpit' ? 'index.html' : req.url)
+  let filePath = path.join(PUBLIC_DIR, targetFile)
   const ext = path.extname(filePath)
 
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
@@ -364,10 +365,10 @@ const server = http.createServer(async (req, res) => {
     res.writeHead(200, { 'Content-Type': contentType })
     fs.createReadStream(filePath).pipe(res)
   } else {
-    const indexPath = path.join(PUBLIC_DIR, 'index.html')
-    if (fs.existsSync(indexPath)) {
+    const fallbackPath = path.join(PUBLIC_DIR, 'landing.html')
+    if (fs.existsSync(fallbackPath)) {
       res.writeHead(200, { 'Content-Type': 'text/html' })
-      fs.createReadStream(indexPath).pipe(res)
+      fs.createReadStream(fallbackPath).pipe(res)
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' })
       res.end('404 Not Found')
