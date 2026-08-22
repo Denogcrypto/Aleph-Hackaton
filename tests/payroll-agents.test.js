@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 import { describe, test, expect, beforeAll, afterAll } from '@jest/globals'
 import { isEmployeeWhitelisted, validatePayrollClaim, registerEmployee } from '../src/payroll/payroll-registry.js'
 import { create402Requirement, createPaymentPayload, createPaymentReceipt } from '../src/payroll/x402-protocol.js'

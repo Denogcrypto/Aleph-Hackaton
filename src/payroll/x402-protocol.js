@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview x402 Protocol Implementation for Autonomous Payroll.
  * Implementa la especificación HTTP 402 Payment Required para la negociación, cobro

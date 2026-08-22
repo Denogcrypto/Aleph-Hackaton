@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview Paygent Full-Stack Server
  * Sirve el Dashboard Web interactivo y expone los endpoints del Scheduler, x402 y WDK Policy Engine.

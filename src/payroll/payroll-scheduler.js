@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview Payroll Scheduler - Programador autónomo de nómina y simulación de adelanto temporal (Time Warp).
  * Detecta el día 1 de cada ciclo de cobro, despierta a los agentes empleados y orquesta el flujo x402.

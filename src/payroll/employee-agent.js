@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview Employee Agent - Agente autónomo que representa al colaborador.
  * Gestiona su wallet WDK, detecta fechas de pago, genera requerimientos x402,

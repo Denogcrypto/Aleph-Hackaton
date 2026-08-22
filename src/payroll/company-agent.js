@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview Company Agent - Agente autónomo de tesorería y validación de nómina.
  * Recibe requerimientos x402, valida contratos en el registro, aplica el WDK Policy Engine

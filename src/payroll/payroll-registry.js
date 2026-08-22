@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview Payroll Registry - Base de datos de empleados autorizados y contratos de nómina.
  * Proporciona validación de identidades, salarios y listas blancas para el WDK Policy Engine.

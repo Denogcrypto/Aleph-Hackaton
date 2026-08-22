@@ -1,3 +1,4 @@
+// Copyright 2024 Tether Operations Limited
 /**
  * @fileoverview WDK Payroll Service - Integración no custodial y orquestación con Tether WDK.
  * Configura WDK Core, Wallet Manager EVM y el Policy Engine para proteger la tesorería corporativa.
