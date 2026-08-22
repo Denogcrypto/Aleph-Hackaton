@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+  <!-- Theme Manager (Dark / Light Mode) -->
+  <script src="/theme.js"></script>
   <!-- i18n Engine (Spanish Primary, English Secondary) -->
   <script src="/i18n.js"></script>
 
@@ -62,7 +64,7 @@
   <aside class="w-64 bg-[#122131]/95 backdrop-blur-md border-r border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
     <div class="h-20 flex items-center px-5 border-b border-slate-800/80">
       <a href="/index.html" class="flex items-center gap-2 w-full">
-        <img src="/paygent-logo.svg" alt="Paygent Logo" class="h-10 w-auto object-contain" />
+        <img src="/paygent-logo.svg" alt="Paygent Logo" class="brand-logo-img h-10 w-auto object-contain" />
       </a>
     </div>
 
@@ -93,9 +95,12 @@
       </a>
     </nav>
 
-    <!-- Bottom Sidebar with Language Switcher & Sepolia Badge -->
+    <!-- Bottom Sidebar with Language Switcher, Theme Toggle & Sepolia Badge -->
     <div class="p-4 border-t border-slate-800/80">
-      <div id="langSwitcherContainer"></div>
+      <div class="flex items-center gap-2 mb-3">
+        <div id="langSwitcherContainer" class="flex-1"></div>
+        <div id="themeToggleContainer"></div>
+      </div>
 
       <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-800 flex items-center gap-2.5">
         <span class="relative flex h-2.5 w-2.5">
