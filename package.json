@@ -20,6 +20,7 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "demo": "node demo.js",
+    "serve": "node src/payroll/server.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:payroll": "cross-env NODE_OPTIONS=--experimental-vm-modules jest tests/payroll-agents.test.js",
     "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage"
