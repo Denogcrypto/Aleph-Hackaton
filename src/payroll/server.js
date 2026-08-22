@@ -13,6 +13,10 @@ import { PayrollScheduler } from './payroll-scheduler.js'
 import { parsePaymentHeader } from './x402-protocol.js'
 import { listActiveEmployees, registerEmployee } from './payroll-registry.js'
 
+try {
+  process.loadEnvFile()
+} catch {}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const PUBLIC_DIR = path.join(__dirname, '../../public')

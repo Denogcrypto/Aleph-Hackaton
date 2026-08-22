@@ -8,6 +8,10 @@ import { EmployeeAgent } from './src/payroll/employee-agent.js'
 import { PayrollScheduler } from './src/payroll/payroll-scheduler.js'
 import { registerEmployee } from './src/payroll/payroll-registry.js'
 
+try {
+  process.loadEnvFile()
+} catch {}
+
 function printHeader (title) {
   console.log('\n' + '═'.repeat(75))
   console.log(`  🔹 ${title}`)
