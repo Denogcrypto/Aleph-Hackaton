@@ -412,10 +412,18 @@ window.PaygentI18n = {
     if (!containerElement) return
     const isEs = this.currentLang === 'es'
     containerElement.innerHTML = `
-      <button onclick="window.PaygentI18n.toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 text-xs font-mono-tech transition-all group">
-        <span class="material-symbols-outlined text-[16px] text-[#2DD4BF]">translate</span>
-        <strong class="text-white">${isEs ? 'ES 🇪🇸' : 'EN 🇬🇧'}</strong>
-      </button>
+      <div class="inline-flex items-center p-0.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-mono-tech">
+        <button onclick="window.PaygentI18n.setLanguage('es')" 
+                title="Español"
+                class="px-2.5 py-1 rounded-lg font-bold transition-all ${isEs ? 'bg-[#2DD4BF] text-[#0F172A] shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}">
+          ES
+        </button>
+        <button onclick="window.PaygentI18n.setLanguage('en')" 
+                title="English"
+                class="px-2.5 py-1 rounded-lg font-bold transition-all ${!isEs ? 'bg-[#2DD4BF] text-[#0F172A] shadow-sm' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'}">
+          EN
+        </button>
+      </div>
     `
   },
 
