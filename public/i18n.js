@@ -21,12 +21,16 @@ const TRANSLATIONS = {
     header_subtitle: 'Cockpit Autónomo de Tesorería',
     header_policy_active: 'Motor de Políticas: ACTIVO',
 
-    // Landing Page
     landing_nav_how: 'Cómo Funciona',
     landing_nav_security: 'Seguridad WDK',
     landing_nav_sandbox: 'Simulador en Vivo',
     landing_nav_arch: 'Arquitectura',
+    landing_nav_team: 'Equipo',
     landing_nav_launch: 'Lanzar Cockpit',
+
+    landing_team_badge: 'TALENTO & INGENIERÍA',
+    landing_team_title: 'Equipo Core de Desarrollo',
+    landing_team_subtitle: 'Ingeniería, producto y diseño construyendo la infraestructura de nómina autónoma con Tether WDK.',
 
     landing_hero_badge: 'LA ERA DE LA NÓMINA AUTÓNOMA',
     landing_hero_title: 'Nómina Autónoma para la Economía de Agentes',
@@ -203,12 +207,16 @@ const TRANSLATIONS = {
     header_subtitle: 'Autonomous Treasury Cockpit',
     header_policy_active: 'Policy Engine: ACTIVE',
 
-    // Landing Page
     landing_nav_how: 'How It Works',
     landing_nav_security: 'WDK Security',
     landing_nav_sandbox: 'Live Sandbox',
     landing_nav_arch: 'Architecture',
+    landing_nav_team: 'Team',
     landing_nav_launch: 'Launch Cockpit',
+
+    landing_team_badge: 'TALENT & ENGINEERING',
+    landing_team_title: 'Core Development Team',
+    landing_team_subtitle: 'Engineering, product, and design building autonomous payroll infrastructure with Tether WDK.',
 
     landing_hero_badge: 'THE AUTONOMOUS PAYROLL EPOCH',
     landing_hero_title: 'Autonomous Payroll for the Agentic Economy',
