@@ -1,440 +1,984 @@
-<!DOCTYPE html>
+<!doctype html>
 <html class="dark" lang="es">
-<head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Paygent - Autonomous Payroll Cockpit | Tether WDK</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/paygent-icon.svg"/>
-  <link rel="alternate icon" href="/favicon.svg"/>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <!-- Chart.js for Live Protocol Visualizations -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Fonts & Material Symbols -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
-  <!-- Theme Manager (Dark / Light Mode) -->
-  <script src="/theme.js"></script>
-  <!-- i18n Engine (Spanish Primary, English Secondary) -->
-  <script src="/i18n.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Paygent - Autonomous Payroll Cockpit | Tether WDK</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/paygent-icon.svg" />
+    <link rel="alternate icon" href="/favicon.svg" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Chart.js for Live Protocol Visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts & Material Symbols -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1"
+      rel="stylesheet"
+    />
+    <!-- Theme Manager (Dark / Light Mode) -->
+    <script src="/theme.js"></script>
+    <!-- i18n Engine (Spanish Primary, English Secondary) -->
+    <script src="/i18n.js"></script>
 
-  <style>
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-weight: 300;
-      font-style: normal;
-      font-size: 24px;
-      display: inline-block;
-      line-height: 1;
-      text-transform: none;
-      letter-spacing: normal;
-      word-wrap: normal;
-      white-space: nowrap;
-      direction: ltr;
-    }
-    body {
-      font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-    .font-mono-tech {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 4px;
-    }
-    .step-active {
-      border-color: #2DD4BF !important;
-      box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
-      transform: scale(1.02);
-    }
-  </style>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              bg: "#0F172A",
-              surface: "#1E293B",
-              surfaceLow: "#0D1C2D",
-              surfaceHigh: "#273647",
-              primary: "#2DD4BF",
-              primaryDark: "#14B8A6",
-              secondary: "#F59E0B",
-              secondaryDark: "#EA580C",
-              textPrimary: "#F8FAFC",
-              textMuted: "#94A3B8"
-            }
-          }
-        }
+    <style>
+      .material-symbols-outlined {
+        font-family: "Material Symbols Outlined";
+        font-weight: 300;
+        font-style: normal;
+        font-size: 24px;
+        display: inline-block;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: normal;
+        word-wrap: normal;
+        white-space: nowrap;
+        direction: ltr;
       }
-    }
-  </script>
-</head>
+      body {
+        font-family:
+          "Hanken Grotesk",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+      .font-mono-tech {
+        font-family: "JetBrains Mono", monospace;
+      }
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 4px;
+      }
+      .step-active {
+        border-color: #2dd4bf !important;
+        box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+        transform: scale(1.02);
+      }
+    </style>
 
-<body class="bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]">
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                bg: "#0F172A",
+                surface: "#1E293B",
+                surfaceLow: "#0D1C2D",
+                surfaceHigh: "#273647",
+                primary: "#2DD4BF",
+                primaryDark: "#14B8A6",
+                secondary: "#F59E0B",
+                secondaryDark: "#EA580C",
+                textPrimary: "#F8FAFC",
+                textMuted: "#94A3B8",
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
 
-  <!-- ========================================================================= -->
-  <!-- 1. Collapsible Sidebar (Left Navigation) -->
-  <!-- ========================================================================= -->
-  <aside class="w-64 bg-white/95 dark:bg-[#122131]/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50">
-    <div class="h-20 flex items-center px-5 border-b border-slate-200 dark:border-slate-800/80">
-      <a href="/index.html" class="flex items-center gap-2 w-full">
-        <img src="/paygent-logo.svg" alt="Paygent Logo" class="brand-logo-img h-10 w-auto object-contain" />
-      </a>
-    </div>
-
-    <nav class="flex-1 py-6 px-4 space-y-1.5">
-      <a href="/index.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-teal-700 dark:text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all">
-        <span class="material-symbols-outlined text-[20px]">dashboard</span>
-        <span data-i18n="nav_overview">Resumen / Cockpit</span>
-      </a>
-
-      <a href="/treasury.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
-        <span class="material-symbols-outlined text-[20px]">account_balance</span>
-        <span data-i18n="nav_treasury">Tesorería de Empresa</span>
-      </a>
-
-      <a href="/employees.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
-        <span class="material-symbols-outlined text-[20px]">smart_toy</span>
-        <span data-i18n="nav_employees">Agentes Empleados</span>
-      </a>
-
-      <a href="/policy-engine.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
-        <span class="material-symbols-outlined text-[20px]">policy</span>
-        <span data-i18n="nav_policy">Motor de Políticas WDK</span>
-      </a>
-
-      <a href="/logs.html" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all">
-        <span class="material-symbols-outlined text-[20px]">receipt_long</span>
-        <span data-i18n="nav_logs">Registros de Auditoría x402</span>
-      </a>
-    </nav>
-
-    <!-- Bottom Sidebar Section with Language Switcher, Theme Toggle, Sepolia Badge & Exit -->
-    <div class="p-4 border-t border-slate-200 dark:border-slate-800/80">
-      
-      <!-- Controls Container: Language Switcher + Theme Toggle -->
-      <div class="flex items-center gap-2 mb-3">
-        <div id="langSwitcherContainer" class="flex-1"></div>
-        <div id="themeToggleContainer"></div>
+  <body
+    class="bg-[#F8FAFC] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F8FAFC] min-h-screen flex antialiased selection:bg-[#2DD4BF] selection:text-[#0F172A]"
+  >
+    <!-- ========================================================================= -->
+    <!-- 1. Collapsible Sidebar (Left Navigation) -->
+    <!-- ========================================================================= -->
+    <aside
+      class="w-64 bg-white/95 dark:bg-[#122131]/95 backdrop-blur-md border-r border-slate-200 dark:border-slate-800 flex flex-col fixed inset-y-0 left-0 z-50"
+    >
+      <div
+        class="h-20 flex items-center px-5 border-b border-slate-200 dark:border-slate-800/80"
+      >
+        <a href="/index.html" class="flex items-center gap-2 w-full">
+          <img
+            src="/paygent-logo.svg"
+            alt="Paygent Logo"
+            class="brand-logo-img h-10 w-auto object-contain"
+          />
+        </a>
       </div>
 
-      <!-- Connected Chain Badge -->
-      <div class="bg-slate-100 dark:bg-slate-900/80 rounded-xl p-3 border border-slate-200 dark:border-slate-800 flex items-center gap-2.5">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"></span>
-        </span>
-        <div class="text-[11px] font-mono-tech leading-tight text-slate-700 dark:text-slate-300">
-          <p class="font-bold text-slate-900 dark:text-white" data-i18n="nav_network_title">Ethereum Sepolia</p>
-          <p class="text-slate-500 dark:text-slate-400" data-i18n="nav_network_subtitle">USD₮ WDK No Custodial</p>
+      <nav class="flex-1 py-6 px-4 space-y-1.5">
+        <a
+          href="/index.html"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#2DD4BF]/10 text-teal-700 dark:text-[#2DD4BF] font-semibold border-r-2 border-[#2DD4BF] shadow-[0_0_12px_rgba(45,212,191,0.15)] transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span data-i18n="nav_overview">Resumen / Cockpit</span>
+        </a>
+
+        <a
+          href="/treasury.html"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >account_balance</span
+          >
+          <span data-i18n="nav_treasury">Tesorería de Empresa</span>
+        </a>
+
+        <a
+          href="/employees.html"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+          <span data-i18n="nav_employees">Agentes Empleados</span>
+        </a>
+
+        <a
+          href="/policy-engine.html"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]">policy</span>
+          <span data-i18n="nav_policy">Motor de Políticas WDK</span>
+        </a>
+
+        <a
+          href="/logs.html"
+          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 font-medium transition-all"
+        >
+          <span class="material-symbols-outlined text-[20px]"
+            >receipt_long</span
+          >
+          <span data-i18n="nav_logs">Registros de Auditoría x402</span>
+        </a>
+      </nav>
+
+      <!-- Bottom Sidebar Section with Language Switcher, Theme Toggle, Sepolia Badge & Exit -->
+      <div class="p-4 border-t border-slate-200 dark:border-slate-800/80">
+        <!-- Controls Container: Language Switcher + Theme Toggle -->
+        <div class="flex items-center gap-2 mb-3">
+          <div id="langSwitcherContainer" class="flex-1"></div>
+          <div id="themeToggleContainer"></div>
         </div>
-      </div>
 
-      <!-- Exit Button / Volver a la Landing -->
-      <a href="/" class="flex items-center justify-center gap-2 w-full py-2.5 px-3 mt-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-mono-tech border border-slate-300 dark:border-slate-700 font-semibold transition-all">
-        <span class="material-symbols-outlined text-[16px]">logout</span>
-        <span data-i18n="nav_exit_home">Salir / Volver a la Landing</span>
-      </a>
-    </div>
-  </aside>
-
-  <!-- ========================================================================= -->
-  <!-- Main Content Canvas -->
-  <!-- ========================================================================= -->
-  <div class="flex-1 ml-64 flex flex-col min-w-0">
-
-    <!-- 2. Top Header Bar -->
-    <header class="h-20 bg-white/80 dark:bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between transition-colors">
-      <div class="flex items-center gap-3">
-        <span class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Paygent</span>
-        <span class="text-slate-400 dark:text-slate-600">/</span>
-        <span data-i18n="header_subtitle" class="text-sm font-semibold text-slate-900 dark:text-white">Cockpit Autónomo de Tesorería</span>
-      </div>
-
-      <div class="flex items-center gap-4">
-        <!-- Live System Status Chip -->
-        <div class="flex items-center gap-2 bg-slate-100 dark:bg-[#1E293B] px-3 py-1.5 rounded-full border border-teal-500/30 shadow-[0_0_10px_rgba(45,212,191,0.15)]">
-          <span class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-pulse"></span>
-          <span data-i18n="header_policy_active" class="text-xs font-mono-tech text-teal-700 dark:text-[#2DD4BF] font-semibold">Motor de Políticas: ACTIVO</span>
-        </div>
-
-        <!-- Connected Treasury Badge -->
-        <div class="flex items-center gap-2.5 bg-slate-100 dark:bg-[#1E293B] px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700">
-          <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]">account_balance_wallet</span>
-          <span id="headerTreasuryAddress" class="text-xs font-mono-tech text-slate-700 dark:text-slate-200">Cargando...</span>
-        </div>
-
-        <!-- Notifications Bell & Dropdown -->
-        <div class="relative">
-          <button id="btnNotifications" onclick="toggleNotifications()" title="Centro de Notificaciones" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-teal-500 transition-all relative">
-            <span class="material-symbols-outlined text-[20px]">notifications</span>
-            <span id="notifBadge" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-          </button>
-
-          <!-- Notification Dropdown -->
-          <div id="notificationDropdown" class="hidden absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 p-4 space-y-3 font-mono-tech text-xs">
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-2.5">
-              <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 font-sans">
-                <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]">notifications_active</span>
-                Centro de Notificaciones
-              </span>
-              <button onclick="clearNotifications()" class="text-[10px] text-slate-500 hover:text-teal-600 dark:hover:text-[#2DD4BF] transition-colors">Marcar como leídas</button>
-            </div>
-
-            <div id="notificationList" class="space-y-2 max-h-72 overflow-y-auto pr-1">
-              <div class="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-900 dark:text-teal-200">
-                <div class="flex items-center justify-between font-bold">
-                  <span>🛡️ WDK Policy Guard</span>
-                  <span class="text-[10px] text-teal-600 dark:text-teal-400">ACTIVO</span>
-                </div>
-                <p class="text-[11px] mt-1 opacity-90">Modo Default-Deny activo. Límite de gasto configurado en 5,000 USD₮ / tx.</p>
-              </div>
-
-              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
-                <div class="flex items-center justify-between font-bold">
-                  <span>⏰ Scheduler Autónomo</span>
-                  <span class="text-[10px] text-slate-400">Día 1</span>
-                </div>
-                <p class="text-[11px] mt-1 opacity-80">Próxima liquidación de salarios el Día 1 de cada mes (9:00 AM).</p>
-              </div>
-
-              <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
-                <div class="flex items-center justify-between font-bold">
-                  <span>🤖 Nodos Agentes</span>
-                  <span class="text-[10px] text-slate-400">Online</span>
-                </div>
-                <p class="text-[11px] mt-1 opacity-80">2 agentes autónomos conectados (Alice Developer, Bob Designer).</p>
-              </div>
-            </div>
+        <!-- Connected Chain Badge -->
+        <div
+          class="bg-slate-100 dark:bg-slate-900/80 rounded-xl p-3 border border-slate-200 dark:border-slate-800 flex items-center gap-2.5"
+        >
+          <span class="relative flex h-2.5 w-2.5">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2DD4BF] opacity-75"
+            ></span>
+            <span
+              class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#2DD4BF]"
+            ></span>
+          </span>
+          <div
+            class="text-[11px] font-mono-tech leading-tight text-slate-700 dark:text-slate-300"
+          >
+            <p
+              class="font-bold text-slate-900 dark:text-white"
+              data-i18n="nav_network_title"
+            >
+              Ethereum Sepolia
+            </p>
+            <p
+              class="text-slate-500 dark:text-slate-400"
+              data-i18n="nav_network_subtitle"
+            >
+              USD₮ WDK No Custodial
+            </p>
           </div>
         </div>
+
+        <!-- Exit Button / Volver a la Landing -->
+        <a
+          href="/"
+          class="flex items-center justify-center gap-2 w-full py-2.5 px-3 mt-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-xs font-mono-tech border border-slate-300 dark:border-slate-700 font-semibold transition-all"
+        >
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span data-i18n="nav_exit_home">Salir / Volver a la Landing</span>
+        </a>
       </div>
-    </header>
+    </aside>
 
-    <!-- Main Body Area -->
-    <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
+    <!-- ========================================================================= -->
+    <!-- Main Content Canvas -->
+    <!-- ========================================================================= -->
+    <div class="flex-1 ml-64 flex flex-col min-w-0">
+      <!-- 2. Top Header Bar -->
+      <header
+        class="h-20 bg-white/80 dark:bg-[#0F172A]/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800/80 sticky top-0 z-40 px-8 flex items-center justify-between transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class="text-xs font-mono-tech text-slate-500 dark:text-slate-400"
+            >Paygent</span
+          >
+          <span class="text-slate-400 dark:text-slate-600">/</span>
+          <span
+            data-i18n="header_subtitle"
+            class="text-sm font-semibold text-slate-900 dark:text-white"
+            >Cockpit Autónomo de Tesorería</span
+          >
+        </div>
 
-      <!-- ========================================================================= -->
-      <!-- SCHEDULER & TIME WARP SIMULATOR CONTROL BAR -->
-      <!-- ========================================================================= -->
-      <section class="bg-gradient-to-r from-teal-500/10 via-slate-100 to-slate-100 dark:from-[#122131] dark:via-[#1E293B] dark:to-[#122131] rounded-2xl border border-teal-500/40 p-5 shadow-[0_0_20px_rgba(45,212,191,0.1)] flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/40 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF] shadow-[0_0_15px_rgba(45,212,191,0.2)]">
-            <span class="material-symbols-outlined text-[26px]">schedule</span>
+          <!-- Live System Status Chip -->
+          <div
+            class="flex items-center gap-2 bg-slate-100 dark:bg-[#1E293B] px-3 py-1.5 rounded-full border border-teal-500/30 shadow-[0_0_10px_rgba(45,212,191,0.15)]"
+          >
+            <span
+              class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-pulse"
+            ></span>
+            <span
+              data-i18n="header_policy_active"
+              class="text-xs font-mono-tech text-teal-700 dark:text-[#2DD4BF] font-semibold"
+              >Motor de Políticas: ACTIVO</span
+            >
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h3 data-i18n="scheduler_title" class="text-base font-bold text-slate-900 dark:text-white tracking-tight">Motor de Programación y Simulación Temporal (Time Warp)</h3>
-              <span id="schedulerBadge" data-i18n="scheduler_standby" class="text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30">EN ESPERA (ESPERANDO DÍA 1)</span>
-            </div>
-            <div class="flex items-center gap-4 text-xs font-mono-tech text-slate-600 dark:text-slate-300 mt-1">
-              <span><span data-i18n="scheduler_clock_label">📅 Reloj Simulado:</span> <strong id="simClockText" class="text-teal-600 dark:text-[#2DD4BF]">--</strong></span>
-              <span>•</span>
-              <span><span data-i18n="scheduler_payday_label">⏰ Pago Programado:</span> <strong data-i18n="scheduler_payday_value" class="text-slate-900 dark:text-white">Día 1 de cada mes (9:00 AM)</strong></span>
-            </div>
-          </div>
-        </div>
 
-        <div class="flex items-center gap-3 w-full md:w-auto">
-          <button id="btnTimeWarp" onclick="advanceToPayday()" class="flex-1 md:flex-initial bg-gradient-to-r from-[#2DD4BF] to-teal-400 hover:from-teal-400 hover:to-[#2DD4BF] text-[#0F172A] font-bold py-2.5 px-5 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(45,212,191,0.35)] active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[18px]">fast_forward</span>
-            <span data-i18n="scheduler_btn_fast_forward">⚡ Adelantar al Día 1 (Disparar Scheduler)</span>
-          </button>
-          
-          <button onclick="resetClock()" title="Reiniciar reloj" class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 px-3 rounded-xl text-xs font-mono-tech border border-slate-300 dark:border-slate-700 active:scale-95 transition-all">
-            <span class="material-symbols-outlined text-[18px]">restart_alt</span>
-          </button>
-        </div>
-      </section>
+          <!-- Connected Treasury Badge -->
+          <div
+            class="flex items-center gap-2.5 bg-slate-100 dark:bg-[#1E293B] px-3.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700"
+          >
+            <span
+              class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]"
+              >account_balance_wallet</span
+            >
+            <span
+              id="headerTreasuryAddress"
+              class="text-xs font-mono-tech text-slate-700 dark:text-slate-200"
+              >Cargando...</span
+            >
+          </div>
 
-      <!-- 3. Top Metrics Row (KPI Cards) -->
-      <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-        <!-- Card 1: Treasury Liquidity -->
-        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
-          <div class="flex justify-between items-start">
-            <span data-i18n="kpi_liquidity_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Liquidez en Tesorería</span>
-            <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]/60 group-hover:text-[#2DD4BF] transition-colors">account_balance</span>
-          </div>
-          <div class="mt-3">
-            <div id="kpiLiquidity" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">-- <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
-            <div class="text-xs font-medium text-teal-600 dark:text-[#2DD4BF] flex items-center gap-1 mt-1">
-              <span class="material-symbols-outlined text-[14px]">trending_up</span>
-              <span data-i18n="kpi_liquidity_sub">Sepolia Testnet No Custodial</span>
-            </div>
-          </div>
-        </div>
+          <!-- Notifications Bell & Dropdown -->
+          <div class="relative">
+            <button
+              id="btnNotifications"
+              onclick="toggleNotifications()"
+              title="Centro de Notificaciones"
+              class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-teal-500 transition-all relative"
+            >
+              <span class="material-symbols-outlined text-[20px]"
+                >notifications</span
+              >
+              <span
+                id="notifBadge"
+                class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-teal-400 animate-pulse"
+              ></span>
+            </button>
 
-        <!-- Card 2: Settled Volume -->
-        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
-          <div class="flex justify-between items-start">
-            <span data-i18n="kpi_settled_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Volumen Liquidado</span>
-            <span data-i18n="kpi_settled_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30">LIQUIDADO</span>
-          </div>
-          <div class="mt-3">
-            <div id="kpiSettled" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">$0.00 <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span></div>
-            <div data-i18n="kpi_settled_sub" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Ciclos automáticos de nómina</div>
-          </div>
-        </div>
-
-        <!-- Card 3: Pending x402 Claims -->
-        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-amber-500/40 shadow-sm transition-all">
-          <div class="flex justify-between items-start">
-            <span data-i18n="kpi_pending_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Reclamos x402 Pendientes</span>
-            <span data-i18n="kpi_pending_badge" class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/30">ESPERANDO_CICLO</span>
-          </div>
-          <div class="mt-3">
-            <div id="kpiPending" class="text-2xl font-bold text-amber-600 dark:text-[#F59E0B] tracking-tight">-- Reclamos <span class="text-sm font-normal text-slate-500 dark:text-slate-400">(-- USD₮)</span></div>
-            <div data-i18n="kpi_pending_sub" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Siguiente: Ejecución programada Día 1</div>
-          </div>
-        </div>
-
-        <!-- Card 4: Active Agents -->
-        <div class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all">
-          <div class="flex justify-between items-start">
-            <span data-i18n="kpi_agents_title" class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider">Agentes Activos</span>
-            <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-[#2DD4BF] transition-colors">smart_toy</span>
-          </div>
-          <div class="mt-3">
-            <div id="kpiAgents" class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">-- <span data-i18n="kpi_agents_nodes" class="text-sm font-normal text-slate-500 dark:text-slate-400">Nodos Autónomos</span></div>
-            <div class="flex items-center gap-1.5 mt-2">
-              <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
-              <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
-              <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600"></span>
-              <span class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600"></span>
-              <span data-i18n="kpi_agents_sub" class="text-[11px] text-slate-500 dark:text-slate-400 ml-1">100% Sincronización WDK</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 4. Main Section: Split-Screen Agent Cockpit -->
-      <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left Panel: Company Treasury & WDK Policy Guard -->
-        <div class="lg:col-span-7 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between space-y-6 shadow-sm">
-          <div>
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">shield</span>
-                <h3 data-i18n="panel_treasury_title" class="text-lg font-bold text-slate-900 dark:text-white">Tesorería Corporativa & Guardián WDK</h3>
-              </div>
-              <span data-i18n="panel_treasury_enforcement" class="text-xs font-mono-tech px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300">ENFORCEMENT EN VIVO</span>
-            </div>
-
-            <!-- Guardrail Rules Badges & Capacity -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-              <!-- Capacity Radial/Bar Card -->
-              <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800">
-                <div data-i18n="panel_budget_title" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400 uppercase">Presupuesto Mensual de Nómina</div>
-                <div id="budgetProgressText" class="text-lg font-bold text-slate-900 dark:text-white mt-1">$0 / $50,000 USD₮</div>
-                <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
-                  <div id="budgetProgressBar" class="bg-gradient-to-r from-[#2DD4BF] to-teal-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-[11px] text-slate-500 dark:text-slate-400 mt-2 font-mono-tech">
-                  <span id="budgetPercentText">0% Asignado</span>
-                  <span data-i18n="panel_budget_reserve">100% Reserva de Liquidez</span>
-                </div>
+            <!-- Notification Dropdown -->
+            <div
+              id="notificationDropdown"
+              class="hidden absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-700 shadow-2xl z-50 p-4 space-y-3 font-mono-tech text-xs"
+            >
+              <div
+                class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-2.5"
+              >
+                <span
+                  class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5 font-sans"
+                >
+                  <span
+                    class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF] text-[18px]"
+                    >notifications_active</span
+                  >
+                  Centro de Notificaciones
+                </span>
+                <button
+                  onclick="clearNotifications()"
+                  class="text-[10px] text-slate-500 hover:text-teal-600 dark:hover:text-[#2DD4BF] transition-colors"
+                >
+                  Marcar como leídas
+                </button>
               </div>
 
-              <!-- Active Guardrail Badges -->
-              <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-                <div data-i18n="panel_rules_title" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400 uppercase">Reglas WDK Aplicadas</div>
-                <div class="space-y-2 mt-2">
-                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
-                    <span data-i18n="rule_whitelist">Regla: Solo Lista Blanca (Activa)</span>
+              <div
+                id="notificationList"
+                class="space-y-2 max-h-72 overflow-y-auto pr-1"
+              >
+                <div
+                  class="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/30 text-teal-900 dark:text-teal-200"
+                >
+                  <div class="flex items-center justify-between font-bold">
+                    <span>🛡️ WDK Policy Guard</span>
+                    <span class="text-[10px] text-teal-600 dark:text-teal-400"
+                      >ACTIVO</span
+                    >
                   </div>
-                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
-                    <span data-i18n="rule_cap">Regla: Máx. 5,000 USD₮ / tx (Aplicada)</span>
+                  <p class="text-[11px] mt-1 opacity-90">
+                    Modo Default-Deny activo. Límite de gasto configurado en
+                    5,000 USD₮ / tx.
+                  </p>
+                </div>
+
+                <div
+                  class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
+                >
+                  <div class="flex items-center justify-between font-bold">
+                    <span>⏰ Scheduler Autónomo</span>
+                    <span class="text-[10px] text-slate-400">Día 1</span>
                   </div>
-                  <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]"></span>
-                    <span data-i18n="rule_default_deny">Regla: Default-Deny para Ops Desconocidas</span>
+                  <p class="text-[11px] mt-1 opacity-80">
+                    Próxima liquidación de salarios el Día 1 de cada mes (9:00
+                    AM).
+                  </p>
+                </div>
+
+                <div
+                  class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
+                >
+                  <div class="flex items-center justify-between font-bold">
+                    <span>🤖 Nodos Agentes</span>
+                    <span class="text-[10px] text-slate-400">Online</span>
                   </div>
+                  <p class="text-[11px] mt-1 opacity-80">
+                    2 agentes autónomos conectados (Alice Developer, Bob
+                    Designer).
+                  </p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </header>
 
-          <!-- Live Policy Simulation Box -->
-          <div class="bg-slate-100 dark:bg-[#0A0F1D] rounded-xl p-4 border border-slate-200 dark:border-slate-800 font-mono-tech text-xs">
-            <div class="flex items-center justify-between text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2 mb-2">
-              <span class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-[#2DD4BF] animate-ping"></span>
-                <span data-i18n="sim_box_title">Simulación Pre-Flight de Políticas WDK</span>
+      <!-- Main Body Area -->
+      <main class="p-8 space-y-8 flex-1 max-w-[1600px] w-full mx-auto">
+        <!-- ========================================================================= -->
+        <!-- SCHEDULER & TIME WARP SIMULATOR CONTROL BAR -->
+        <!-- ========================================================================= -->
+        <section
+          class="bg-gradient-to-r from-teal-500/10 via-slate-100 to-slate-100 dark:from-[#122131] dark:via-[#1E293B] dark:to-[#122131] rounded-2xl border border-teal-500/40 px-5 py-4 shadow-[0_0_20px_rgba(45,212,191,0.1)]"
+        >
+          <div class="flex flex-col xl:flex-row xl:items-center gap-5">
+            <!-- LEFT: Scheduler info -->
+            <div class="flex items-start gap-4 flex-1 min-w-0">
+              <!-- Icon -->
+              <div
+                class="shrink-0 w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/40 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF] shadow-[0_0_15px_rgba(45,212,191,0.15)]"
+              >
+                <span class="material-symbols-outlined text-[25px]">
+                  schedule
+                </span>
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <!-- Title -->
+                <h3
+                  data-i18n="scheduler_title"
+                  class="text-base font-bold text-slate-900 dark:text-white tracking-tight leading-snug"
+                >
+                  Motor de Programación y Simulación Temporal (Time Warp)
+                </h3>
+
+                <!-- Status -->
+                <div class="mt-2">
+                  <span
+                    id="schedulerBadge"
+                    data-i18n="scheduler_standby"
+                    class="inline-flex items-center gap-1.5 text-[10px] font-mono-tech font-bold px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 whitespace-nowrap"
+                  >
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+
+                    EN ESPERA · ESPERANDO DÍA 1
+                  </span>
+                </div>
+
+                <!-- Scheduler details -->
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 mt-4 text-xs font-mono-tech"
+                >
+                  <!-- Simulated clock -->
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="material-symbols-outlined text-[17px] text-slate-400 shrink-0"
+                    >
+                      calendar_today
+                    </span>
+
+                    <span class="text-slate-500 dark:text-slate-400">
+                      <span data-i18n="scheduler_clock_label">
+                        Reloj Simulado:
+                      </span>
+
+                      <strong
+                        id="simClockText"
+                        class="ml-1 text-teal-600 dark:text-[#2DD4BF] font-bold whitespace-nowrap"
+                      >
+                        --
+                      </strong>
+                    </span>
+                  </div>
+
+                  <!-- Payday -->
+                  <div class="flex items-center gap-2 min-w-0">
+                    <span
+                      class="material-symbols-outlined text-[17px] text-slate-400 shrink-0"
+                    >
+                      event_repeat
+                    </span>
+
+                    <span class="text-slate-500 dark:text-slate-400">
+                      <span data-i18n="scheduler_payday_label">
+                        Pago programado:
+                      </span>
+
+                      <strong
+                        data-i18n="scheduler_payday_value"
+                        class="ml-1 text-slate-800 dark:text-slate-200 font-semibold"
+                      >
+                        Día 1 de cada mes · 09:00
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT: Actions -->
+            <div class="flex items-center gap-2 w-full xl:w-auto xl:shrink-0">
+              <!-- Primary action -->
+              <button
+                id="btnTimeWarp"
+                onclick="advanceToPayday()"
+                class="flex-1 xl:flex-none inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#2DD4BF] to-teal-400 hover:from-teal-400 hover:to-[#2DD4BF] text-[#0F172A] font-bold py-2.5 px-5 rounded-xl text-xs font-mono-tech whitespace-nowrap shadow-[0_0_18px_rgba(45,212,191,0.25)] hover:shadow-[0_0_22px_rgba(45,212,191,0.35)] active:scale-[0.98] transition-all"
+              >
+                <span class="material-symbols-outlined text-[18px]">
+                  fast_forward
+                </span>
+
+                <span data-i18n="scheduler_btn_fast_forward">
+                  Adelantar al Día 1
+                </span>
+              </button>
+
+              <!-- Reset -->
+              <button
+                onclick="resetClock()"
+                title="Reiniciar reloj"
+                aria-label="Reiniciar reloj"
+                class="shrink-0 w-10 h-10 flex items-center justify-center bg-white/60 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl border border-slate-300 dark:border-slate-700 active:scale-95 transition-all"
+              >
+                <span class="material-symbols-outlined text-[19px]">
+                  restart_alt
+                </span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Top Metrics Row (KPI Cards) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+          <!-- Card 1: Treasury Liquidity -->
+          <div
+            class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all"
+          >
+            <div class="flex justify-between items-start">
+              <span
+                data-i18n="kpi_liquidity_title"
+                class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider"
+                >Liquidez en Tesorería</span
+              >
+              <span
+                class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]/60 group-hover:text-[#2DD4BF] transition-colors"
+                >account_balance</span
+              >
+            </div>
+            <div class="mt-3">
+              <div
+                id="kpiLiquidity"
+                class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight"
+              >
+                --
+                <span
+                  class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]"
+                  >USD₮</span
+                >
+              </div>
+              <div
+                class="text-xs font-medium text-teal-600 dark:text-[#2DD4BF] flex items-center gap-1 mt-1"
+              >
+                <span class="material-symbols-outlined text-[14px]"
+                  >trending_up</span
+                >
+                <span data-i18n="kpi_liquidity_sub"
+                  >Sepolia Testnet No Custodial</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Settled Volume -->
+          <div
+            class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all"
+          >
+            <div class="flex justify-between items-start">
+              <span
+                data-i18n="kpi_settled_title"
+                class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider"
+                >Volumen Liquidado</span
+              >
+              <span
+                data-i18n="kpi_settled_badge"
+                class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30"
+                >LIQUIDADO</span
+              >
+            </div>
+            <div class="mt-3">
+              <div
+                id="kpiSettled"
+                class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight"
+              >
+                $0.00
+                <span
+                  class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]"
+                  >USD₮</span
+                >
+              </div>
+              <div
+                data-i18n="kpi_settled_sub"
+                class="text-xs text-slate-500 dark:text-slate-400 mt-1"
+              >
+                Ciclos automáticos de nómina
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Pending x402 Claims -->
+          <div
+            class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-amber-500/40 shadow-sm transition-all"
+          >
+            <div class="flex justify-between items-start">
+              <span
+                data-i18n="kpi_pending_title"
+                class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider"
+                >Reclamos x402 Pendientes</span
+              >
+              <span
+                data-i18n="kpi_pending_badge"
+                class="px-2 py-0.5 rounded text-[10px] font-mono-tech font-bold bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/30"
+                >ESPERANDO_CICLO</span
+              >
+            </div>
+            <div class="mt-3">
+              <div
+                id="kpiPending"
+                class="text-2xl font-bold text-amber-600 dark:text-[#F59E0B] tracking-tight"
+              >
+                -- Reclamos
+                <span
+                  class="text-sm font-normal text-slate-500 dark:text-slate-400"
+                  >(-- USD₮)</span
+                >
+              </div>
+              <div
+                data-i18n="kpi_pending_sub"
+                class="text-xs text-slate-500 dark:text-slate-400 mt-1"
+              >
+                Siguiente: Ejecución programada Día 1
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4: Active Agents -->
+          <div
+            class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-5 relative overflow-hidden group hover:border-teal-500/40 shadow-sm transition-all"
+          >
+            <div class="flex justify-between items-start">
+              <span
+                data-i18n="kpi_agents_title"
+                class="text-xs font-mono-tech uppercase text-slate-500 dark:text-slate-400 font-semibold tracking-wider"
+                >Agentes Activos</span
+              >
+              <span
+                class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-[#2DD4BF] transition-colors"
+                >smart_toy</span
+              >
+            </div>
+            <div class="mt-3">
+              <div
+                id="kpiAgents"
+                class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight"
+              >
+                --
+                <span
+                  data-i18n="kpi_agents_nodes"
+                  class="text-sm font-normal text-slate-500 dark:text-slate-400"
+                  >Nodos Autónomos</span
+                >
+              </div>
+              <div class="flex items-center gap-1.5 mt-2">
+                <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
+                <span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
+                <span
+                  class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600"
+                ></span>
+                <span
+                  class="w-2 h-2 rounded-full bg-slate-400 dark:bg-slate-600"
+                ></span>
+                <span
+                  data-i18n="kpi_agents_sub"
+                  class="text-[11px] text-slate-500 dark:text-slate-400 ml-1"
+                  >100% Sincronización WDK</span
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Main Section: Split-Screen Agent Cockpit -->
+        <section
+          class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:items-stretch"
+        >
+          <!-- ========================================================= -->
+          <!-- Left Panel: Company Treasury & WDK Policy Guard           -->
+          <!-- ========================================================= -->
+          <div
+            class="lg:col-span-7 h-full bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-sm"
+          >
+            <!-- Header -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div
+                  class="shrink-0 w-9 h-9 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF]"
+                >
+                  <span class="material-symbols-outlined text-[21px]">
+                    shield
+                  </span>
+                </div>
+
+                <h3
+                  data-i18n="panel_treasury_title"
+                  class="min-w-0 text-lg leading-tight font-bold text-slate-900 dark:text-white"
+                >
+                  Tesorería Corporativa & Guardián WDK
+                </h3>
+              </div>
+
+              <span
+                data-i18n="panel_treasury_enforcement"
+                class="shrink-0 inline-flex items-center gap-2 w-fit text-[10px] font-mono-tech font-semibold tracking-wide px-2.5 py-1.5 rounded-md bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full bg-[#2DD4BF] shadow-[0_0_8px_rgba(45,212,191,0.65)]"
+                ></span>
+
+                ENFORCEMENT EN VIVO
               </span>
-              <span id="simStatusHeader" class="text-teal-600 dark:text-[#2DD4BF] font-semibold">account.simulate.transfer: LISTO</span>
             </div>
-            <div id="simLogBox" class="space-y-1.5 text-slate-700 dark:text-slate-300 min-h-[100px] flex flex-col justify-center">
-              <p><span class="text-slate-400 dark:text-slate-500">[EN ESPERA]</span> Aguardando requerimiento entrante de pago de agente...</p>
+
+            <!-- Guardrails / Capacity -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+              <!-- Budget -->
+              <div
+                class="min-h-[170px] bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 p-5 flex flex-col"
+              >
+                <div
+                  data-i18n="panel_budget_title"
+                  class="text-[11px] font-mono-tech tracking-wide text-slate-500 dark:text-slate-400 uppercase"
+                >
+                  Presupuesto Mensual de Nómina
+                </div>
+
+                <div
+                  id="budgetProgressText"
+                  class="mt-2 text-xl leading-none font-bold tracking-tight text-slate-900 dark:text-white"
+                >
+                  $0 / $50,000 USD₮
+                </div>
+
+                <div class="mt-auto pt-6">
+                  <div
+                    class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden"
+                  >
+                    <div
+                      id="budgetProgressBar"
+                      class="h-full rounded-full bg-gradient-to-r from-[#2DD4BF] to-teal-400 transition-all duration-500"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+
+                  <div
+                    class="mt-3 flex items-center justify-between gap-4 text-[10px] leading-4 font-mono-tech text-slate-500 dark:text-slate-400"
+                  >
+                    <span id="budgetPercentText" class="shrink-0">
+                      0% Asignado
+                    </span>
+
+                    <span data-i18n="panel_budget_reserve" class="text-right">
+                      100% Reserva de Liquidez
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rules -->
+              <div
+                class="min-h-[170px] bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 p-5"
+              >
+                <div
+                  data-i18n="panel_rules_title"
+                  class="text-[11px] font-mono-tech tracking-wide text-slate-500 dark:text-slate-400 uppercase"
+                >
+                  Reglas WDK Aplicadas
+                </div>
+
+                <div class="mt-4 space-y-3">
+                  <div class="flex items-start gap-2.5">
+                    <span
+                      class="shrink-0 w-1.5 h-1.5 mt-[6px] rounded-full bg-[#2DD4BF]"
+                    ></span>
+
+                    <span
+                      data-i18n="rule_whitelist"
+                      class="text-xs leading-5 text-slate-700 dark:text-slate-200"
+                    >
+                      Regla: Solo Lista Blanca (Activa)
+                    </span>
+                  </div>
+
+                  <div class="flex items-start gap-2.5">
+                    <span
+                      class="shrink-0 w-1.5 h-1.5 mt-[6px] rounded-full bg-[#2DD4BF]"
+                    ></span>
+
+                    <span
+                      data-i18n="rule_cap"
+                      class="text-xs leading-5 text-slate-700 dark:text-slate-200"
+                    >
+                      Regla: Máx. 5,000 USD₮ / tx (Aplicada)
+                    </span>
+                  </div>
+
+                  <div class="flex items-start gap-2.5">
+                    <span
+                      class="shrink-0 w-1.5 h-1.5 mt-[6px] rounded-full bg-[#2DD4BF]"
+                    ></span>
+
+                    <span
+                      data-i18n="rule_default_deny"
+                      class="text-xs leading-5 text-slate-700 dark:text-slate-200"
+                    >
+                      Regla: Default-Deny para Ops Desconocidas
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Policy Simulation -->
+            <div
+              class="mt-5 flex-1 min-h-[185px] bg-slate-100 dark:bg-[#0A0F1D] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden font-mono-tech flex flex-col"
+            >
+              <!-- Terminal Header -->
+              <div
+                class="shrink-0 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2 px-5 py-3.5 bg-white/40 dark:bg-white/[0.015] border-b border-slate-200 dark:border-slate-800"
+              >
+                <div
+                  class="flex items-center gap-2.5 min-w-0 text-[11px] text-slate-500 dark:text-slate-400"
+                >
+                  <span class="relative flex w-2 h-2 shrink-0">
+                    <span
+                      class="absolute inline-flex w-full h-full rounded-full bg-[#2DD4BF] opacity-30 animate-ping"
+                    ></span>
+
+                    <span
+                      class="relative inline-flex w-2 h-2 rounded-full bg-[#2DD4BF]"
+                    ></span>
+                  </span>
+
+                  <span data-i18n="sim_box_title">
+                    Simulación Pre-Flight de Políticas WDK
+                  </span>
+                </div>
+
+                <span
+                  id="simStatusHeader"
+                  class="shrink-0 text-[11px] font-semibold text-teal-600 dark:text-[#2DD4BF] xl:text-right"
+                >
+                  account.simulate.transfer: LISTO
+                </span>
+              </div>
+
+              <!-- Terminal Body -->
+              <div
+                id="simLogBox"
+                class="flex-1 px-5 py-5 space-y-2 text-[11px] leading-6 text-slate-700 dark:text-slate-300"
+              >
+                <p class="m-0">
+                  <span class="text-slate-400 dark:text-slate-500 mr-1.5">
+                    [EN ESPERA]
+                  </span>
+
+                  Aguardando requerimiento entrante de pago de agente...
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Right Panel: Employee Agent Claim Station -->
-        <div class="lg:col-span-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between space-y-6 shadow-sm">
-          <div>
-            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-amber-600 dark:text-[#F59E0B]">badge</span>
-                <h3 data-i18n="panel_claim_title" class="text-lg font-bold text-slate-900 dark:text-white">Estación de Reclamos del Agente Empleado</h3>
+          <!-- ========================================================= -->
+          <!-- Right Panel: Employee Agent Claim Station                 -->
+          <!-- ========================================================= -->
+          <div
+            class="lg:col-span-5 h-full bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-sm"
+          >
+            <!-- Header -->
+            <div
+              class="flex items-start justify-between gap-4 pb-5 border-b border-slate-200 dark:border-slate-800"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <div
+                  class="shrink-0 w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-[#F59E0B]"
+                >
+                  <span class="material-symbols-outlined text-[21px]">
+                    badge
+                  </span>
+                </div>
+
+                <h3
+                  data-i18n="panel_claim_title"
+                  class="min-w-0 text-lg leading-tight font-bold text-slate-900 dark:text-white"
+                >
+                  Estación de Reclamos del Agente Empleado
+                </h3>
               </div>
-              <span id="stationEmpBadge" class="text-xs font-mono-tech px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30 font-bold">emp-001</span>
+
+              <span
+                id="stationEmpBadge"
+                class="shrink-0 text-[10px] font-mono-tech font-bold px-2.5 py-1.5 rounded-md bg-teal-500/10 text-teal-700 dark:text-[#2DD4BF] border border-teal-500/30"
+              >
+                emp-001
+              </span>
             </div>
 
-            <!-- Profile Info Card -->
-            <div class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 mt-6 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div id="stationAvatar" class="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-slate-800 border border-teal-500/40 flex items-center justify-center font-bold text-lg text-teal-600 dark:text-[#2DD4BF]">
-                  AD
+            <!-- Employee Card -->
+            <div
+              class="mt-5 bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 p-5"
+            >
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+              >
+                <div class="flex items-center gap-3 min-w-0">
+                  <div
+                    id="stationAvatar"
+                    class="shrink-0 w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/40 flex items-center justify-center font-bold text-base text-teal-600 dark:text-[#2DD4BF]"
+                  >
+                    AD
+                  </div>
+
+                  <div class="min-w-0">
+                    <h4
+                      id="stationEmpName"
+                      class="text-sm leading-5 font-bold text-slate-900 dark:text-white"
+                    >
+                      Alice Developer
+                    </h4>
+
+                    <p
+                      id="stationEmpRole"
+                      data-i18n="emp_role_alice"
+                      class="mt-1 text-[11px] leading-4 text-slate-500 dark:text-slate-400"
+                    >
+                      Desarrolladora Senior Core · 2,500 USD₮ / mes
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 id="stationEmpName" class="font-bold text-slate-900 dark:text-white">Alice Developer</h4>
-                  <p id="stationEmpRole" data-i18n="emp_role_alice" class="text-xs text-slate-500 dark:text-slate-400">Desarrolladora Senior Core · 2,500 USD₮ / mes</p>
+
+                <div class="sm:text-right shrink-0">
+                  <span
+                    data-i18n="emp_status_label"
+                    class="block text-[10px] leading-none font-mono-tech uppercase tracking-wide text-slate-500 dark:text-slate-400"
+                  >
+                    Estado
+                  </span>
+
+                  <p
+                    id="aliceAgentStatus"
+                    data-i18n="emp_status_ready"
+                    class="mt-2 text-[10px] leading-none font-mono-tech font-bold text-teal-600 dark:text-[#2DD4BF]"
+                  >
+                    LISTO_PARA_COBRAR
+                  </p>
                 </div>
-              </div>
-              <div class="text-right">
-                <span data-i18n="emp_status_label" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Estado</span>
-                <p id="aliceAgentStatus" data-i18n="emp_status_ready" class="text-xs font-mono-tech text-teal-600 dark:text-[#2DD4BF] font-bold">LISTO_PARA_COBRAR</p>
               </div>
             </div>
 
-            <!-- Interactive Action Buttons -->
-            <div class="grid grid-cols-2 gap-3 mt-4">
-              <button id="btnTriggerClaim" onclick="triggerClaim()" class="bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.3)] transition-all">
-                <span class="material-symbols-outlined text-[18px]">bolt</span>
-                <span data-i18n="btn_trigger_claim">Disparar Reclamo x402</span>
+            <!-- Actions -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+              <!-- Primary -->
+              <button
+                id="btnTriggerClaim"
+                onclick="triggerClaim()"
+                class="min-h-[48px] bg-[#2DD4BF] hover:bg-[#14B8A6] text-[#0F172A] font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(45,212,191,0.25)] hover:shadow-[0_0_20px_rgba(45,212,191,0.35)] active:scale-[0.98] transition-all"
+              >
+                <span class="material-symbols-outlined text-[18px] shrink-0">
+                  bolt
+                </span>
+
+                <span data-i18n="btn_trigger_claim">
+                  Disparar Reclamo x402
+                </span>
               </button>
 
-              <button id="btnSimulateThreat" onclick="simulateThreat()" class="bg-transparent hover:bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/60 font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 transition-all">
-                <span class="material-symbols-outlined text-[18px]">warning</span>
-                <span data-i18n="btn_simulate_threat">Simular Amenaza</span>
+              <!-- Secondary -->
+              <button
+                id="btnSimulateThreat"
+                onclick="simulateThreat()"
+                class="min-h-[48px] bg-transparent hover:bg-amber-500/10 text-amber-600 dark:text-[#F59E0B] border border-amber-500/50 hover:border-amber-500/80 font-bold py-3 px-4 rounded-xl text-xs font-mono-tech flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+              >
+                <span class="material-symbols-outlined text-[18px] shrink-0">
+                  warning
+                </span>
+
+                <span data-i18n="btn_simulate_threat"> Simular Amenaza </span>
               </button>
             </div>
-          </div>
 
-          <!-- Payload Preview Box -->
-          <div class="bg-slate-100 dark:bg-[#0A0F1D] rounded-xl p-4 border border-slate-200 dark:border-slate-800 font-mono-tech text-xs">
-            <div class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-2 mb-2 flex justify-between">
-              <span data-i18n="payload_preview_title">Requerimiento x402 & Recibo</span>
-              <span class="text-amber-600 dark:text-[#F59E0B] font-semibold">HTTP 402 / X-PAYMENT</span>
-            </div>
-            <pre id="jsonPayload" class="text-slate-800 dark:text-slate-300 text-[11px] overflow-x-auto">{
+            <!-- Payload Preview -->
+            <div
+              class="mt-5 flex-1 min-h-[250px] bg-slate-100 dark:bg-[#0A0F1D] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden font-mono-tech flex flex-col"
+            >
+              <!-- Payload Header -->
+              <div
+                class="shrink-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-5 py-3.5 bg-white/40 dark:bg-white/[0.015] border-b border-slate-200 dark:border-slate-800"
+              >
+                <span
+                  data-i18n="payload_preview_title"
+                  class="text-[11px] text-slate-500 dark:text-slate-400"
+                >
+                  Requerimiento x402 &amp; Recibo
+                </span>
+
+                <span
+                  class="shrink-0 text-[10px] font-semibold text-amber-600 dark:text-[#F59E0B]"
+                >
+                  HTTP 402 / X-PAYMENT
+                </span>
+              </div>
+
+              <!-- JSON -->
+              <div class="flex-1 min-h-0 px-5 py-4 overflow-auto">
+                <pre
+                  id="jsonPayload"
+                  class="m-0 text-[10.5px] leading-[1.65] text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-words"
+                >
+{
   "x402Version": 1,
   "employeeId": "emp-001",
   "amountUsdt": 2500,
@@ -442,298 +986,540 @@
   "concept": "Monthly Engineering Salary",
   "network": "eip155:11155111 (Sepolia)",
   "status": "AWAITING_TRIGGER"
-}</pre>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. Interactive Visual Pipeline: "Settlement Protocol Inspector" -->
-      <section class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-teal-600 dark:text-[#2DD4BF]">schema</span>
-            <h3 data-i18n="pipeline_title" class="text-lg font-bold text-slate-900 dark:text-white">Inspector del Protocolo de Liquidación (Flujo en 5 Fases)</h3>
-          </div>
-          <span data-i18n="pipeline_subtitle" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Handshake Autónomo entre Agentes en Sepolia</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
-          <!-- Step 1 -->
-          <div id="flowStep1" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
-              <span class="material-symbols-outlined text-[20px]">calendar_today</span>
-            </div>
-            <h5 data-i18n="step1_title" class="text-xs font-bold text-slate-900 dark:text-white">1. Fecha de Cobro Detectada</h5>
-            <p data-i18n="step1_desc" class="text-[11px] text-slate-500 dark:text-slate-400">Disparo de Día 1 por Scheduler</p>
-          </div>
-
-          <!-- Step 2 -->
-          <div id="flowStep2" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
-              <span class="material-symbols-outlined text-[20px]">receipt_long</span>
-            </div>
-            <h5 data-i18n="step2_title" class="text-xs font-bold text-slate-900 dark:text-white">2. Requerimiento x402 Emitido</h5>
-            <p data-i18n="step2_desc" class="text-[11px] text-slate-500 dark:text-slate-400">HTTP 402 + Cabecera X-PAYMENT</p>
-          </div>
-
-          <!-- Step 3 -->
-          <div id="flowStep3" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
-              <span class="material-symbols-outlined text-[20px]">policy</span>
-            </div>
-            <h5 data-i18n="step3_title" class="text-xs font-bold text-slate-900 dark:text-white">3. Simulación de Política WDK</h5>
-            <p data-i18n="step3_desc" class="text-[11px] text-slate-500 dark:text-slate-400">ALLOW (Lista Blanca & Tope)</p>
-          </div>
-
-          <!-- Step 4 -->
-          <div id="flowStep4" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40">
-              <span class="material-symbols-outlined text-[20px]">currency_exchange</span>
-            </div>
-            <h5 data-i18n="step4_title" class="text-xs font-bold text-slate-900 dark:text-white">4. Transferencia USD₮ Emitida</h5>
-            <p data-i18n="step4_desc" class="text-[11px] text-slate-500 dark:text-slate-400">Ethereum Sepolia Testnet</p>
-          </div>
-
-          <!-- Step 5 -->
-          <div id="flowStep5" class="bg-slate-50 dark:bg-slate-900/90 rounded-xl p-4 border border-slate-200 dark:border-slate-800 flex flex-col items-center text-center space-y-2 transition-all duration-300">
-            <div class="w-10 h-10 rounded-full bg-[#2DD4BF] text-[#0F172A] flex items-center justify-center font-bold">
-              <span class="material-symbols-outlined text-[20px]">verified</span>
-            </div>
-            <h5 id="flowStep5Title" data-i18n="step5_title" class="text-xs font-bold text-teal-600 dark:text-[#2DD4BF]">5. Recibo Validado</h5>
-            <div id="flowStep5Container">
-              <p id="flowStep5Tx" data-i18n="step5_awaiting" class="text-[11px] font-mono-tech text-slate-600 dark:text-slate-300">Aguardando Liquidación</p>
+}</pre
+                >
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 6. Comparative Analytics & Activity Ledger -->
-      <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-        <!-- Analytics Chart -->
-        <div class="xl:col-span-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
-          <div class="flex justify-between items-center mb-4">
-            <h4 data-i18n="analytics_title" class="text-base font-bold text-slate-900 dark:text-white">Volumen Liquidado vs Pendiente</h4>
-            <div class="flex items-center gap-3 text-xs font-mono-tech">
-              <span class="flex items-center gap-1.5 text-teal-600 dark:text-[#2DD4BF] font-semibold"><span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span> <span data-i18n="analytics_legend_settled">Liquidado</span></span>
-              <span class="flex items-center gap-1.5 text-amber-600 dark:text-[#F59E0B] font-semibold"><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span> <span data-i18n="analytics_legend_pending">Pendiente</span></span>
+        <!-- 5. Interactive Visual Pipeline: "Settlement Protocol Inspector" -->
+        <section
+          class="bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm"
+        >
+          <!-- Header -->
+          <div
+            class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 mb-7"
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <div
+                class="shrink-0 w-9 h-9 rounded-lg bg-teal-500/10 flex items-center justify-center text-teal-600 dark:text-[#2DD4BF]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  schema
+                </span>
+              </div>
+
+              <h3
+                data-i18n="pipeline_title"
+                class="text-lg font-bold text-slate-900 dark:text-white leading-tight"
+              >
+                Inspector del Protocolo de Liquidación (Flujo en 5 Fases)
+              </h3>
+            </div>
+
+            <span
+              data-i18n="pipeline_subtitle"
+              class="lg:shrink-0 lg:text-right text-xs font-mono-tech text-slate-500 dark:text-slate-400 tracking-wide"
+            >
+              Handshake Autónomo entre Agentes en Sepolia
+            </span>
+          </div>
+
+          <!-- Steps -->
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5"
+          >
+            <!-- Step 1 -->
+            <div
+              id="flowStep1"
+              class="bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 px-5 py-6 min-h-[190px] grid grid-rows-[48px_48px_1fr] gap-3 place-items-center text-center transition-all duration-300"
+            >
+              <!-- Icon -->
+              <div
+                class="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40 shadow-[0_0_12px_rgba(45,212,191,0.08)]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  calendar_today
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h5
+                data-i18n="step1_title"
+                class="self-center text-xs font-bold leading-5 text-slate-900 dark:text-white"
+              >
+                1. Fecha de Cobro Detectada
+              </h5>
+
+              <!-- Description -->
+              <p
+                data-i18n="step1_desc"
+                class="self-start pt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400"
+              >
+                Disparo de Día 1 por Scheduler
+              </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div
+              id="flowStep2"
+              class="bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 px-5 py-6 min-h-[190px] grid grid-rows-[48px_48px_1fr] gap-3 place-items-center text-center transition-all duration-300"
+            >
+              <!-- Icon -->
+              <div
+                class="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40 shadow-[0_0_12px_rgba(45,212,191,0.08)]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  receipt_long
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h5
+                data-i18n="step2_title"
+                class="self-center text-xs font-bold leading-5 text-slate-900 dark:text-white"
+              >
+                2. Requerimiento x402 Emitido
+              </h5>
+
+              <!-- Description -->
+              <p
+                data-i18n="step2_desc"
+                class="self-start pt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400"
+              >
+                HTTP 402 + Cabecera X-PAYMENT
+              </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div
+              id="flowStep3"
+              class="bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 px-5 py-6 min-h-[190px] grid grid-rows-[48px_48px_1fr] gap-3 place-items-center text-center transition-all duration-300"
+            >
+              <!-- Icon -->
+              <div
+                class="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40 shadow-[0_0_12px_rgba(45,212,191,0.08)]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  policy
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h5
+                data-i18n="step3_title"
+                class="self-center text-xs font-bold leading-5 text-slate-900 dark:text-white"
+              >
+                3. Simulación de Política WDK
+              </h5>
+
+              <!-- Description -->
+              <p
+                data-i18n="step3_desc"
+                class="self-start pt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400"
+              >
+                ALLOW (Lista Blanca &amp; Tope)
+              </p>
+            </div>
+
+            <!-- Step 4 -->
+            <div
+              id="flowStep4"
+              class="bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 px-5 py-6 min-h-[190px] grid grid-rows-[48px_48px_1fr] gap-3 place-items-center text-center transition-all duration-300"
+            >
+              <!-- Icon -->
+              <div
+                class="w-12 h-12 rounded-full bg-teal-500/10 text-teal-600 dark:text-[#2DD4BF] flex items-center justify-center border border-teal-500/40 shadow-[0_0_12px_rgba(45,212,191,0.08)]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  currency_exchange
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h5
+                data-i18n="step4_title"
+                class="self-center text-xs font-bold leading-5 text-slate-900 dark:text-white"
+              >
+                4. Transferencia USD₮ Emitida
+              </h5>
+
+              <!-- Description -->
+              <p
+                data-i18n="step4_desc"
+                class="self-start pt-1 text-[11px] leading-5 text-slate-500 dark:text-slate-400"
+              >
+                Ethereum Sepolia Testnet
+              </p>
+            </div>
+
+            <!-- Step 5 -->
+            <div
+              id="flowStep5"
+              class="bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-200 dark:border-slate-800 px-5 py-6 min-h-[190px] grid grid-rows-[48px_48px_1fr] gap-3 place-items-center text-center transition-all duration-300"
+            >
+              <!-- Icon -->
+              <div
+                class="w-12 h-12 rounded-full bg-[#2DD4BF] text-[#0F172A] flex items-center justify-center shadow-[0_0_18px_rgba(45,212,191,0.25)]"
+              >
+                <span class="material-symbols-outlined text-[21px]">
+                  verified
+                </span>
+              </div>
+
+              <!-- Title -->
+              <h5
+                id="flowStep5Title"
+                data-i18n="step5_title"
+                class="self-center text-xs font-bold leading-5 text-teal-600 dark:text-[#2DD4BF]"
+              >
+                5. Recibo Validado
+              </h5>
+
+              <!-- Dynamic status -->
+              <div
+                id="flowStep5Container"
+                class="self-start pt-1 min-w-0 w-full"
+              >
+                <p
+                  id="flowStep5Tx"
+                  data-i18n="step5_awaiting"
+                  class="text-[11px] leading-5 font-mono-tech text-slate-500 dark:text-slate-400 break-words"
+                >
+                  Aguardando Liquidación
+                </p>
+              </div>
             </div>
           </div>
-          <div class="h-60 w-full">
-            <canvas id="payrollChart"></canvas>
+        </section>
+
+        <!-- 6. Comparative Analytics & Activity Ledger -->
+        <section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+          <!-- Analytics Chart -->
+          <div
+            class="xl:col-span-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h4
+                data-i18n="analytics_title"
+                class="text-base font-bold text-slate-900 dark:text-white"
+              >
+                Volumen Liquidado vs Pendiente
+              </h4>
+              <div class="flex items-center gap-3 text-xs font-mono-tech">
+                <span
+                  class="flex items-center gap-1.5 text-teal-600 dark:text-[#2DD4BF] font-semibold"
+                  ><span class="w-2 h-2 rounded-full bg-[#2DD4BF]"></span>
+                  <span data-i18n="analytics_legend_settled"
+                    >Liquidado</span
+                  ></span
+                >
+                <span
+                  class="flex items-center gap-1.5 text-amber-600 dark:text-[#F59E0B] font-semibold"
+                  ><span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span>
+                  <span data-i18n="analytics_legend_pending"
+                    >Pendiente</span
+                  ></span
+                >
+              </div>
+            </div>
+            <div class="h-60 w-full">
+              <canvas id="payrollChart"></canvas>
+            </div>
           </div>
-        </div>
 
-        <!-- Ledger Table -->
-        <div class="xl:col-span-7 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm">
-          <div class="flex justify-between items-center mb-4">
-            <h4 data-i18n="ledger_title" class="text-base font-bold text-slate-900 dark:text-white">Libro Contable de Liquidaciones Autónomas</h4>
-            <span data-i18n="ledger_subtitle" class="text-xs font-mono-tech text-slate-500 dark:text-slate-400">Eventos Verificados On-Chain</span>
+          <!-- Ledger Table -->
+          <div
+            class="xl:col-span-7 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-sm"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h4
+                data-i18n="ledger_title"
+                class="text-base font-bold text-slate-900 dark:text-white"
+              >
+                Libro Contable de Liquidaciones Autónomas
+              </h4>
+              <span
+                data-i18n="ledger_subtitle"
+                class="text-xs font-mono-tech text-slate-500 dark:text-slate-400"
+                >Eventos Verificados On-Chain</span
+              >
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs font-mono-tech">
+                <thead>
+                  <tr
+                    class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800"
+                  >
+                    <th data-i18n="th_timestamp" class="pb-3 font-semibold">
+                      Marca Temporal
+                    </th>
+                    <th data-i18n="th_agent_id" class="pb-3 font-semibold">
+                      ID de Agente
+                    </th>
+                    <th data-i18n="th_amount" class="pb-3 font-semibold">
+                      Monto
+                    </th>
+                    <th data-i18n="th_status" class="pb-3 font-semibold">
+                      Estado
+                    </th>
+                    <th data-i18n="th_tx_hash" class="pb-3 font-semibold">
+                      Hash Tx (Sepolia)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="ledgerTbody"
+                  class="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300"
+                >
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
           </div>
+        </section>
+      </main>
+    </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs font-mono-tech">
-              <thead>
-                <tr class="text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
-                  <th data-i18n="th_timestamp" class="pb-3 font-semibold">Marca Temporal</th>
-                  <th data-i18n="th_agent_id" class="pb-3 font-semibold">ID de Agente</th>
-                  <th data-i18n="th_amount" class="pb-3 font-semibold">Monto</th>
-                  <th data-i18n="th_status" class="pb-3 font-semibold">Estado</th>
-                  <th data-i18n="th_tx_hash" class="pb-3 font-semibold">Hash Tx (Sepolia)</th>
-                </tr>
-              </thead>
-              <tbody id="ledgerTbody" class="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+    <!-- JavaScript: Live Backend Connection, Scheduler & Interactivity -->
+    <script>
+      let payrollChartInstance = null;
 
-    </main>
-  </div>
+      // 1. Initialize Chart
+      function initChart() {
+        const ctx = document.getElementById("payrollChart").getContext("2d");
+        const isDark = document.documentElement.classList.contains("dark");
+        const gridColor = isDark
+          ? "rgba(255,255,255,0.05)"
+          : "rgba(0,0,0,0.05)";
+        const tickColor = isDark ? "#94A3B8" : "#64748B";
 
-  <!-- JavaScript: Live Backend Connection, Scheduler & Interactivity -->
-  <script>
-    let payrollChartInstance = null;
-
-    // 1. Initialize Chart
-    function initChart() {
-      const ctx = document.getElementById('payrollChart').getContext('2d');
-      const isDark = document.documentElement.classList.contains('dark');
-      const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
-      const tickColor = isDark ? '#94A3B8' : '#64748B';
-
-      payrollChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Inicio', 'Actual'],
-          datasets: [
-            {
-              label: 'Settled USD₮',
-              data: [0, 0],
-              borderColor: '#2DD4BF',
-              backgroundColor: 'rgba(45, 212, 191, 0.1)',
-              tension: 0.4,
-              fill: true,
-              pointRadius: 4,
-              pointBackgroundColor: '#2DD4BF'
+        payrollChartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: ["Inicio", "Actual"],
+            datasets: [
+              {
+                label: "Settled USD₮",
+                data: [0, 0],
+                borderColor: "#2DD4BF",
+                backgroundColor: "rgba(45, 212, 191, 0.1)",
+                tension: 0.4,
+                fill: true,
+                pointRadius: 4,
+                pointBackgroundColor: "#2DD4BF",
+              },
+              {
+                label: "Pending Claims",
+                data: [0, 0],
+                borderColor: "#F59E0B",
+                backgroundColor: "transparent",
+                borderDash: [5, 5],
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: "#F59E0B",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: {
+                grid: { color: gridColor },
+                ticks: {
+                  color: tickColor,
+                  font: { family: "JetBrains Mono", size: 10 },
+                },
+              },
+              y: {
+                grid: { color: gridColor },
+                ticks: {
+                  color: tickColor,
+                  font: { family: "JetBrains Mono", size: 10 },
+                },
+              },
             },
-            {
-              label: 'Pending Claims',
-              data: [0, 0],
-              borderColor: '#F59E0B',
-              backgroundColor: 'transparent',
-              borderDash: [5, 5],
-              tension: 0.4,
-              pointRadius: 4,
-              pointBackgroundColor: '#F59E0B'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'JetBrains Mono', size: 10 } } },
-            y: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'JetBrains Mono', size: 10 } } }
-          }
-        }
-      });
-    }
-
-    function updateChart(metrics, txHistory) {
-      if (!payrollChartInstance) return;
-
-      const settled = Number(metrics.settledVolume || 0);
-      const pending = Number(metrics.pendingClaimsUsdt || 0);
-
-      if (!txHistory || txHistory.length === 0) {
-        payrollChartInstance.data.labels = ['Inicial', 'Actual'];
-        payrollChartInstance.data.datasets[0].data = [0, settled];
-        payrollChartInstance.data.datasets[1].data = [pending, pending];
-      } else {
-        const labels = ['Inicio'];
-        const settledPoints = [0];
-        const initialTotal = settled + pending;
-        const pendingPoints = [initialTotal];
-        let cumulative = 0;
-
-        const chron = [...txHistory].reverse();
-        chron.forEach((tx, i) => {
-          if (tx.status === 'SETTLED') {
-            cumulative += Number(tx.amountUsdt || 0);
-            labels.push(`Tx ${i + 1}`);
-            settledPoints.push(cumulative);
-            pendingPoints.push(Math.max(0, initialTotal - cumulative));
-          }
+          },
         });
-
-        payrollChartInstance.data.labels = labels;
-        payrollChartInstance.data.datasets[0].data = settledPoints;
-        payrollChartInstance.data.datasets[1].data = pendingPoints;
       }
-      payrollChartInstance.update();
-    }
 
-    // 2. Fetch System Status on Load
-    async function loadSystemStatus() {
-      try {
-        const res = await fetch('/api/payroll/status');
-        if (!res.ok) return;
-        const data = await res.json();
+      function updateChart(metrics, txHistory) {
+        if (!payrollChartInstance) return;
 
-        if (data.treasuryAddress) {
-          const shortTreasury = data.treasuryAddress.slice(0, 6) + '...' + data.treasuryAddress.slice(-4);
-          document.getElementById('headerTreasuryAddress').innerText = shortTreasury;
+        const settled = Number(metrics.settledVolume || 0);
+        const pending = Number(metrics.pendingClaimsUsdt || 0);
+
+        if (!txHistory || txHistory.length === 0) {
+          payrollChartInstance.data.labels = ["Inicial", "Actual"];
+          payrollChartInstance.data.datasets[0].data = [0, settled];
+          payrollChartInstance.data.datasets[1].data = [pending, pending];
+        } else {
+          const labels = ["Inicio"];
+          const settledPoints = [0];
+          const initialTotal = settled + pending;
+          const pendingPoints = [initialTotal];
+          let cumulative = 0;
+
+          const chron = [...txHistory].reverse();
+          chron.forEach((tx, i) => {
+            if (tx.status === "SETTLED") {
+              cumulative += Number(tx.amountUsdt || 0);
+              labels.push(`Tx ${i + 1}`);
+              settledPoints.push(cumulative);
+              pendingPoints.push(Math.max(0, initialTotal - cumulative));
+            }
+          });
+
+          payrollChartInstance.data.labels = labels;
+          payrollChartInstance.data.datasets[0].data = settledPoints;
+          payrollChartInstance.data.datasets[1].data = pendingPoints;
         }
+        payrollChartInstance.update();
+      }
 
-        if (data.simulatedDate) {
-          document.getElementById('simClockText').innerText = data.simulatedDate;
-        }
+      // 2. Fetch System Status on Load
+      async function loadSystemStatus() {
+        try {
+          const res = await fetch("/api/payroll/status");
+          if (!res.ok) return;
+          const data = await res.json();
 
-        if (data.isPaydayToday) {
-          const badge = document.getElementById('schedulerBadge');
-          badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_active') : 'DÍA DE PAGO ACTIVO (DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30';
-        }
-
-        if (data.employees && data.employees.length > 0) {
-          const emp0 = data.employees[0];
-          const initials = emp0.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-          const avatarEl = document.getElementById('stationAvatar');
-          if (avatarEl) avatarEl.innerText = initials;
-          const nameEl = document.getElementById('stationEmpName');
-          if (nameEl) nameEl.innerText = emp0.name;
-          const badgeEl = document.getElementById('stationEmpBadge');
-          if (badgeEl) badgeEl.innerText = emp0.employeeId;
-          const roleEl = document.getElementById('stationEmpRole');
-          if (roleEl) roleEl.innerText = `${emp0.employeeId === 'emp-001' ? 'Desarrolladora Senior Core' : 'Agente Autónomo'} · ${Number(emp0.salaryUsdt).toLocaleString()} USD₮ / mes`;
-
-          const payloadBox = document.getElementById('jsonPayload');
-          if (payloadBox && payloadBox.innerText.includes('AWAITING_TRIGGER')) {
-            payloadBox.innerText = JSON.stringify({
-              x402Version: 1,
-              employeeId: emp0.employeeId,
-              amountUsdt: emp0.salaryUsdt,
-              payTo: emp0.walletAddress,
-              concept: emp0.employeeId === 'emp-001' ? 'Monthly Core Engineering Salary' : 'Monthly Employee Salary',
-              network: 'eip155:11155111 (Sepolia)',
-              status: 'AWAITING_TRIGGER'
-            }, null, 2);
+          if (data.treasuryAddress) {
+            const shortTreasury =
+              data.treasuryAddress.slice(0, 6) +
+              "..." +
+              data.treasuryAddress.slice(-4);
+            document.getElementById("headerTreasuryAddress").innerText =
+              shortTreasury;
           }
-        }
 
-        if (data.metrics) {
-          updateMetricsUI(data.metrics);
-          updateChart(data.metrics, data.transactionHistory);
-        }
+          if (data.simulatedDate) {
+            document.getElementById("simClockText").innerText =
+              data.simulatedDate;
+          }
 
-        if (data.transactionHistory) {
-          renderLedger(data.transactionHistory);
+          if (data.isPaydayToday) {
+            const badge = document.getElementById("schedulerBadge");
+            badge.innerText = window.PaygentI18n
+              ? window.PaygentI18n.t("scheduler_active")
+              : "DÍA DE PAGO ACTIVO (DÍA 1)";
+            badge.className =
+              "text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30";
+          }
+
+          if (data.employees && data.employees.length > 0) {
+            const emp0 = data.employees[0];
+            const initials = emp0.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase();
+            const avatarEl = document.getElementById("stationAvatar");
+            if (avatarEl) avatarEl.innerText = initials;
+            const nameEl = document.getElementById("stationEmpName");
+            if (nameEl) nameEl.innerText = emp0.name;
+            const badgeEl = document.getElementById("stationEmpBadge");
+            if (badgeEl) badgeEl.innerText = emp0.employeeId;
+            const roleEl = document.getElementById("stationEmpRole");
+            if (roleEl)
+              roleEl.innerText = `${emp0.employeeId === "emp-001" ? "Desarrolladora Senior Core" : "Agente Autónomo"} · ${Number(emp0.salaryUsdt).toLocaleString()} USD₮ / mes`;
+
+            const payloadBox = document.getElementById("jsonPayload");
+            if (
+              payloadBox &&
+              payloadBox.innerText.includes("AWAITING_TRIGGER")
+            ) {
+              payloadBox.innerText = JSON.stringify(
+                {
+                  x402Version: 1,
+                  employeeId: emp0.employeeId,
+                  amountUsdt: emp0.salaryUsdt,
+                  payTo: emp0.walletAddress,
+                  concept:
+                    emp0.employeeId === "emp-001"
+                      ? "Monthly Core Engineering Salary"
+                      : "Monthly Employee Salary",
+                  network: "eip155:11155111 (Sepolia)",
+                  status: "AWAITING_TRIGGER",
+                },
+                null,
+                2,
+              );
+            }
+          }
+
+          if (data.metrics) {
+            updateMetricsUI(data.metrics);
+            updateChart(data.metrics, data.transactionHistory);
+          }
+
+          if (data.transactionHistory) {
+            renderLedger(data.transactionHistory);
+          }
+        } catch (err) {
+          console.warn("Backend offline or fetching error:", err);
         }
-      } catch (err) {
-        console.warn('Backend offline or fetching error:', err);
       }
-    }
 
-    function updateMetricsUI(metrics) {
-      if (!metrics) return;
-      document.getElementById('kpiLiquidity').innerHTML = `$${Number(metrics.treasuryLiquidity || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
-      document.getElementById('kpiSettled').innerHTML = `$${Number(metrics.settledVolume || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
-      document.getElementById('kpiPending').innerHTML = `${metrics.pendingClaimsCount || 0} ${window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Claims' : 'Reclamos'} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">($${Number(metrics.pendingClaimsUsdt || 0).toLocaleString()} USD₮)</span>`;
-      document.getElementById('kpiAgents').innerHTML = `${metrics.activeAgentsCount || 0} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">${window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Autonomous Nodes' : 'Nodos Autónomos'}</span>`;
+      function updateMetricsUI(metrics) {
+        if (!metrics) return;
+        document.getElementById("kpiLiquidity").innerHTML =
+          `$${Number(metrics.treasuryLiquidity || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
+        document.getElementById("kpiSettled").innerHTML =
+          `$${Number(metrics.settledVolume || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="text-sm font-normal text-teal-600 dark:text-[#2DD4BF]">USD₮</span>`;
+        document.getElementById("kpiPending").innerHTML =
+          `${metrics.pendingClaimsCount || 0} ${window.PaygentI18n && window.PaygentI18n.currentLang === "en" ? "Claims" : "Reclamos"} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">($${Number(metrics.pendingClaimsUsdt || 0).toLocaleString()} USD₮)</span>`;
+        document.getElementById("kpiAgents").innerHTML =
+          `${metrics.activeAgentsCount || 0} <span class="text-sm font-normal text-slate-500 dark:text-slate-400">${window.PaygentI18n && window.PaygentI18n.currentLang === "en" ? "Autonomous Nodes" : "Nodos Autónomos"}</span>`;
 
-      const settled = Number(metrics.settledVolume || 0);
-      document.getElementById('budgetProgressText').innerText = `$${settled.toLocaleString()} / $50,000 USD₮`;
-      const pct = Math.min(100, Math.round((settled / 50000) * 100));
-      document.getElementById('budgetProgressBar').style.width = `${pct}%`;
-      const allocText = window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Allocated' : 'Asignado';
-      const resText = window.PaygentI18n && window.PaygentI18n.currentLang === 'en' ? 'Liquidity Reserve' : 'Reserva de Liquidez';
-      document.getElementById('budgetPercentText').innerText = `${pct}% ${allocText}`;
-      const reserveSpan = document.querySelector('[data-i18n="panel_budget_reserve"]');
-      if (reserveSpan) reserveSpan.innerText = `${100 - pct}% ${resText}`;
-    }
-
-    function renderLedger(txList) {
-      const tbody = document.getElementById('ledgerTbody');
-      if (!txList || txList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 font-mono-tech">No hay liquidaciones registradas en este período. Ejecuta un reclamo o avanza el reloj para liquidar nómina.</td></tr>`;
-        return;
+        const settled = Number(metrics.settledVolume || 0);
+        document.getElementById("budgetProgressText").innerText =
+          `$${settled.toLocaleString()} / $50,000 USD₮`;
+        const pct = Math.min(100, Math.round((settled / 50000) * 100));
+        document.getElementById("budgetProgressBar").style.width = `${pct}%`;
+        const allocText =
+          window.PaygentI18n && window.PaygentI18n.currentLang === "en"
+            ? "Allocated"
+            : "Asignado";
+        const resText =
+          window.PaygentI18n && window.PaygentI18n.currentLang === "en"
+            ? "Liquidity Reserve"
+            : "Reserva de Liquidez";
+        document.getElementById("budgetPercentText").innerText =
+          `${pct}% ${allocText}`;
+        const reserveSpan = document.querySelector(
+          '[data-i18n="panel_budget_reserve"]',
+        );
+        if (reserveSpan) reserveSpan.innerText = `${100 - pct}% ${resText}`;
       }
 
-      tbody.innerHTML = txList.map(tx => {
-        const isSettled = tx.status === 'SETTLED';
-        const badgeClass = isSettled
-          ? 'bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-500/30'
-          : 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30';
-        const amountColor = isSettled ? 'text-teal-600 dark:text-[#2DD4BF]' : 'text-slate-500 dark:text-slate-400';
+      function renderLedger(txList) {
+        const tbody = document.getElementById("ledgerTbody");
+        if (!txList || txList.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 font-mono-tech">No hay liquidaciones registradas en este período. Ejecuta un reclamo o avanza el reloj para liquidar nómina.</td></tr>`;
+          return;
+        }
 
-        const txLink = tx.explorerUrl
-          ? `<a href="${tx.explorerUrl}" target="_blank" class="text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${tx.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
-          : `<span class="text-slate-400 dark:text-slate-500 font-mono-tech">${tx.txHash}</span>`;
+        tbody.innerHTML = txList
+          .map((tx) => {
+            const isSettled = tx.status === "SETTLED";
+            const badgeClass = isSettled
+              ? "bg-teal-500/10 text-teal-700 dark:text-teal-400 border-teal-500/30"
+              : "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/30";
+            const amountColor = isSettled
+              ? "text-teal-600 dark:text-[#2DD4BF]"
+              : "text-slate-500 dark:text-slate-400";
 
-        return `
+            const txLink = tx.explorerUrl
+              ? `<a href="${tx.explorerUrl}" target="_blank" class="text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1 font-mono-tech">${tx.txHash.slice(0, 10)}... <span class="material-symbols-outlined text-[12px]">open_in_new</span></a>`
+              : `<span class="text-slate-400 dark:text-slate-500 font-mono-tech">${tx.txHash}</span>`;
+
+            return `
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
             <td class="py-3 text-slate-500 dark:text-slate-400">${tx.timestamp}</td>
             <td class="py-3 text-slate-900 dark:text-white font-bold">${tx.agentId}</td>
@@ -744,199 +1530,266 @@
             <td class="py-3 text-slate-500 dark:text-slate-400 max-w-[140px]">${txLink}</td>
           </tr>
         `;
-      }).join('');
-    }
-
-    // 3. Fast-Forward Time to Day 1 & Trigger Scheduler
-    async function advanceToPayday() {
-      const btn = document.getElementById('btnTimeWarp');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">autorenew</span> ...`;
-
-      // Animate stages sequentially
-      const steps = [1, 2, 3, 4, 5];
-      for (const step of steps) {
-        document.getElementById(`flowStep${step}`).classList.add('step-active');
-        await new Promise(r => setTimeout(r, 220));
+          })
+          .join("");
       }
 
-      try {
-        const res = await fetch('/api/scheduler/advance-to-payday', { method: 'POST' });
-        const data = await res.json();
+      // 3. Fast-Forward Time to Day 1 & Trigger Scheduler
+      async function advanceToPayday() {
+        const btn = document.getElementById("btnTimeWarp");
+        btn.disabled = true;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">autorenew</span> ...`;
 
-        if (data.success) {
-          document.getElementById('simClockText').innerText = data.timeWarp.newDate;
-          const badge = document.getElementById('schedulerBadge');
-          badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_active') : 'DÍA DE PAGO ACTIVO (DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30';
+        // Animate stages sequentially
+        const steps = [1, 2, 3, 4, 5];
+        for (const step of steps) {
+          document
+            .getElementById(`flowStep${step}`)
+            .classList.add("step-active");
+          await new Promise((r) => setTimeout(r, 220));
+        }
 
-          document.getElementById('aliceAgentStatus').innerText = window.PaygentI18n ? window.PaygentI18n.t('emp_status_paid') : 'PAGO_CONFIRMADO';
-          document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
+        try {
+          const res = await fetch("/api/scheduler/advance-to-payday", {
+            method: "POST",
+          });
+          const data = await res.json();
 
-          // Update Simulation Box
-          const simBox = document.getElementById('simLogBox');
-          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`).join('');
+          if (data.success) {
+            document.getElementById("simClockText").innerText =
+              data.timeWarp.newDate;
+            const badge = document.getElementById("schedulerBadge");
+            badge.innerText = window.PaygentI18n
+              ? window.PaygentI18n.t("scheduler_active")
+              : "DÍA DE PAGO ACTIVO (DÍA 1)";
+            badge.className =
+              "text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-teal-500/10 text-teal-700 dark:text-teal-400 border border-teal-500/30";
 
-          // Update Payload Box with full receipt
-          const payloadBox = document.getElementById('jsonPayload');
-          const firstResult = data.cycleResult.results[0];
-          payloadBox.innerHTML = JSON.stringify(firstResult?.receipt || data.cycleResult, null, 2);
-          payloadBox.classList.add('text-teal-700', 'dark:text-[#2DD4BF]');
+            document.getElementById("aliceAgentStatus").innerText =
+              window.PaygentI18n
+                ? window.PaygentI18n.t("emp_status_paid")
+                : "PAGO_CONFIRMADO";
+            document.getElementById("simStatusHeader").innerText =
+              "account.simulate.transfer: ALLOW";
 
-          // Update Step 5 Link
-          if (firstResult?.txHash) {
-            const txShort = firstResult.txHash.slice(0, 10) + '...';
-            document.getElementById('flowStep5Container').innerHTML = `
+            // Update Simulation Box
+            const simBox = document.getElementById("simLogBox");
+            simBox.innerHTML = data.simulationLog
+              .map(
+                (line) =>
+                  `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`,
+              )
+              .join("");
+
+            // Update Payload Box with full receipt
+            const payloadBox = document.getElementById("jsonPayload");
+            const firstResult = data.cycleResult.results[0];
+            payloadBox.innerHTML = JSON.stringify(
+              firstResult?.receipt || data.cycleResult,
+              null,
+              2,
+            );
+            payloadBox.classList.add("text-teal-700", "dark:text-[#2DD4BF]");
+
+            // Update Step 5 Link
+            if (firstResult?.txHash) {
+              const txShort = firstResult.txHash.slice(0, 10) + "...";
+              document.getElementById("flowStep5Container").innerHTML = `
               <a href="${firstResult.receipt?.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-600 dark:text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
                 Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
               </a>
             `;
+            }
+
+            if (data.metrics) updateMetricsUI(data.metrics);
+            loadSystemStatus();
           }
-
-          if (data.metrics) updateMetricsUI(data.metrics);
-          loadSystemStatus();
+        } catch (err) {
+          console.error("Time warp error:", err);
+        } finally {
+          btn.disabled = false;
+          const btnLabel = window.PaygentI18n
+            ? window.PaygentI18n.t("scheduler_btn_fast_forward")
+            : "Adelantar al Día 1 (Disparar Scheduler)";
+          btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">fast_forward</span> <span>${btnLabel}</span>`;
         }
-      } catch (err) {
-        console.error('Time warp error:', err);
-      } finally {
-        btn.disabled = false;
-        const btnLabel = window.PaygentI18n ? window.PaygentI18n.t('scheduler_btn_fast_forward') : '⚡ Adelantar al Día 1 (Disparar Scheduler)';
-        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">fast_forward</span> <span>${btnLabel}</span>`;
       }
-    }
 
-    // 4. Reset Clock
-    async function resetClock() {
-      try {
-        const res = await fetch('/api/scheduler/reset-clock', { method: 'POST' });
-        const data = await res.json();
-        if (data.success) {
-          document.getElementById('simClockText').innerText = data.simulatedDate;
-          const badge = document.getElementById('schedulerBadge');
-          badge.innerText = window.PaygentI18n ? window.PaygentI18n.t('scheduler_standby') : 'EN ESPERA (ESPERANDO DÍA 1)';
-          badge.className = 'text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30';
-          loadSystemStatus();
+      // 4. Reset Clock
+      async function resetClock() {
+        try {
+          const res = await fetch("/api/scheduler/reset-clock", {
+            method: "POST",
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById("simClockText").innerText =
+              data.simulatedDate;
+            const badge = document.getElementById("schedulerBadge");
+            badge.innerText = window.PaygentI18n
+              ? window.PaygentI18n.t("scheduler_standby")
+              : "EN ESPERA (ESPERANDO DÍA 1)";
+            badge.className =
+              "text-[10px] font-mono-tech font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30";
+            loadSystemStatus();
+          }
+        } catch (e) {
+          console.error(e);
         }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    // 5. Individual Claim Trigger
-    async function triggerClaim() {
-      const btn = document.getElementById('btnTriggerClaim');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> ...`;
-
-      const steps = [1, 2, 3, 4, 5];
-      for (const step of steps) {
-        document.getElementById(`flowStep${step}`).classList.add('step-active');
-        await new Promise(r => setTimeout(r, 180));
       }
 
-      try {
-        const res = await fetch('/api/payroll/trigger-employee-claim', { method: 'POST' });
-        const data = await res.json();
+      // 5. Individual Claim Trigger
+      async function triggerClaim() {
+        const btn = document.getElementById("btnTriggerClaim");
+        btn.disabled = true;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> ...`;
 
-        if (data.success) {
-          document.getElementById('aliceAgentStatus').innerText = window.PaygentI18n ? window.PaygentI18n.t('emp_status_paid') : 'PAGO_CONFIRMADO';
-          document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: ALLOW';
+        const steps = [1, 2, 3, 4, 5];
+        for (const step of steps) {
+          document
+            .getElementById(`flowStep${step}`)
+            .classList.add("step-active");
+          await new Promise((r) => setTimeout(r, 180));
+        }
 
-          const simBox = document.getElementById('simLogBox');
-          simBox.innerHTML = data.simulationLog.map(line => `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`).join('');
+        try {
+          const res = await fetch("/api/payroll/trigger-employee-claim", {
+            method: "POST",
+          });
+          const data = await res.json();
 
-          const payloadBox = document.getElementById('jsonPayload');
-          payloadBox.innerHTML = JSON.stringify(data.receipt, null, 2);
-          payloadBox.classList.add('text-teal-700', 'dark:text-[#2DD4BF]');
+          if (data.success) {
+            document.getElementById("aliceAgentStatus").innerText =
+              window.PaygentI18n
+                ? window.PaygentI18n.t("emp_status_paid")
+                : "PAGO_CONFIRMADO";
+            document.getElementById("simStatusHeader").innerText =
+              "account.simulate.transfer: ALLOW";
 
-          const txShort = data.receipt.txHash.slice(0, 10) + '...';
-          document.getElementById('flowStep5Container').innerHTML = `
+            const simBox = document.getElementById("simLogBox");
+            simBox.innerHTML = data.simulationLog
+              .map(
+                (line) =>
+                  `<p class="text-teal-700 dark:text-teal-300 font-mono-tech">${line}</p>`,
+              )
+              .join("");
+
+            const payloadBox = document.getElementById("jsonPayload");
+            payloadBox.innerHTML = JSON.stringify(data.receipt, null, 2);
+            payloadBox.classList.add("text-teal-700", "dark:text-[#2DD4BF]");
+
+            const txShort = data.receipt.txHash.slice(0, 10) + "...";
+            document.getElementById("flowStep5Container").innerHTML = `
             <a href="${data.receipt.explorerUrl}" target="_blank" class="text-xs font-mono-tech text-teal-600 dark:text-teal-400 hover:underline flex items-center justify-center gap-1 mt-1">
               Tx: ${txShort} <span class="material-symbols-outlined text-[12px]">open_in_new</span>
             </a>
           `;
 
-          if (data.metrics) updateMetricsUI(data.metrics);
-          loadSystemStatus();
+            if (data.metrics) updateMetricsUI(data.metrics);
+            loadSystemStatus();
+          }
+        } catch (err) {
+          console.error("Claim error:", err);
+        } finally {
+          btn.disabled = false;
+          const btnText = window.PaygentI18n
+            ? window.PaygentI18n.t("btn_trigger_claim")
+            : "Disparar Reclamo x402";
+          btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">bolt</span> <span>${btnText}</span>`;
         }
-      } catch (err) {
-        console.error('Claim error:', err);
-      } finally {
-        btn.disabled = false;
-        const btnText = window.PaygentI18n ? window.PaygentI18n.t('btn_trigger_claim') : 'Disparar Reclamo x402';
-        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">bolt</span> <span>${btnText}</span>`;
       }
-    }
 
-    // 6. Threat Simulation
-    async function simulateThreat() {
-      const btn = document.getElementById('btnSimulateThreat');
-      btn.disabled = true;
+      // 6. Threat Simulation
+      async function simulateThreat() {
+        const btn = document.getElementById("btnSimulateThreat");
+        btn.disabled = true;
 
-      try {
-        const res = await fetch('/api/payroll/simulate-threat', { method: 'POST' });
-        const data = await res.json();
+        try {
+          const res = await fetch("/api/payroll/simulate-threat", {
+            method: "POST",
+          });
+          const data = await res.json();
 
-        document.getElementById('simStatusHeader').innerText = 'account.simulate.transfer: DENY';
-        document.getElementById('simStatusHeader').classList.remove('text-teal-600', 'dark:text-[#2DD4BF]');
-        document.getElementById('simStatusHeader').classList.add('text-amber-600', 'dark:text-[#F59E0B]');
+          document.getElementById("simStatusHeader").innerText =
+            "account.simulate.transfer: DENY";
+          document
+            .getElementById("simStatusHeader")
+            .classList.remove("text-teal-600", "dark:text-[#2DD4BF]");
+          document
+            .getElementById("simStatusHeader")
+            .classList.add("text-amber-600", "dark:text-[#F59E0B]");
 
-        const simBox = document.getElementById('simLogBox');
-        simBox.innerHTML = data.simulationLog.map(line => `<p class="text-amber-600 dark:text-amber-400 font-mono-tech">${line}</p>`).join('');
+          const simBox = document.getElementById("simLogBox");
+          simBox.innerHTML = data.simulationLog
+            .map(
+              (line) =>
+                `<p class="text-amber-600 dark:text-amber-400 font-mono-tech">${line}</p>`,
+            )
+            .join("");
 
-        const payloadBox = document.getElementById('jsonPayload');
-        payloadBox.innerHTML = JSON.stringify({
-          error: data.error,
-          policyDecision: "DENY",
-          timestamp: new Date().toISOString()
-        }, null, 2);
-        payloadBox.classList.remove('text-teal-700', 'dark:text-[#2DD4BF]');
-        payloadBox.classList.add('text-amber-600', 'dark:text-[#F59E0B]');
+          const payloadBox = document.getElementById("jsonPayload");
+          payloadBox.innerHTML = JSON.stringify(
+            {
+              error: data.error,
+              policyDecision: "DENY",
+              timestamp: new Date().toISOString(),
+            },
+            null,
+            2,
+          );
+          payloadBox.classList.remove("text-teal-700", "dark:text-[#2DD4BF]");
+          payloadBox.classList.add("text-amber-600", "dark:text-[#F59E0B]");
 
-        loadSystemStatus();
-      } catch (err) {
-        console.error('Threat sim error:', err);
-      } finally {
-        btn.disabled = false;
+          loadSystemStatus();
+        } catch (err) {
+          console.error("Threat sim error:", err);
+        } finally {
+          btn.disabled = false;
+        }
       }
-    }
 
-    // 7. Notification Panel Handlers
-    function toggleNotifications() {
-      const dropdown = document.getElementById('notificationDropdown');
-      if (dropdown) {
-        dropdown.classList.toggle('hidden');
+      // 7. Notification Panel Handlers
+      function toggleNotifications() {
+        const dropdown = document.getElementById("notificationDropdown");
+        if (dropdown) {
+          dropdown.classList.toggle("hidden");
+        }
       }
-    }
 
-    function clearNotifications() {
-      const badge = document.getElementById('notifBadge');
-      if (badge) badge.classList.add('hidden');
-      const list = document.getElementById('notificationList');
-      if (list) {
-        list.innerHTML = `
+      function clearNotifications() {
+        const badge = document.getElementById("notifBadge");
+        if (badge) badge.classList.add("hidden");
+        const list = document.getElementById("notificationList");
+        if (list) {
+          list.innerHTML = `
           <div class="py-6 text-center text-slate-400 text-xs">
             <span class="material-symbols-outlined text-[24px] mb-1 opacity-50">drafts</span>
             <p>No tienes notificaciones pendientes.</p>
           </div>
         `;
+        }
       }
-    }
 
-    // Close dropdown on outside click
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('notificationDropdown');
-      const btn = document.getElementById('btnNotifications');
-      if (dropdown && !dropdown.classList.contains('hidden') && btn && !btn.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.add('hidden');
-      }
-    });
+      // Close dropdown on outside click
+      document.addEventListener("click", (e) => {
+        const dropdown = document.getElementById("notificationDropdown");
+        const btn = document.getElementById("btnNotifications");
+        if (
+          dropdown &&
+          !dropdown.classList.contains("hidden") &&
+          btn &&
+          !btn.contains(e.target) &&
+          !dropdown.contains(e.target)
+        ) {
+          dropdown.classList.add("hidden");
+        }
+      });
 
-    // Initialize
-    window.addEventListener('DOMContentLoaded', () => {
-      initChart();
-      loadSystemStatus();
-    });
-  </script>
-</body>
+      // Initialize
+      window.addEventListener("DOMContentLoaded", () => {
+        initChart();
+        loadSystemStatus();
+      });
+    </script>
+  </body>
 </html>
