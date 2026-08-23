@@ -20,29 +20,34 @@ export function create402Requirement ({
   employeeId,
   walletAddress,
   amountUsdt,
-  assetAddress = '0x7169D38820dfd117C3FA1f22a697dBA58d90BA06',
+  amountEth = 0.0001,
+  assetAddress = '0x0000000000000000000000000000000000000000',
   chainId = 11155111,
   period = new Date().toISOString().slice(0, 7)
 }) {
-  // Conversión a unidades mínimas (6 decimales para USD₮: 1 USD₮ = 1,000,000 unidades)
+  // Conversión a unidades mínimas (6 decimales para USD₮ y wei para Sepolia ETH)
   const amountInUnits = (BigInt(Math.round(amountUsdt * 100)) * 10000n).toString()
+  const amountInWei = (BigInt(Math.round(amountEth * 1e8)) * 10000000000n).toString()
 
   return {
     x402Version: 1,
     status: 402,
-    message: 'Payment Required - Autonomous Payroll Claim',
+    message: 'Payment Required - Autonomous Payroll Claim in Sepolia ETH',
     accepts: [
       {
         scheme: 'exact',
         network: `eip155:${chainId}`,
         maxAmountRequired: amountInUnits,
         amountUsdt,
+        amountEth,
+        amountWei: amountInWei,
+        currency: 'Sepolia ETH',
         asset: assetAddress,
         payTo: walletAddress,
         extra: {
           employeeId,
           period,
-          concept: `Salary settlement for ${period}`,
+          concept: `Salary settlement in Sepolia ETH for ${period}`,
           timestamp: new Date().toISOString()
         }
       }
@@ -110,7 +115,7 @@ export function createPaymentReceipt ({
   walletAddress,
   amountUsdt,
   amountEth = 0.0001,
-  currency = 'USD₮',
+  currency = 'Sepolia ETH',
   network = 'eip155:11155111'
 }) {
   return {
